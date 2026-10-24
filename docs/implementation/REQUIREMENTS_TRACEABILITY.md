@@ -24,7 +24,7 @@
 
 | ID | Requirement | Priority | Component | Test File | Status |
 |----|-------------|----------|-----------|-----------|--------|
-| FR-001 | Create/open/archive projects | P0 | `platform/orchestrator` | `tests/unit/project.test.ts` | `not_started` |
+| FR-001 | Create/open/archive projects | P0 | `platform/orchestrator` | `tests/integration/projects-api.test.ts` | `tested` |
 | FR-002 | Store goal/status/config/capability/artifacts | P0 | `packages/types`, DB schema | `tests/unit/types-and-schema.test.ts` | `tested` |
 | FR-003 | Conversational Orchestrator | P0 | `platform/orchestrator` | `tests/integration/orchestrator.test.ts` | `not_started` |
 | FR-004 | Conversations reference projects/tasks/artifacts/runs | P0 | `platform/orchestrator` | `tests/integration/conversation.test.ts` | `not_started` |
