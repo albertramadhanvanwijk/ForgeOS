@@ -1,0 +1,16 @@
+{
+  "name": "@forgeos/quality-engine",
+  "version": "0.1.0",
+  "description": "ForgeOS Quality Engine and Verification Gates",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@forgeos/types": "workspace:*",
+    "@forgeos/runner": "workspace:*"
+  }
+}

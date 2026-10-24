@@ -109,6 +109,9 @@ importers:
       '@forgeos/policy-engine':
         specifier: workspace:*
         version: link:../policy-engine
+      '@forgeos/quality-engine':
+        specifier: workspace:*
+        version: link:../quality-engine
       '@forgeos/runner':
         specifier: workspace:*
         version: link:../../infrastructure/local-runner
@@ -141,6 +144,15 @@ importers:
       typescript:
         specifier: ^5.7.2
         version: 5.9.3
+
+  platform/quality-engine:
+    dependencies:
+      '@forgeos/runner':
+        specifier: workspace:*
+        version: link:../../infrastructure/local-runner
+      '@forgeos/types':
+        specifier: workspace:*
+        version: link:../../packages/types
 
   platform/workflow-engine:
     dependencies:

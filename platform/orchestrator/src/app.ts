@@ -22,6 +22,8 @@ import { ModelGateway, MockModelAdapter } from '@forgeos/model-gateway';
 import { registerRunnerRoutes } from './runner/runner.routes.js';
 import { IRunnerAdapter, LocalProcessRunner } from '@forgeos/runner';
 import { GitService, registerGitRoutes } from './git/index.js';
+import { QualityEngine } from '@forgeos/quality-engine';
+import { registerQualityRoutes } from './quality/quality.routes.js';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -37,6 +39,7 @@ export interface ServerOptions {
   modelGateway?: ModelGateway;
   runner?: IRunnerAdapter;
   gitService?: GitService;
+  qualityEngine?: QualityEngine;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -161,6 +164,14 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
 
   registerGitRoutes(app, {
     gitService,
+  });
+
+  // Quality Engine Routes (FR-060, FR-061, FR-063)
+  const qualityEngine = opts.qualityEngine ?? new QualityEngine();
+
+  registerQualityRoutes(app, {
+    qualityEngine,
+    runner,
   });
 
   return app;

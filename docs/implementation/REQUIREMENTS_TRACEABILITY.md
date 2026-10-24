@@ -62,9 +62,9 @@
 | FR-047 | Network/filesystem/env/secrets policy | P0 | `infrastructure/local-runner` | `tests/unit/runner.test.ts` | `tested` |
 | FR-048 | Failed commands never reported successful | P0 | `infrastructure/local-runner` | `tests/unit/runner.test.ts` | `tested` |
 | FR-050 | Requirements/user flows before complex UI | P1 | `apps/web` | `tests/unit/web-workspace.test.ts` | `tested` |
-| FR-060 | Task-appropriate quality criteria | P0 | `platform/quality-engine` | `tests/unit/quality-criteria.test.ts` | `not_started` |
-| FR-061 | Relevant checks before verification | P0 | `platform/quality-engine` | `tests/unit/quality-checks.test.ts` | `not_started` |
-| FR-063 | Failed mandatory gates block release | P0 | `platform/quality-engine` | `tests/unit/gate-blocking.test.ts` | `not_started` |
+| FR-060 | Task-appropriate quality criteria | P0 | `platform/quality-engine` | `tests/unit/quality-engine.test.ts` | `tested` |
+| FR-061 | Relevant checks before verification | P0 | `platform/quality-engine` | `tests/unit/quality-engine.test.ts` | `tested` |
+| FR-063 | Failed mandatory gates block release | P0 | `platform/quality-engine` | `tests/unit/quality-engine.test.ts` | `tested` |
 | FR-065 | Policy-controlled production deployment | P0 | `platform/policy-engine` | `tests/integration/deploy-policy.test.ts` | `not_started` |
 | FR-070 | Conversational ForgeOS changes | P0 | `platform/platform-builder` | `tests/integration/platform-builder.test.ts` | `not_started` |
 | FR-071 | Inspect existing capabilities | P0 | `platform/platform-builder` | `tests/unit/capability-inspect.test.ts` | `not_started` |
