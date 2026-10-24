@@ -1,0 +1,14 @@
+{
+  "name": "@forgeos/design-studio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ForgeOS Design Studio & Quality Visual Validation Engine (FR-050 - FR-055)",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@forgeos/types": "workspace:*"
+  }
+}

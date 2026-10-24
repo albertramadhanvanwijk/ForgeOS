@@ -35,6 +35,8 @@ import {
   ContextPackager,
 } from '@forgeos/persistent-memory';
 import { registerMemoryRoutes } from './memory/memory.routes.js';
+import { DesignStudioEngine } from '@forgeos/design-studio';
+import { registerDesignRoutes } from './design/design.routes.js';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -56,6 +58,7 @@ export interface ServerOptions {
   limitEnforcer?: LimitEnforcer;
   memoryService?: PersistentMemoryService;
   contextPackager?: ContextPackager;
+  designEngine?: DesignStudioEngine;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -213,6 +216,13 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
   registerMemoryRoutes(app, {
     memoryService,
     contextPackager,
+  });
+
+  // Design Studio Routes (FR-050 - FR-055)
+  const designEngine = opts.designEngine ?? new DesignStudioEngine();
+
+  registerDesignRoutes(app, {
+    designEngine,
   });
 
   return app;
