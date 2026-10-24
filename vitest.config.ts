@@ -17,6 +17,7 @@ export default defineConfig({
     alias: {
       '@forgeos/types': path.resolve(__dirname, 'packages/types/src/index.ts'),
       '@forgeos/agent-registry': path.resolve(__dirname, 'platform/agent-registry/src/index.ts'),
+      '@forgeos/workflow-engine': path.resolve(__dirname, 'platform/workflow-engine/src/index.ts'),
     },
   },
 });

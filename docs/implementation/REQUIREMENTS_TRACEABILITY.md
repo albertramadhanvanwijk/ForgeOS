@@ -33,13 +33,13 @@
 | FR-007 | Preserve relevant context | P0 | `platform/persistent-memory` | `tests/unit/context.test.ts` | `not_started` |
 | FR-008 | Store decisions/assumptions with source/time | P1 | `platform/orchestrator` | `tests/unit/decisions.test.ts` | `not_started` |
 | FR-010 | Translate intent into goals and criteria | P0 | `platform/orchestrator` | `tests/unit/planning.test.ts` | `not_started` |
-| FR-011 | Task graph with dependencies/inputs/outputs/status | P0 | `platform/workflow-engine` | `tests/unit/task-graph.test.ts` | `not_started` |
+| FR-011 | Task graph with dependencies/inputs/outputs/status | P0 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
 | FR-012 | Adaptive workflow selection | P0 | `platform/workflow-engine` | `tests/unit/workflow-selection.test.ts` | `not_started` |
 | FR-013 | Safe serial/parallel work | P1 | `platform/workflow-engine` | `tests/integration/parallel-work.test.ts` | `not_started` |
 | FR-015 | Review consequential plans | P0 | `platform/policy-engine` | `tests/integration/plan-approval.test.ts` | `not_started` |
-| FR-016 | Explicit workflow states | P0 | `platform/workflow-engine` | `tests/unit/workflow-states.test.ts` | `not_started` |
-| FR-017 | Resume after interruption | P1 | `platform/workflow-engine` | `tests/integration/workflow-resume.test.ts` | `not_started` |
-| FR-018 | Persistent checkpoints | P0 | `platform/workflow-engine` | `tests/unit/checkpoints.test.ts` | `not_started` |
+| FR-016 | Explicit workflow states | P0 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
+| FR-017 | Resume after interruption | P1 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
+| FR-018 | Persistent checkpoints | P0 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
 | FR-020 | Registry for roles/skills/tools/models/capabilities | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-021 | Select agents by task | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-022 | Agent uses compatible skills | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |

@@ -5,11 +5,14 @@ import { ProjectsService } from './projects/projects.service.js';
 import { InMemoryProjectStore } from './projects/project-store.js';
 import { registryRoutes } from './registry/registry.routes.js';
 import { AgentRegistry } from '@forgeos/agent-registry';
+import { workflowsRoutes } from './workflows/workflows.routes.js';
+import { WorkflowEngine, InMemoryWorkflowStore } from '@forgeos/workflow-engine';
 
 export interface ServerOptions {
   logger?: boolean;
   projectsService?: ProjectsService;
   agentRegistry?: AgentRegistry;
+  workflowEngine?: WorkflowEngine;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -32,7 +35,7 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
     };
   });
 
-  // Projects Service & Routes
+  // Projects Service & Routes (FR-001, FR-002)
   const projectsService =
     opts.projectsService ?? new ProjectsService(new InMemoryProjectStore());
 
@@ -45,6 +48,15 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
   await app.register(registryRoutes, {
     prefix: '/api/registry',
     registry: opts.agentRegistry,
+  });
+
+  // Workflow Engine Routes (FR-011, FR-016, FR-017, FR-018)
+  const workflowEngine =
+    opts.workflowEngine ?? new WorkflowEngine(new InMemoryWorkflowStore());
+
+  await app.register(workflowsRoutes, {
+    prefix: '/api/workflows',
+    engine: workflowEngine,
   });
 
   return app;
