@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { ArrowLeft, Bot, Workflow, FileCode2, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Bot, Workflow, FileCode2, ShieldCheck, Sparkles, CheckCircle2, Play } from 'lucide-react';
 
 export default function ProjectWorkspacePage({ params }: { params: { id: string } }) {
   return (
@@ -19,7 +19,10 @@ export default function ProjectWorkspacePage({ params }: { params: { id: string 
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="success">Phase 2 Verified</Badge>
-            <Button size="sm">⚡ Run Stage</Button>
+            <Button size="sm" className="gap-1.5">
+              <Play className="h-3.5 w-3.5 fill-current" />
+              <span>Run Stage</span>
+            </Button>
           </div>
         </div>
       </div>

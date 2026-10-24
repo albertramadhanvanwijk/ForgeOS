@@ -1,83 +1,135 @@
 import React from 'react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Workflow,
+  Plus,
+  Play,
+  RotateCcw,
+  CheckCircle2,
+  Clock,
+  ArrowRight,
+  GitBranch,
+} from 'lucide-react';
 
 export default function WorkflowsPage() {
   const workflows = [
     {
-      id: 'wf-001',
-      name: 'workflow-greenfield-engineering',
+      id: 'wf-greenfield-core',
+      name: 'Greenfield Engineering Pipeline',
       intent: 'CREATE',
       tasks: 4,
       status: 'completed',
-      leadRole: 'Solution Architect',
+      leadRole: 'Lead Architect',
       duration: '42s',
+      checkpoints: 4,
     },
     {
-      id: 'wf-002',
-      name: 'workflow-feature-enhancement',
+      id: 'wf-feature-mfa',
+      name: 'Feature Enhancement & Gate Check',
       intent: 'MODIFY',
       tasks: 3,
       status: 'running',
-      leadRole: 'Software Engineer',
+      leadRole: 'Backend Engineer',
       duration: '18s',
+      checkpoints: 2,
     },
     {
-      id: 'wf-003',
-      name: 'workflow-incident-repair',
+      id: 'wf-repair-telemetry',
+      name: 'Incident Diagnostic & Repair DAG',
       intent: 'TROUBLESHOOT',
       tasks: 2,
       status: 'completed',
-      leadRole: 'QA Engineer',
+      leadRole: 'QA & Verification',
       duration: '12s',
+      checkpoints: 2,
     },
   ];
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '26px', fontWeight: 800, margin: '0 0 6px' }}>Workflows & Runs</h1>
-        <p style={{ color: '#94a3b8', margin: 0, fontSize: '14px' }}>
-          Durable state machines, DAG task graphs, and persistent checkpoints (FR-011, FR-016-FR-018).
-        </p>
+    <div className="mx-auto max-w-7xl space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-100">Workflows & DAG Engine</h1>
+          <p className="mt-0.5 text-xs text-zinc-400">
+            Durable state machines, DAG topological sorting, and persistent checkpoints (FR-011, FR-016–FR-018).
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button size="sm" variant="outline" className="border-zinc-800 bg-zinc-900 font-mono text-xs text-zinc-300 hover:bg-zinc-800">
+            <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
+            <span>Resume Checkpoint</span>
+          </Button>
+          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 hover:bg-white">
+            <Plus className="mr-1.5 h-3.5 w-3.5" />
+            <span>New Workflow</span>
+          </Button>
+        </div>
       </div>
 
-      <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13.5px' }}>
+      {/* Metrics Bar */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+          <span className="text-[11px] font-medium text-zinc-400">Active Workflows</span>
+          <div className="mt-1 font-mono text-xl font-bold text-zinc-100">3 Total / 1 Executing</div>
+          <span className="font-mono text-[10px] text-zinc-500">Zero orphaned checkpoints</span>
+        </div>
+        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+          <span className="text-[11px] font-medium text-zinc-400">DAG Execution Engine</span>
+          <div className="mt-1 font-mono text-xl font-bold text-emerald-400">Deterministic</div>
+          <span className="font-mono text-[10px] text-zinc-500">Kahn topological sort algorithm</span>
+        </div>
+        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+          <span className="text-[11px] font-medium text-zinc-400">Recovery Integrity</span>
+          <div className="mt-1 font-mono text-xl font-bold text-zinc-100">100% Resumable</div>
+          <span className="font-mono text-[10px] text-zinc-500">JSON snapshot state persistence</span>
+        </div>
+      </div>
+
+      {/* Workflow Table */}
+      <div className="overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950">
+        <table className="w-full text-left text-xs">
           <thead>
-            <tr style={{ borderBottom: '1px solid #1e293b', backgroundColor: '#090d16', color: '#64748b' }}>
-              <th style={{ padding: '14px 20px', fontWeight: 600 }}>Workflow Run ID</th>
-              <th style={{ padding: '14px 20px', fontWeight: 600 }}>DAG Definition</th>
-              <th style={{ padding: '14px 20px', fontWeight: 600 }}>Intent Type</th>
-              <th style={{ padding: '14px 20px', fontWeight: 600 }}>Tasks</th>
-              <th style={{ padding: '14px 20px', fontWeight: 600 }}>Status</th>
-              <th style={{ padding: '14px 20px', fontWeight: 600 }}>Lead Role</th>
+            <tr className="border-b border-zinc-800/80 bg-zinc-900/60 font-mono text-[11px] text-zinc-400">
+              <th className="px-4 py-3 font-medium">Workflow Run ID</th>
+              <th className="px-4 py-3 font-medium">Pipeline Definition</th>
+              <th className="px-4 py-3 font-medium">Intent</th>
+              <th className="px-4 py-3 font-medium">DAG Nodes</th>
+              <th className="px-4 py-3 font-medium">Status</th>
+              <th className="px-4 py-3 font-medium">Lead Agent</th>
+              <th className="px-4 py-3 font-medium text-right">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-zinc-800/60 font-mono">
             {workflows.map((wf) => (
-              <tr key={wf.id} style={{ borderBottom: '1px solid #1e293b' }}>
-                <td style={{ padding: '16px 20px', fontFamily: "'JetBrains Mono', monospace", color: '#38bdf8' }}>{wf.id}</td>
-                <td style={{ padding: '16px 20px', fontWeight: 600 }}>{wf.name}</td>
-                <td style={{ padding: '16px 20px' }}>
-                  <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', backgroundColor: '#1e293b', color: '#cbd5e1' }}>
+              <tr key={wf.id} className="hover:bg-zinc-900/30 transition-colors">
+                <td className="px-4 py-3.5 text-zinc-300 font-semibold">{wf.id}</td>
+                <td className="px-4 py-3.5 font-sans font-medium text-zinc-200">{wf.name}</td>
+                <td className="px-4 py-3.5">
+                  <span className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 text-[10px] text-zinc-300">
                     {wf.intent}
                   </span>
                 </td>
-                <td style={{ padding: '16px 20px', color: '#94a3b8' }}>{wf.tasks} nodes</td>
-                <td style={{ padding: '16px 20px' }}>
-                  <span
-                    style={{
-                      fontSize: '11.5px',
-                      padding: '3px 8px',
-                      borderRadius: '4px',
-                      backgroundColor: wf.status === 'completed' ? '#064e3b' : '#075985',
-                      color: wf.status === 'completed' ? '#34d399' : '#38bdf8',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {wf.status}
-                  </span>
+                <td className="px-4 py-3.5 text-zinc-400">{wf.tasks} nodes</td>
+                <td className="px-4 py-3.5">
+                  {wf.status === 'completed' ? (
+                    <span className="inline-flex items-center gap-1.5 text-emerald-400">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> completed
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 text-amber-400">
+                      <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" /> running ({wf.duration})
+                    </span>
+                  )}
                 </td>
-                <td style={{ padding: '16px 20px', color: '#cbd5e1' }}>{wf.leadRole}</td>
+                <td className="px-4 py-3.5 font-sans text-zinc-300">{wf.leadRole}</td>
+                <td className="px-4 py-3.5 text-right font-sans">
+                  <button className="text-zinc-400 hover:text-zinc-100 text-xs font-medium">
+                    Inspect Graph →
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

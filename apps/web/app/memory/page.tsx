@@ -1,97 +1,122 @@
 import React from 'react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  BrainCircuit,
+  Search,
+  Lock,
+  History,
+  ShieldAlert,
+  Database,
+  Plus,
+} from 'lucide-react';
 
 export default function MemoryPage() {
   const items = [
     {
       id: 'mem-001',
-      title: 'Monorepo Stack & Fastify Integration',
+      title: 'Monorepo Stack & Fastify Integration Architecture',
       type: 'decision',
       state: 'active',
-      scope: 'project:proj-001',
+      scope: 'project:forgeos-core',
       provenance: 'Task 1.3: Fastify Orchestrator Backend Scaffold',
       version: 1,
+      sanitized: true,
     },
     {
       id: 'mem-002',
-      title: 'Command Runner Allowlist & Security Policy',
+      title: 'Command Runner Allowlist & Security Sandbox Rules',
       type: 'policy',
       state: 'active',
       scope: 'system:global',
       provenance: 'Task 2.3: Sandboxed Execution & Runner Policy',
       version: 1,
+      sanitized: true,
     },
     {
       id: 'mem-003',
-      title: 'Adaptive Intent Workflow DAG Synthesis',
+      title: 'Adaptive Intent Workflow DAG Synthesis Pattern',
       type: 'pattern',
       state: 'active',
-      scope: 'project:proj-001',
+      scope: 'project:forgeos-core',
       provenance: 'Task 2.1: Orchestrator Intent Classification',
       version: 2,
+      sanitized: true,
+    },
+    {
+      id: 'mem-004',
+      title: 'Prisma SQLite Development Schema Migration Map',
+      type: 'artifact_ref',
+      state: 'active',
+      scope: 'project:forgeos-core',
+      provenance: 'Task 1.2: Database Persistence Layer',
+      version: 1,
+      sanitized: true,
     },
   ];
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '26px', fontWeight: 800, margin: '0 0 6px' }}>Persistent Memory System</h1>
-        <p style={{ color: '#94a3b8', margin: 0, fontSize: '14px' }}>
-          Contextual knowledge, project-isolated memory items, secret scrubbing, and immutable versioning (MEM-001–MEM-018).
-        </p>
+    <div className="mx-auto max-w-7xl space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-100">Persistent Memory Subsystem</h1>
+          <p className="mt-0.5 text-xs text-zinc-400">
+            Contextual memory items, strict project-level isolation, automated secret scrubbing, and deduplication (MEM-001–MEM-018).
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 hover:bg-white">
+            <Plus className="mr-1.5 h-3.5 w-3.5" />
+            <span>Store Context</span>
+          </Button>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '20px' }}>
+      {/* Governance Banner */}
+      <div className="flex items-center justify-between rounded-md border border-zinc-800 bg-zinc-900/40 px-4 py-2.5 text-xs text-zinc-400">
+        <div className="flex items-center gap-2">
+          <Lock className="h-3.5 w-3.5 text-emerald-400" />
+          <span>Project Isolation Enforced: Context items cannot leak across project boundaries.</span>
+        </div>
+        <span className="font-mono text-[11px] text-zinc-500">Secret Scrubbing: ACTIVE</span>
+      </div>
+
+      {/* Memory Item Grid */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {items.map((m) => (
           <div
             key={m.id}
-            style={{
-              backgroundColor: '#0e1526',
-              border: '1px solid #1e293b',
-              borderRadius: '12px',
-              padding: '22px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
+            className="flex flex-col justify-between rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-colors hover:border-zinc-700"
           >
             <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    fontFamily: "'JetBrains Mono', monospace",
-                    color: '#38bdf8',
-                    backgroundColor: '#0369a120',
-                    padding: '2px 6px',
-                    borderRadius: '4px',
-                  }}
-                >
-                  {m.id}
-                </span>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    padding: '2px 8px',
-                    borderRadius: '4px',
-                    backgroundColor: '#064e3b',
-                    color: '#34d399',
-                    fontWeight: 600,
-                  }}
-                >
-                  {m.state}
-                </span>
+              <div className="flex items-start justify-between gap-2">
+                <span className="font-mono text-[10px] text-zinc-500">{m.id}</span>
+                <div className="flex items-center gap-1.5">
+                  <Badge variant="outline" className="border-zinc-800 bg-zinc-900 font-mono text-[10px] text-zinc-300">
+                    {m.type}
+                  </Badge>
+                  <span className="rounded border border-zinc-800 bg-zinc-900 px-1 font-mono text-[10px] text-zinc-400">
+                    v{m.version}
+                  </span>
+                </div>
               </div>
-              <h3 style={{ margin: '0 0 8px', fontSize: '16px', fontWeight: 700 }}>{m.title}</h3>
-              <div style={{ fontSize: '12px', color: '#64748b', marginBottom: '12px' }}>
-                Scope: <span style={{ color: '#cbd5e1' }}>{m.scope}</span> • Type: <span style={{ color: '#cbd5e1' }}>{m.type}</span>
-              </div>
-              <div style={{ fontSize: '12.5px', color: '#94a3b8', lineHeight: 1.4 }}>
-                <strong>Provenance:</strong> {m.provenance}
-              </div>
+
+              <h3 className="mt-2 text-sm font-semibold text-zinc-100">{m.title}</h3>
+              <div className="mt-1 font-mono text-[11px] text-zinc-500">Scope: {m.scope}</div>
+              <p className="mt-3 text-xs leading-relaxed text-zinc-400">
+                Provenance: {m.provenance}
+              </p>
             </div>
 
-            <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #1e293b', fontSize: '12px', color: '#64748b' }}>
-              Version: v{m.version} (Immutable Snapshot)
+            <div className="mt-4 flex items-center justify-between border-t border-zinc-800/80 pt-3 text-[11px] font-mono">
+              <span className="text-emerald-400 flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Zero Secrets Detected
+              </span>
+              <span className="text-zinc-400 hover:text-zinc-200 cursor-pointer font-sans">
+                Inspect Memory →
+              </span>
             </div>
           </div>
         ))}

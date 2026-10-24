@@ -1,122 +1,130 @@
 import React from 'react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  ShieldCheck,
+  CheckCircle2,
+  AlertTriangle,
+  Play,
+  RotateCcw,
+  FileCheck,
+  Terminal,
+} from 'lucide-react';
 
 export default function QualityPage() {
   const gates = [
     {
-      name: 'Unit Test Verification Suite',
+      name: 'Unit & Integration Test Verification Suite',
       type: 'unit_test',
       severity: 'mandatory',
-      command: 'vitest run',
+      command: 'pnpm test --run',
       status: 'passed',
-      evidence: '91/91 tests passed across 25 suites',
+      evidence: '91/91 tests passing across 25 test suites',
+      timestamp: '2 min ago',
     },
     {
-      name: 'TypeScript Compilation & Strict Types',
+      name: 'TypeScript Strict Typecheck Compilation',
       type: 'typecheck',
       severity: 'mandatory',
-      command: 'tsc --noEmit',
+      command: 'pnpm --filter @forgeos/* typecheck',
       status: 'passed',
-      evidence: '0 errors found',
+      evidence: '0 errors found across all packages',
+      timestamp: '4 min ago',
     },
     {
-      name: 'Security & Least-Privilege Policy Audit',
+      name: 'Least-Privilege RBAC & Capability Gate',
       type: 'security_audit',
       severity: 'mandatory',
-      command: 'policy-engine audit',
+      command: 'pnpm --filter @forgeos/policy-engine test',
       status: 'passed',
-      evidence: 'Default-deny enforced; zero privilege escalations',
+      evidence: 'Default-deny active; zero unauthorized escalation vectors',
+      timestamp: '10 min ago',
     },
     {
-      name: 'Static Lint & Code Style',
+      name: 'Cryptographic Artifact SHA-256 Provenance',
+      type: 'provenance_audit',
+      severity: 'mandatory',
+      command: 'artifact-registry verify --all',
+      status: 'passed',
+      evidence: 'All staged artifacts match immutable SHA-256 hashes',
+      timestamp: '12 min ago',
+    },
+    {
+      name: 'Static Lint & Formatting Enforcement',
       type: 'lint',
       severity: 'advisory',
-      command: 'eslint .',
+      command: 'eslint . --max-warnings 0',
       status: 'passed',
-      evidence: 'No critical warnings',
+      evidence: 'Codebase adheres to clean architectural guidelines',
+      timestamp: '15 min ago',
     },
   ];
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '26px', fontWeight: 800, margin: '0 0 6px' }}>Quality Center</h1>
-        <p style={{ color: '#94a3b8', margin: 0, fontSize: '14px' }}>
-          Verification gates, empirical test evidence, and mandatory release blocking (FR-060–FR-063).
-        </p>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '28px' }}>
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px' }}>
-          <span style={{ fontSize: '12px', color: '#64748b' }}>Overall Pass Rate</span>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#34d399', marginTop: '4px' }}>100%</div>
-          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>4/4 Gates Cleared</div>
+    <div className="mx-auto max-w-7xl space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-100">Quality Center</h1>
+          <p className="mt-0.5 text-xs text-zinc-400">
+            Automated verification gates, empirical test evidence, and release blocking enforcement (FR-060–FR-063).
+          </p>
         </div>
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px' }}>
-          <span style={{ fontSize: '12px', color: '#64748b' }}>Blocking Violations</span>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc', marginTop: '4px' }}>0</div>
-          <div style={{ fontSize: '12px', color: '#34d399', marginTop: '4px' }}>Release Approved</div>
-        </div>
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px' }}>
-          <span style={{ fontSize: '12px', color: '#64748b' }}>Automated Test Count</span>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#38bdf8', marginTop: '4px' }}>91 Passed</div>
-          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '4px' }}>Unit, Integration, Security</div>
+        <div className="flex items-center gap-2">
+          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 hover:bg-white">
+            <Play className="mr-1.5 h-3.5 w-3.5 fill-current" />
+            <span>Evaluate All Gates</span>
+          </Button>
         </div>
       </div>
 
-      <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', overflow: 'hidden' }}>
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid #1e293b' }}>
-          <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700 }}>Active Verification Gates</h3>
+      {/* Metrics Bar */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+          <span className="text-[11px] font-medium text-zinc-400">Overall Gate Pass Rate</span>
+          <div className="mt-1 font-mono text-2xl font-bold text-emerald-400">100%</div>
+          <span className="font-mono text-[10px] text-zinc-500">5/5 gates passing</span>
         </div>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13.5px' }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid #1e293b', backgroundColor: '#090d16', color: '#64748b' }}>
-              <th style={{ padding: '14px 24px', fontWeight: 600 }}>Gate Name</th>
-              <th style={{ padding: '14px 24px', fontWeight: 600 }}>Severity</th>
-              <th style={{ padding: '14px 24px', fontWeight: 600 }}>Verification Command</th>
-              <th style={{ padding: '14px 24px', fontWeight: 600 }}>Status</th>
-              <th style={{ padding: '14px 24px', fontWeight: 600 }}>Empirical Evidence</th>
-            </tr>
-          </thead>
-          <tbody>
-            {gates.map((g) => (
-              <tr key={g.name} style={{ borderBottom: '1px solid #1e293b' }}>
-                <td style={{ padding: '16px 24px', fontWeight: 600 }}>{g.name}</td>
-                <td style={{ padding: '16px 24px' }}>
-                  <span
-                    style={{
-                      fontSize: '11px',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      backgroundColor: g.severity === 'mandatory' ? '#451a03' : '#1e293b',
-                      color: g.severity === 'mandatory' ? '#f59e0b' : '#94a3b8',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {g.severity}
-                  </span>
-                </td>
-                <td style={{ padding: '16px 24px', fontFamily: "'JetBrains Mono', monospace", color: '#cbd5e1' }}>
-                  {g.command}
-                </td>
-                <td style={{ padding: '16px 24px' }}>
-                  <span
-                    style={{
-                      fontSize: '11px',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      backgroundColor: '#064e3b',
-                      color: '#34d399',
-                      fontWeight: 600,
-                    }}
-                  >
-                    {g.status}
-                  </span>
-                </td>
-                <td style={{ padding: '16px 24px', color: '#94a3b8' }}>{g.evidence}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+          <span className="text-[11px] font-medium text-zinc-400">Release Gate Clearance</span>
+          <div className="mt-1 font-mono text-2xl font-bold text-zinc-100">GRANTED</div>
+          <span className="font-mono text-[10px] text-zinc-500">Zero mandatory blockers</span>
+        </div>
+        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+          <span className="text-[11px] font-medium text-zinc-400">Automated Suites</span>
+          <div className="mt-1 font-mono text-2xl font-bold text-zinc-100">91 Tests</div>
+          <span className="font-mono text-[10px] text-zinc-500">100% automated regression evidence</span>
+        </div>
+      </div>
+
+      {/* Quality Gate List */}
+      <div className="divide-y divide-zinc-800/60 rounded-lg border border-zinc-800 bg-zinc-950">
+        {gates.map((g) => (
+          <div key={g.name} className="flex items-center justify-between p-4 hover:bg-zinc-900/20 transition-colors">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                <h3 className="text-xs font-semibold text-zinc-100">{g.name}</h3>
+                <span className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                  {g.severity}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 font-mono text-[11px] text-zinc-500">
+                <span className="text-zinc-400">$ {g.command}</span>
+                <span>•</span>
+                <span>{g.evidence}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-[11px] text-zinc-500">{g.timestamp}</span>
+              <Badge variant="outline" className="border-emerald-800/80 bg-emerald-950/40 font-mono text-[10px] text-emerald-400">
+                PASSED
+              </Badge>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

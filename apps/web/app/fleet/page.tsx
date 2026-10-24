@@ -1,144 +1,162 @@
 import React from 'react';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  Bot,
+  Compass,
+  Code2,
+  ShieldCheck,
+  GitFork,
+  Cpu,
+  Layers,
+  Sparkles,
+  Terminal,
+  Activity,
+} from 'lucide-react';
 
 export default function FleetPage() {
   const roles = [
     {
       id: 'orchestrator',
       name: 'Conversational Orchestrator',
-      icon: '⚡',
+      icon: Compass,
       skills: ['intent-classification', 'adaptive-planning', 'delegation'],
-      modelTier: 'fast',
+      modelTier: 'claude-3-5-sonnet',
       status: 'idle',
-      description: 'Translates high-level user intent into goals, criteria, and executable DAG workflows.',
+      description: 'Translates high-level user intent into unambiguous goals, acceptance criteria, and DAG workflows.',
+      capabilities: ['intent:classify', 'dag:synthesize', 'workflow:orchestrate'],
     },
     {
       id: 'solution-architect',
-      name: 'Solution Architect',
-      icon: '📐',
+      name: 'Lead Solution Architect',
+      icon: Layers,
       skills: ['architecture-design', 'interface-specification', 'adr-authoring'],
-      modelTier: 'deep_reasoning',
+      modelTier: 'gpt-4o',
       status: 'idle',
-      description: 'Designs software architecture, data schemas, API contracts, and technology trade-offs.',
+      description: 'Authoritative architect for domain models, API contracts, schema migrations, and ADR packages.',
+      capabilities: ['arch:spec', 'adr:author', 'contract:validate'],
     },
     {
       id: 'software-engineer',
-      name: 'Software Engineer',
-      icon: '💻',
+      name: 'Senior Software Engineer',
+      icon: Code2,
       skills: ['tdd-implementation', 'refactoring', 'code-generation'],
-      modelTier: 'balanced',
-      status: 'idle',
-      description: 'Executes test-driven development, implements features, and satisfies architectural contracts.',
+      modelTier: 'gpt-4o',
+      status: 'busy',
+      description: 'Executes strict test-driven development, builds production features, and refactors clean code.',
+      capabilities: ['code:write', 'test:tdd', 'refactor:clean'],
     },
     {
       id: 'qa-engineer',
       name: 'QA & Verification Engineer',
-      icon: '🛡️',
+      icon: ShieldCheck,
       skills: ['automated-testing', 'quality-gate-verification', 'regression-testing'],
-      modelTier: 'balanced',
+      modelTier: 'gemini-1.5-pro',
       status: 'idle',
-      description: 'Authors test suites, verifies coverage thresholds, and validates mandatory release gates.',
+      description: 'Validates empirical test evidence against mandatory gate presets and blocks releases on failure.',
+      capabilities: ['test:verify', 'gate:evaluate', 'coverage:measure'],
     },
     {
       id: 'devops-engineer',
-      name: 'DevOps & Release Engineer',
-      icon: '🚀',
+      name: 'DevOps & Worktree Engineer',
+      icon: GitFork,
       skills: ['git-worktrees', 'runner-sandboxing', 'ci-cd-pipelines'],
-      modelTier: 'balanced',
+      modelTier: 'claude-3-5-sonnet',
       status: 'idle',
-      description: 'Manages isolated branches, runner environments, deployment scripts, and container configs.',
+      description: 'Manages sandboxed execution runners, worktree lifecycle isolation, and atomic merge releases.',
+      capabilities: ['worktree:isolate', 'runner:sandbox', 'release:publish'],
     },
     {
-      id: 'product-manager',
-      name: 'Product Manager',
-      icon: '📋',
-      skills: ['requirements-analysis', 'ambiguity-detection', 'impact-analysis'],
-      modelTier: 'fast',
+      id: 'platform-builder',
+      name: 'Platform Builder Agent',
+      icon: Cpu,
+      skills: ['engine-modification', 'policy-evaluation', 'rollback-management'],
+      modelTier: 'gpt-4o',
       status: 'idle',
-      description: 'Synthesizes functional requirements, acceptance criteria, and user story definitions.',
+      description: 'Enables self-contained modification of ForgeOS engines through isolated staging and approval gates.',
+      capabilities: ['engine:inspect', 'changeset:plan', 'engine:upgrade'],
     },
   ];
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '26px', fontWeight: 800, margin: '0 0 6px' }}>Agent Fleet Catalog</h1>
-        <p style={{ color: '#94a3b8', margin: 0, fontSize: '14px' }}>
-          Role registry, skill bindings, model tier routing, and capability isolation (FR-020–FR-028).
-        </p>
+    <div className="mx-auto max-w-7xl space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight text-zinc-100">Agent Fleet Catalog</h1>
+          <p className="mt-0.5 text-xs text-zinc-400">
+            Authoritative role specifications, capability bindings, and least-privilege governance (FR-020–FR-024).
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-xs text-zinc-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> 6 Roles Registered
+          </span>
+        </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '20px' }}>
-        {roles.map((r) => (
-          <div
-            key={r.id}
-            style={{
-              backgroundColor: '#0e1526',
-              border: '1px solid #1e293b',
-              borderRadius: '12px',
-              padding: '24px',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontSize: '24px' }}>{r.icon}</span>
-                  <div>
-                    <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700 }}>{r.name}</h3>
-                    <span style={{ fontSize: '11px', fontFamily: "'JetBrains Mono', monospace", color: '#64748b' }}>
-                      {r.id}
-                    </span>
+      {/* Roster Cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {roles.map((role) => {
+          const Icon = role.icon;
+          return (
+            <div
+              key={role.id}
+              className="flex flex-col justify-between rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-colors hover:border-zinc-700"
+            >
+              <div>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-800 bg-zinc-900 text-zinc-300">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-semibold text-zinc-100">{role.name}</h3>
+                      <span className="font-mono text-[10px] text-zinc-500">{role.id}</span>
+                    </div>
+                  </div>
+                  {role.status === 'busy' ? (
+                    <Badge variant="outline" className="border-amber-800/80 bg-amber-950/40 font-mono text-[10px] text-amber-400">
+                      active
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="border-zinc-800 bg-zinc-900 font-mono text-[10px] text-zinc-400">
+                      idle
+                    </Badge>
+                  )}
+                </div>
+
+                <p className="mt-3 text-xs leading-relaxed text-zinc-400">
+                  {role.description}
+                </p>
+
+                {/* Capability Pills */}
+                <div className="mt-4 space-y-1.5">
+                  <div className="text-[10px] font-semibold tracking-wider text-zinc-500 uppercase">
+                    Bound Capabilities (RBAC)
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {role.capabilities.map((cap) => (
+                      <span
+                        key={cap}
+                        className="rounded border border-zinc-800/80 bg-zinc-900/60 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300"
+                      >
+                        {cap}
+                      </span>
+                    ))}
                   </div>
                 </div>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    padding: '3px 8px',
-                    borderRadius: '4px',
-                    backgroundColor: '#064e3b',
-                    color: '#34d399',
-                  }}
-                >
-                  {r.status}
-                </span>
               </div>
 
-              <p style={{ color: '#94a3b8', fontSize: '13px', lineHeight: 1.5, margin: '0 0 16px' }}>
-                {r.description}
-              </p>
-
-              <div style={{ marginBottom: '16px' }}>
-                <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', marginBottom: '6px' }}>
-                  COMPATIBLE SKILLS
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                  {r.skills.map((s) => (
-                    <span
-                      key={s}
-                      style={{
-                        fontSize: '11px',
-                        padding: '2px 8px',
-                        borderRadius: '4px',
-                        backgroundColor: '#1e293b',
-                        color: '#cbd5e1',
-                      }}
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
+              {/* Card Footer */}
+              <div className="mt-4 flex items-center justify-between border-t border-zinc-800/80 pt-3 text-[11px] font-mono text-zinc-500">
+                <span>Model: {role.modelTier}</span>
+                <span className="text-zinc-400 hover:text-zinc-200 cursor-pointer">Config →</span>
               </div>
             </div>
-
-            <div style={{ paddingTop: '14px', borderTop: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '12px', color: '#64748b' }}>Model Tier:</span>
-              <span style={{ fontSize: '12px', fontWeight: 600, color: '#38bdf8' }}>{r.modelTier}</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
