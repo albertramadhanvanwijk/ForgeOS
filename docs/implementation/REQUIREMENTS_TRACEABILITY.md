@@ -36,7 +36,7 @@
 | FR-011 | Task graph with dependencies/inputs/outputs/status | P0 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
 | FR-012 | Adaptive workflow selection | P0 | `platform/workflow-engine` | `tests/unit/workflow-selection.test.ts` | `not_started` |
 | FR-013 | Safe serial/parallel work | P1 | `platform/workflow-engine` | `tests/integration/parallel-work.test.ts` | `not_started` |
-| FR-015 | Review consequential plans | P0 | `platform/policy-engine` | `tests/integration/plan-approval.test.ts` | `not_started` |
+| FR-015 | Review consequential plans | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
 | FR-016 | Explicit workflow states | P0 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
 | FR-017 | Resume after interruption | P1 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
 | FR-018 | Persistent checkpoints | P0 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
@@ -44,10 +44,10 @@
 | FR-021 | Select agents by task | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-022 | Agent uses compatible skills | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-024 | Skip irrelevant agents | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
-| FR-025 | Scope every run by goal/context/permissions/budget | P0 | `platform/policy-engine` | `tests/unit/run-scope.test.ts` | `not_started` |
+| FR-025 | Scope every run by goal/context/permissions/budget | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
 | FR-026 | Delegation | P1 | `platform/orchestrator` | `tests/unit/delegation.test.ts` | `not_started` |
 | FR-027 | Record selection rationale | P1 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
-| FR-028 | Agents cannot expand permissions | P0 | `platform/policy-engine` | `tests/security/permission-expansion.test.ts` | `not_started` |
+| FR-028 | Agents cannot expand permissions | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
 | FR-030 | Artifact Registry | P0 | `platform/artifact-registry` | `tests/unit/artifact.test.ts` | `not_started` |
 | FR-031 | Type/version/status/provenance/task links | P0 | `platform/artifact-registry` | `tests/unit/artifact-model.test.ts` | `not_started` |
 | FR-032 | Store documents/code/tests/designs/reports | P0 | `platform/artifact-registry` | `tests/integration/artifact-store.test.ts` | `not_started` |
@@ -75,7 +75,7 @@
 | FR-090 | Structured workflow/tool logs | P0 | `platform/observability` | `tests/unit/structured-logs.test.ts` | `not_started` |
 | FR-091 | Explain failure/recovery | P0 | `platform/orchestrator` | `tests/unit/failure-explain.test.ts` | `not_started` |
 | FR-092 | Budget/time/concurrency/retry limits | P0 | `platform/policy-engine` | `tests/unit/limits.test.ts` | `not_started` |
-| FR-093 | Audit sensitive actions | P0 | `platform/observability` | `tests/security/audit.test.ts` | `not_started` |
+| FR-093 | Audit sensitive actions | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
 | FR-094 | Model routing | P1 | `platform/model-gateway` | `tests/unit/model-routing.test.ts` | `not_started` |
 | FR-095 | Outcome-based agent evaluation | P1 | `platform/quality-engine` | `tests/unit/agent-eval.test.ts` | `not_started` |
 

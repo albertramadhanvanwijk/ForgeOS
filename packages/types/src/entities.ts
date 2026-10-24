@@ -178,6 +178,8 @@ export type ApprovalStatus =
   | 'cancelled'
   | 'superseded';
 
+export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
+
 export interface ApprovalRecord {
   id: string;
   projectId: string;
@@ -186,7 +188,7 @@ export interface ApprovalRecord {
   resourceId: string;
   exactVersionHash: string;
   status: ApprovalStatus;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: RiskLevel;
   requestedBy: string;
   approvedBy?: string | null;
   rationale: string;

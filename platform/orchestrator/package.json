@@ -15,6 +15,7 @@
     "@forgeos/types": "workspace:*",
     "@forgeos/agent-registry": "workspace:*",
     "@forgeos/workflow-engine": "workspace:*",
+    "@forgeos/policy-engine": "workspace:*",
     "fastify": "^4.28.1",
     "@fastify/cors": "^9.0.1"
   },

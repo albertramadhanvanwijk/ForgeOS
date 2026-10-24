@@ -47,6 +47,9 @@ importers:
       '@forgeos/agent-registry':
         specifier: workspace:*
         version: link:../agent-registry
+      '@forgeos/policy-engine':
+        specifier: workspace:*
+        version: link:../policy-engine
       '@forgeos/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -56,6 +59,19 @@ importers:
       fastify:
         specifier: ^4.28.1
         version: 4.29.1
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.5
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  platform/policy-engine:
+    dependencies:
+      '@forgeos/types':
+        specifier: workspace:*
+        version: link:../../packages/types
     devDependencies:
       '@types/node':
         specifier: ^22.10.2

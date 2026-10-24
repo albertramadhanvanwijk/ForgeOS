@@ -7,12 +7,22 @@ import { registryRoutes } from './registry/registry.routes.js';
 import { AgentRegistry } from '@forgeos/agent-registry';
 import { workflowsRoutes } from './workflows/workflows.routes.js';
 import { WorkflowEngine, InMemoryWorkflowStore } from '@forgeos/workflow-engine';
+import { policyRoutes } from './policy/policy.routes.js';
+import {
+  PolicyEngine,
+  ApprovalService,
+  InMemoryApprovalStore,
+  InMemoryAuditLogger,
+} from '@forgeos/policy-engine';
 
 export interface ServerOptions {
   logger?: boolean;
   projectsService?: ProjectsService;
   agentRegistry?: AgentRegistry;
   workflowEngine?: WorkflowEngine;
+  policyEngine?: PolicyEngine;
+  approvalService?: ApprovalService;
+  auditLogger?: InMemoryAuditLogger;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -57,6 +67,19 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
   await app.register(workflowsRoutes, {
     prefix: '/api/workflows',
     engine: workflowEngine,
+  });
+
+  // Policy Engine & Approvals Routes (FR-015, FR-025, FR-028, FR-093)
+  const auditLogger = opts.auditLogger ?? new InMemoryAuditLogger();
+  const policyEngine = opts.policyEngine ?? new PolicyEngine(auditLogger);
+  const approvalService =
+    opts.approvalService ?? new ApprovalService(new InMemoryApprovalStore());
+
+  await app.register(policyRoutes, {
+    prefix: '/api/policy',
+    policyEngine,
+    approvalService,
+    auditLogger,
   });
 
   return app;
