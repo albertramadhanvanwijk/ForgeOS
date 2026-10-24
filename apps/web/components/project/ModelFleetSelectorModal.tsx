@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { X, Cpu, Check, ShieldCheck, Sparkles, SlidersHorizontal, ExternalLink } from 'lucide-react';
+import { X, SlidersHorizontal, ShieldCheck, ExternalLink, Cpu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
-  ALL_MODELS,
   getStoredApiKeys,
   type ApiKeysConfig,
   DEFAULT_API_KEYS,
@@ -47,19 +46,12 @@ export function ModelFleetSelectorModal({
     onClose();
   };
 
-  // Collect all suggestions: custom endpoints + base models
-  const suggestions: string[] = [
-    ...(apiKeys.customEndpoints || []).map((ep) => ep.modelName),
-    'anthropic/claude-3.5-sonnet',
-    'deepseek/deepseek-coder-v2',
-    'openai/gpt-4o',
-    'openai/gpt-4o-mini',
-    'deepseek/deepseek-r1',
-    'llama-3.3-70b-versatile',
-    'qwen2.5-coder:32b',
-    'ollama/llama3.1-70b',
-  ];
-  const uniqueSuggestions = Array.from(new Set(suggestions));
+  // Extract all automatically detected models across all configured custom endpoints
+  const detectedModels: string[] = Array.from(
+    new Set(
+      (apiKeys.customEndpoints || []).flatMap((ep) => ep.availableModels || [])
+    )
+  );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
@@ -73,7 +65,7 @@ export function ModelFleetSelectorModal({
             <div>
               <h2 className="text-sm font-semibold text-zinc-100">Custom AI Model Routing</h2>
               <p className="text-[11px] text-zinc-400">
-                Ketik atau pilih model AI kustom apa saja tanpa batasan provider
+                Pilih atau ketik model kustom apa saja sesuai endpoint yang Anda konfigurasi
               </p>
             </div>
           </div>
@@ -85,21 +77,27 @@ export function ModelFleetSelectorModal({
         {/* Custom Endpoints Shortcut Banner */}
         <div className="flex items-center justify-between rounded-md border border-zinc-800/80 bg-zinc-950 p-3 text-xs">
           <div className="text-zinc-400 font-mono text-[11px]">
-            <span>💡 Anda bebas mengetik nama model string apa saja (misal: <code>deepseek-r1</code>, <code>my-model:v1</code>).</span>
+            {detectedModels.length > 0 ? (
+              <span className="text-emerald-400 font-semibold">
+                ✓ {detectedModels.length} model terdeteksi otomatis dari endpoint Anda.
+              </span>
+            ) : (
+              <span>💡 Belum ada endpoint kustom. Ketik model bebas atau hubungkan endpoint di Settings.</span>
+            )}
           </div>
           <Link
             href="/settings"
             onClick={onClose}
             className="flex items-center gap-1 font-mono text-[11px] font-semibold text-blue-400 hover:text-blue-300 shrink-0 ml-2"
           >
-            <span>Custom Endpoints</span>
+            <span>+ AI Endpoints Settings</span>
             <ExternalLink className="h-3 w-3" />
           </Link>
         </div>
 
         {/* Global Datalist for suggestions */}
         <datalist id="model-suggestions">
-          {uniqueSuggestions.map((m) => (
+          {detectedModels.map((m) => (
             <option key={m} value={m} />
           ))}
         </datalist>
@@ -120,7 +118,7 @@ export function ModelFleetSelectorModal({
               list="model-suggestions"
               value={config.architect}
               onChange={(e) => setConfig({ ...config, architect: e.target.value })}
-              placeholder="e.g. claude-3.5-sonnet, deepseek-r1, my-model"
+              placeholder="Ketik atau pilih model (misal: deepseek-r1)..."
               className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
             />
           </div>
@@ -139,7 +137,7 @@ export function ModelFleetSelectorModal({
               list="model-suggestions"
               value={config.designer}
               onChange={(e) => setConfig({ ...config, designer: e.target.value })}
-              placeholder="e.g. claude-3.5-sonnet, gpt-4o, my-designer-model"
+              placeholder="Ketik atau pilih model (misal: claude-3-5-sonnet)..."
               className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
             />
           </div>
@@ -158,7 +156,7 @@ export function ModelFleetSelectorModal({
               list="model-suggestions"
               value={config.engineer}
               onChange={(e) => setConfig({ ...config, engineer: e.target.value })}
-              placeholder="e.g. deepseek-coder-v2, claude-3.5-sonnet, qwen2.5-coder"
+              placeholder="Ketik atau pilih model (misal: deepseek-coder, qwen2.5-coder)..."
               className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
             />
           </div>
@@ -177,7 +175,7 @@ export function ModelFleetSelectorModal({
               list="model-suggestions"
               value={config.qa}
               onChange={(e) => setConfig({ ...config, qa: e.target.value })}
-              placeholder="e.g. gpt-4o-mini, haiku, llama-3.3-70b"
+              placeholder="Ketik atau pilih model (misal: gpt-4o-mini, llama-3.3-70b)..."
               className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
             />
           </div>

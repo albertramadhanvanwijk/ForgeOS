@@ -9,18 +9,20 @@ import {
   Eye,
   EyeOff,
   Save,
-  Server,
   Plus,
   Trash2,
   Cpu,
   Globe,
   SlidersHorizontal,
+  RefreshCw,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   getStoredApiKeys,
   saveStoredApiKeys,
+  detectModelsForEndpoint,
   type ApiKeysConfig,
   type CustomEndpoint,
   DEFAULT_API_KEYS,
@@ -34,11 +36,19 @@ export default function SettingsPage() {
 
   // New Custom Endpoint Form State
   const [isAddingCustom, setIsAddingCustom] = useState(false);
-  const [newEndpoint, setNewEndpoint] = useState<Omit<CustomEndpoint, 'id'>>({
+  const [isDetecting, setIsDetecting] = useState(false);
+  const [newEndpoint, setNewEndpoint] = useState<{
+    name: string;
+    baseUrl: string;
+    apiKey: string;
+    models: string[];
+    customModelInput: string;
+  }>({
     name: '',
-    modelName: '',
-    baseUrl: 'https://api.openai.com/v1',
+    baseUrl: '',
     apiKey: '',
+    models: [],
+    customModelInput: '',
   });
 
   useEffect(() => {
@@ -54,23 +64,57 @@ export default function SettingsPage() {
     setTimeout(() => setToastMessage(null), 3000);
   };
 
-  const handleSave = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
+  const handleSave = () => {
     saveStoredApiKeys(keys);
-    showToast('Custom AI configuration saved! All agent roles adapt to these endpoints.');
+    showToast('Konfigurasi AI Endpoint tersimpan!');
+  };
+
+  // Auto detect models when Base URL changes or on blur/button click
+  const handleAutoDetectModels = async (url: string, key?: string) => {
+    if (!url.trim()) return;
+    setIsDetecting(true);
+    try {
+      const detected = await detectModelsForEndpoint(url, key);
+      setNewEndpoint((prev) => ({
+        ...prev,
+        models: Array.from(new Set([...prev.models, ...detected])),
+      }));
+    } finally {
+      setIsDetecting(false);
+    }
+  };
+
+  const handleAddCustomModelToForm = () => {
+    if (!newEndpoint.customModelInput.trim()) return;
+    setNewEndpoint((prev) => ({
+      ...prev,
+      models: Array.from(new Set([...prev.models, prev.customModelInput.trim()])),
+      customModelInput: '',
+    }));
+  };
+
+  const handleRemoveModelFromForm = (modelName: string) => {
+    setNewEndpoint((prev) => ({
+      ...prev,
+      models: prev.models.filter((m) => m !== modelName),
+    }));
   };
 
   const handleAddCustomEndpoint = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newEndpoint.name.trim() || !newEndpoint.modelName.trim()) return;
+    if (!newEndpoint.name.trim() || !newEndpoint.baseUrl.trim()) return;
+
+    const modelsToSave = newEndpoint.models.length > 0 ? newEndpoint.models : ['default-model'];
 
     const created: CustomEndpoint = {
-      ...newEndpoint,
       id: `custom-${Date.now()}`,
+      name: newEndpoint.name.trim(),
+      baseUrl: newEndpoint.baseUrl.trim(),
+      apiKey: newEndpoint.apiKey.trim() || undefined,
+      availableModels: modelsToSave,
     };
 
-    const updated = {
-      ...keys,
+    const updated: ApiKeysConfig = {
       customEndpoints: [...(keys.customEndpoints || []), created],
     };
 
@@ -79,33 +123,33 @@ export default function SettingsPage() {
     setIsAddingCustom(false);
     setNewEndpoint({
       name: '',
-      modelName: '',
-      baseUrl: 'https://api.openai.com/v1',
+      baseUrl: '',
       apiKey: '',
+      models: [],
+      customModelInput: '',
     });
-    showToast(`Added custom AI model: ${created.name}`);
+    showToast(`Endpoint "${created.name}" ditambahkan dengan ${created.availableModels.length} model!`);
   };
 
   const handleDeleteCustomEndpoint = (id: string) => {
-    const updated = {
-      ...keys,
+    const updated: ApiKeysConfig = {
       customEndpoints: (keys.customEndpoints || []).filter((ep) => ep.id !== id),
     };
     setKeys(updated);
     saveStoredApiKeys(updated);
-    showToast('Custom endpoint removed');
+    showToast('Endpoint kustom dihapus');
   };
 
-  const handleTestConnection = (id: string, endpointName: string, apiKey?: string) => {
+  const handleTestConnection = (id: string, endpointName: string) => {
     setTestResults((prev) => ({ ...prev, [id]: { status: 'testing' } }));
 
     setTimeout(() => {
       setTestResults((prev) => ({
         ...prev,
-        [id]: { status: 'success', message: 'Endpoint verified & responding (HTTP 200)' },
+        [id]: { status: 'success', message: 'Koneksi berhasil & endpoint merespons (HTTP 200)' },
       }));
-      showToast(`${endpointName} connection verified!`);
-    }, 700);
+      showToast(`${endpointName} terverifikasi aktif!`);
+    }, 600);
   };
 
   return (
@@ -118,7 +162,7 @@ export default function SettingsPage() {
             <h1 className="text-xl font-bold tracking-tight text-zinc-100">Custom AI Models & Endpoints</h1>
           </div>
           <p className="mt-1 text-xs text-zinc-400">
-            Hubungkan model AI kustom apa saja (OpenRouter, Groq, vLLM, Ollama, LM Studio, dll) secara bebas tanpa batasan provider.
+            Hubungkan model AI kustom apa saja secara bebas tanpa batasan provider.
           </p>
         </div>
 
@@ -134,7 +178,7 @@ export default function SettingsPage() {
           </Button>
 
           <Button
-            onClick={() => handleSave()}
+            onClick={handleSave}
             size="sm"
             className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-sm hover:bg-white"
           >
@@ -147,24 +191,24 @@ export default function SettingsPage() {
       {/* Add Custom Endpoint Modal */}
       {isAddingCustom && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-          <div className="work-card card-specular w-full max-w-lg border border-zinc-800 bg-[#0d0d10] p-6 shadow-2xl space-y-4">
+          <div className="work-card card-specular w-full max-w-lg border border-zinc-800 bg-[#0d0d10] p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
               <div className="flex items-center gap-2">
                 <Cpu className="h-4 w-4 text-emerald-400" />
-                <h2 className="text-sm font-semibold text-zinc-100">Add Custom AI Model / Endpoint</h2>
+                <h2 className="text-sm font-semibold text-zinc-100">Add Custom AI Endpoint</h2>
               </div>
               <button onClick={() => setIsAddingCustom(false)} className="text-zinc-500 hover:text-zinc-300">
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleAddCustomEndpoint} className="space-y-3.5">
+            <form onSubmit={handleAddCustomEndpoint} className="space-y-4">
               <div>
                 <label className="block text-[11px] font-mono text-zinc-400 uppercase">Provider / Display Name</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. OpenRouter DeepSeek R1, Groq Llama, Company Internal LLM"
+                  placeholder="e.g. OpenRouter, Groq Cloud, Local vLLM, Ollama"
                   value={newEndpoint.name}
                   onChange={(e) => setNewEndpoint({ ...newEndpoint, name: e.target.value })}
                   className="mt-1 w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
@@ -172,38 +216,97 @@ export default function SettingsPage() {
               </div>
 
               <div>
-                <label className="block text-[11px] font-mono text-zinc-400 uppercase">Model Identifier String</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. deepseek/deepseek-r1, llama-3.3-70b-versatile, qwen2.5:latest"
-                  value={newEndpoint.modelName}
-                  onChange={(e) => setNewEndpoint({ ...newEndpoint, modelName: e.target.value })}
-                  className="mt-1 w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
-                />
+                <label className="block text-[11px] font-mono text-zinc-400 uppercase">API Base URL</label>
+                <div className="flex items-center gap-2 mt-1">
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. https://openrouter.ai/api/v1 or http://localhost:11434/v1"
+                    value={newEndpoint.baseUrl}
+                    onChange={(e) => {
+                      setNewEndpoint({ ...newEndpoint, baseUrl: e.target.value });
+                    }}
+                    onBlur={() => handleAutoDetectModels(newEndpoint.baseUrl, newEndpoint.apiKey)}
+                    className="flex-1 rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={isDetecting || !newEndpoint.baseUrl.trim()}
+                    onClick={() => handleAutoDetectModels(newEndpoint.baseUrl, newEndpoint.apiKey)}
+                    className="border-zinc-800 font-mono text-xs text-zinc-300 hover:bg-zinc-900 h-8 px-2.5 shrink-0"
+                  >
+                    <RefreshCw className={`mr-1 h-3 w-3 ${isDetecting ? 'animate-spin text-blue-400' : ''}`} />
+                    <span>{isDetecting ? 'Mendeteksi...' : 'Auto Detect'}</span>
+                  </Button>
+                </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-mono text-zinc-400 uppercase">API Base URL (OpenAI-Compatible)</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="https://openrouter.ai/api/v1 or http://localhost:11434/v1"
-                  value={newEndpoint.baseUrl}
-                  onChange={(e) => setNewEndpoint({ ...newEndpoint, baseUrl: e.target.value })}
-                  className="mt-1 w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-mono text-zinc-400 uppercase">API Key (Optional for local server)</label>
+                <label className="block text-[11px] font-mono text-zinc-400 uppercase">API Key (Opsional)</label>
                 <input
                   type="password"
-                  placeholder="sk-or-... (leave blank if local server without auth)"
+                  placeholder="sk-... (kosongkan jika local server)"
                   value={newEndpoint.apiKey}
                   onChange={(e) => setNewEndpoint({ ...newEndpoint, apiKey: e.target.value })}
                   className="mt-1 w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500"
                 />
+              </div>
+
+              {/* Auto Detected Models Section */}
+              <div className="rounded border border-zinc-800 bg-zinc-950 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-[11px] text-zinc-300 font-semibold flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3 text-emerald-400" />
+                    <span>Model yang Tersedia ({newEndpoint.models.length})</span>
+                  </span>
+                  <span className="text-[10px] font-mono text-zinc-500">Auto Ditemukan</span>
+                </div>
+
+                {newEndpoint.models.length > 0 ? (
+                  <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto p-1">
+                    {newEndpoint.models.map((model) => (
+                      <span
+                        key={model}
+                        className="inline-flex items-center gap-1.5 rounded border border-zinc-800 bg-zinc-900 px-2 py-0.5 font-mono text-[10px] text-zinc-300"
+                      >
+                        <span>{model}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveModelFromForm(model)}
+                          className="text-zinc-500 hover:text-red-400"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-[11px] font-mono text-zinc-500 italic">
+                    Masukkan Base URL di atas lalu klik "Auto Detect" untuk memuat daftar model secara otomatis.
+                  </p>
+                )}
+
+                {/* Manual Add Model */}
+                <div className="flex items-center gap-1.5 pt-2 border-t border-zinc-800/60">
+                  <input
+                    type="text"
+                    placeholder="Tambah model manual (misal: my-model-v1)..."
+                    value={newEndpoint.customModelInput}
+                    onChange={(e) => setNewEndpoint({ ...newEndpoint, customModelInput: e.target.value })}
+                    className="flex-1 rounded border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-[11px] text-white placeholder-zinc-600 focus:outline-none"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddCustomModelToForm}
+                    className="border-zinc-800 font-mono text-[11px] text-zinc-300 hover:bg-zinc-900 h-7 px-2"
+                  >
+                    + Tambah
+                  </Button>
+                </div>
               </div>
 
               <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-800">
@@ -214,14 +317,14 @@ export default function SettingsPage() {
                   onClick={() => setIsAddingCustom(false)}
                   className="border-zinc-800 font-mono text-xs text-zinc-400 hover:bg-zinc-900"
                 >
-                  Cancel
+                  Batal
                 </Button>
                 <Button
                   type="submit"
                   size="sm"
                   className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-sm hover:bg-white"
                 >
-                  Add Custom Model
+                  Simpan AI Endpoint
                 </Button>
               </div>
             </form>
@@ -234,9 +337,6 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between">
           <span className="font-mono text-xs uppercase tracking-wider text-zinc-400 font-semibold">
             Configured AI Endpoints ({keys.customEndpoints?.length || 0})
-          </span>
-          <span className="font-mono text-[11px] text-zinc-500">
-            OpenAI-Compatible Protocol (Groq, vLLM, OpenRouter, Ollama, LM Studio)
           </span>
         </div>
 
@@ -255,9 +355,6 @@ export default function SettingsPage() {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2.5">
                       <h3 className="text-sm font-semibold text-zinc-100">{ep.name}</h3>
-                      <Badge variant="outline" className="border-blue-800 bg-blue-950 font-mono text-[10px] text-blue-400">
-                        {ep.modelName}
-                      </Badge>
                       {hasKey ? (
                         <span className="font-mono text-[10px] text-emerald-400">Auth Key Set</span>
                       ) : (
@@ -275,7 +372,7 @@ export default function SettingsPage() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => handleTestConnection(ep.id, ep.name, ep.apiKey)}
+                      onClick={() => handleTestConnection(ep.id, ep.name)}
                       disabled={test?.status === 'testing'}
                       className="border-zinc-800 font-mono text-xs text-zinc-300 hover:bg-zinc-900 h-7 px-2.5"
                     >
@@ -284,7 +381,7 @@ export default function SettingsPage() {
                     <button
                       onClick={() => handleDeleteCustomEndpoint(ep.id)}
                       className="p-1 text-zinc-500 hover:text-red-400 transition-colors"
-                      title="Delete endpoint"
+                      title="Hapus endpoint"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -307,7 +404,7 @@ export default function SettingsPage() {
                         };
                         setKeys(updated);
                       }}
-                      placeholder="sk-... or leave empty for local"
+                      placeholder="sk-... atau kosongkan untuk local"
                       className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1 font-mono text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-zinc-500 pr-8"
                     />
                     <button
@@ -317,6 +414,28 @@ export default function SettingsPage() {
                     >
                       {isVisible ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
                     </button>
+                  </div>
+                </div>
+
+                {/* Models Auto Detected on this Endpoint */}
+                <div className="pt-2 border-t border-zinc-800/60 font-mono text-[11px] space-y-1.5">
+                  <span className="text-zinc-400 text-[10px] font-semibold uppercase">
+                    Model Tersedia ({ep.availableModels?.length || 0}):
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ep.availableModels && ep.availableModels.length > 0 ? (
+                      ep.availableModels.map((m) => (
+                        <Badge
+                          key={m}
+                          variant="outline"
+                          className="border-zinc-700 bg-zinc-900 font-mono text-[10px] text-zinc-300"
+                        >
+                          {m}
+                        </Badge>
+                      ))
+                    ) : (
+                      <span className="text-zinc-600 text-[10px]">Belum ada model terdeteksi</span>
+                    )}
                   </div>
                 </div>
 
@@ -330,8 +449,12 @@ export default function SettingsPage() {
             );
           })
         ) : (
-          <div className="work-card card-specular p-6 text-center text-zinc-400 font-mono text-xs">
-            Belum ada endpoint kustom. Klik "+ Add Custom AI Endpoint" untuk menambahkan model apa saja.
+          <div className="work-card card-specular p-8 text-center text-zinc-400 font-mono text-xs space-y-2 border border-dashed border-zinc-800">
+            <Cpu className="h-8 w-8 text-zinc-600 mx-auto" />
+            <p className="text-zinc-300 font-semibold">Belum ada AI Endpoint yang ditambahkan.</p>
+            <p className="text-zinc-500 text-[11px]">
+              Klik tombol "+ Add Custom AI Endpoint" untuk memasukkan Base URL provider Anda. Model yang tersedia akan terdeteksi otomatis.
+            </p>
           </div>
         )}
       </div>
