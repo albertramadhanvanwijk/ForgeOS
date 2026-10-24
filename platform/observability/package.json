@@ -1,0 +1,15 @@
+{
+  "name": "@forgeos/observability",
+  "version": "0.1.0",
+  "description": "ForgeOS Observability, Structured Logging, Failure Explanation, and Limit Enforcement",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@forgeos/types": "workspace:*"
+  }
+}

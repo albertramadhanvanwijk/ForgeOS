@@ -24,6 +24,12 @@ import { IRunnerAdapter, LocalProcessRunner } from '@forgeos/runner';
 import { GitService, registerGitRoutes } from './git/index.js';
 import { QualityEngine } from '@forgeos/quality-engine';
 import { registerQualityRoutes } from './quality/quality.routes.js';
+import {
+  StructuredLogger,
+  FailureExplainer,
+  LimitEnforcer,
+} from '@forgeos/observability';
+import { registerObservabilityRoutes } from './observability/observability.routes.js';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -40,6 +46,9 @@ export interface ServerOptions {
   runner?: IRunnerAdapter;
   gitService?: GitService;
   qualityEngine?: QualityEngine;
+  structuredLogger?: StructuredLogger;
+  failureExplainer?: FailureExplainer;
+  limitEnforcer?: LimitEnforcer;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -172,6 +181,22 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
   registerQualityRoutes(app, {
     qualityEngine,
     runner,
+  });
+
+  // Observability & Tracing Routes (FR-090, FR-091, FR-092)
+  const structuredLogger = opts.structuredLogger ?? new StructuredLogger();
+  const failureExplainer = opts.failureExplainer ?? new FailureExplainer();
+  const limitEnforcer = opts.limitEnforcer ?? new LimitEnforcer({
+    maxCostUsd: 10.0,
+    maxDurationMs: 600000,
+    maxConcurrency: 10,
+    maxRetries: 3,
+  });
+
+  registerObservabilityRoutes(app, {
+    logger: structuredLogger,
+    explainer: failureExplainer,
+    limitEnforcer,
   });
 
   return app;

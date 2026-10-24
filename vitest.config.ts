@@ -23,6 +23,7 @@ export default defineConfig({
       '@forgeos/model-gateway': path.resolve(__dirname, 'platform/model-gateway/src/index.ts'),
       '@forgeos/runner': path.resolve(__dirname, 'infrastructure/local-runner/src/index.ts'),
       '@forgeos/quality-engine': path.resolve(__dirname, 'platform/quality-engine/src/index.ts'),
+      '@forgeos/observability': path.resolve(__dirname, 'platform/observability/src/index.ts'),
     },
   },
 });

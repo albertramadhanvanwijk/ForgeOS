@@ -20,6 +20,7 @@
     "@forgeos/model-gateway": "workspace:*",
     "@forgeos/runner": "workspace:*",
     "@forgeos/quality-engine": "workspace:*",
+    "@forgeos/observability": "workspace:*",
     "fastify": "^4.28.1",
     "@fastify/cors": "^9.0.1"
   },

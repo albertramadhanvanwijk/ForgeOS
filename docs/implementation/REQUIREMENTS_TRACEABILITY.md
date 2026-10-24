@@ -72,9 +72,9 @@
 | FR-075 | Isolated implementation | P0 | `platform/platform-builder` | `tests/integration/isolated-impl.test.ts` | `not_started` |
 | FR-077 | Approve/reject/request revisions | P0 | `platform/policy-engine` | `tests/integration/approval.test.ts` | `not_started` |
 | FR-080 | No silent production changes | P0 | `platform/platform-builder` | `tests/security/silent-change.test.ts` | `not_started` |
-| FR-090 | Structured workflow/tool logs | P0 | `platform/observability` | `tests/unit/structured-logs.test.ts` | `not_started` |
-| FR-091 | Explain failure/recovery | P0 | `platform/orchestrator` | `tests/unit/failure-explain.test.ts` | `not_started` |
-| FR-092 | Budget/time/concurrency/retry limits | P0 | `platform/policy-engine` | `tests/unit/limits.test.ts` | `not_started` |
+| FR-090 | Structured workflow/tool logs | P0 | `platform/observability` | `tests/unit/observability.test.ts` | `tested` |
+| FR-091 | Explain failure/recovery | P0 | `platform/observability` | `tests/unit/observability.test.ts` | `tested` |
+| FR-092 | Budget/time/concurrency/retry limits | P0 | `platform/observability` | `tests/unit/observability.test.ts` | `tested` |
 | FR-093 | Audit sensitive actions | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
 | FR-094 | Model routing | P1 | `platform/model-gateway` | `tests/unit/model-gateway.test.ts` | `tested` |
 | FR-095 | Outcome-based agent evaluation | P1 | `platform/quality-engine` | `tests/unit/agent-eval.test.ts` | `not_started` |
