@@ -48,12 +48,12 @@
 | FR-026 | Delegation | P1 | `platform/orchestrator` | `tests/unit/delegation.test.ts` | `not_started` |
 | FR-027 | Record selection rationale | P1 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-028 | Agents cannot expand permissions | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
-| FR-030 | Artifact Registry | P0 | `platform/artifact-registry` | `tests/unit/artifact.test.ts` | `not_started` |
-| FR-031 | Type/version/status/provenance/task links | P0 | `platform/artifact-registry` | `tests/unit/artifact-model.test.ts` | `not_started` |
-| FR-032 | Store documents/code/tests/designs/reports | P0 | `platform/artifact-registry` | `tests/integration/artifact-store.test.ts` | `not_started` |
-| FR-034 | Reference artifacts from conversation/workflow/approval | P0 | `platform/artifact-registry` | `tests/integration/artifact-refs.test.ts` | `not_started` |
-| FR-035 | Draft/approved/verified/released/superseded/failed states | P0 | `platform/artifact-registry` | `tests/unit/artifact-states.test.ts` | `not_started` |
-| FR-036 | Review before dependent stages | P0 | `platform/policy-engine` | `tests/integration/artifact-review.test.ts` | `not_started` |
+| FR-030 | Artifact Registry | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
+| FR-031 | Type/version/status/provenance/task links | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
+| FR-032 | Store documents/code/tests/designs/reports | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
+| FR-034 | Reference artifacts from conversation/workflow/approval | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
+| FR-035 | Draft/approved/verified/released/superseded/failed states | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
+| FR-036 | Review before dependent stages | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
 | FR-040 | Git integration | P1 | `platform/orchestrator` | `tests/integration/git.test.ts` | `not_started` |
 | FR-041 | Isolated branch/worktree | P1 | `infrastructure/local-runner` | `tests/integration/worktree.test.ts` | `not_started` |
 | FR-042 | Execute allowed commands/build/lint/tests | P1 | `infrastructure/local-runner` | `tests/integration/execution.test.ts` | `not_started` |

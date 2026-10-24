@@ -14,6 +14,8 @@ import {
   InMemoryApprovalStore,
   InMemoryAuditLogger,
 } from '@forgeos/policy-engine';
+import { artifactsRoutes } from './artifacts/artifacts.routes.js';
+import { ArtifactRegistry, InMemoryArtifactStorage } from '@forgeos/artifact-registry';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -23,6 +25,7 @@ export interface ServerOptions {
   policyEngine?: PolicyEngine;
   approvalService?: ApprovalService;
   auditLogger?: InMemoryAuditLogger;
+  artifactRegistry?: ArtifactRegistry;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -80,6 +83,15 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
     policyEngine,
     approvalService,
     auditLogger,
+  });
+
+  // Artifact Registry Routes (FR-030 - FR-036)
+  const artifactRegistry =
+    opts.artifactRegistry ?? new ArtifactRegistry(new InMemoryArtifactStorage());
+
+  await app.register(artifactsRoutes, {
+    prefix: '/api/artifacts',
+    registry: artifactRegistry,
   });
 
   return app;

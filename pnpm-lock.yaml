@@ -39,6 +39,19 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  platform/artifact-registry:
+    dependencies:
+      '@forgeos/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.5
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   platform/orchestrator:
     dependencies:
       '@fastify/cors':
@@ -47,6 +60,9 @@ importers:
       '@forgeos/agent-registry':
         specifier: workspace:*
         version: link:../agent-registry
+      '@forgeos/artifact-registry':
+        specifier: workspace:*
+        version: link:../artifact-registry
       '@forgeos/policy-engine':
         specifier: workspace:*
         version: link:../policy-engine
