@@ -1,18 +1,12 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
-  Bot,
   Compass,
   Code2,
   ShieldCheck,
   GitFork,
   Cpu,
   Layers,
-  Sparkles,
-  Terminal,
-  Activity,
 } from 'lucide-react';
 
 export default function FleetPage() {
@@ -90,25 +84,25 @@ export default function FleetPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-xs text-zinc-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> 6 Roles Registered
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-xs text-zinc-300 backdrop-blur-md">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" /> 6 Roles Registered
           </span>
         </div>
       </div>
 
       {/* Roster Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {roles.map((role) => {
           const Icon = role.icon;
           return (
             <div
               key={role.id}
-              className="flex flex-col justify-between rounded-lg border border-zinc-800 bg-zinc-950 p-4 transition-colors hover:border-zinc-700"
+              className="glass-panel glass-specular glass-panel-hover flex flex-col justify-between rounded-xl p-5"
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-md border border-zinc-800 bg-zinc-900 text-zinc-300">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-zinc-300">
                       <Icon className="h-4 w-4" />
                     </div>
                     <div>
@@ -117,17 +111,17 @@ export default function FleetPage() {
                     </div>
                   </div>
                   {role.status === 'busy' ? (
-                    <Badge variant="outline" className="border-amber-800/80 bg-amber-950/40 font-mono text-[10px] text-amber-400">
+                    <Badge variant="outline" className="border-amber-500/30 bg-amber-500/10 font-mono text-[10px] text-amber-400">
                       active
                     </Badge>
                   ) : (
-                    <Badge variant="outline" className="border-zinc-800 bg-zinc-900 font-mono text-[10px] text-zinc-400">
+                    <Badge variant="outline" className="border-white/10 bg-white/[0.04] font-mono text-[10px] text-zinc-400">
                       idle
                     </Badge>
                   )}
                 </div>
 
-                <p className="mt-3 text-xs leading-relaxed text-zinc-400">
+                <p className="mt-3.5 text-xs leading-relaxed text-zinc-400">
                   {role.description}
                 </p>
 
@@ -140,7 +134,7 @@ export default function FleetPage() {
                     {role.capabilities.map((cap) => (
                       <span
                         key={cap}
-                        className="rounded border border-zinc-800/80 bg-zinc-900/60 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300"
+                        className="rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 backdrop-blur-sm"
                       >
                         {cap}
                       </span>
@@ -150,7 +144,7 @@ export default function FleetPage() {
               </div>
 
               {/* Card Footer */}
-              <div className="mt-4 flex items-center justify-between border-t border-zinc-800/80 pt-3 text-[11px] font-mono text-zinc-500">
+              <div className="mt-5 flex items-center justify-between border-t border-white/[0.08] pt-3 text-[11px] font-mono text-zinc-500">
                 <span>Model: {role.modelTier}</span>
                 <span className="text-zinc-400 hover:text-zinc-200 cursor-pointer">Config →</span>
               </div>

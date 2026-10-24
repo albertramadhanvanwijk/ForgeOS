@@ -79,15 +79,22 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="flex h-screen overflow-hidden bg-zinc-950 font-sans text-zinc-100 antialiased selection:bg-zinc-800 selection:text-zinc-100">
-        {/* Left Sidebar */}
-        <aside className="flex w-64 flex-shrink-0 flex-col justify-between border-r border-zinc-800/80 bg-zinc-950">
+      <body className="relative flex h-screen overflow-hidden bg-zinc-950 font-sans text-zinc-100 antialiased selection:bg-zinc-800 selection:text-zinc-100">
+        {/* Atmospheric Ambient Depth Backdrop (Makes Frosted Glass Real) */}
+        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+          <div className="absolute -top-32 left-1/3 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-gradient-to-b from-sky-500/10 via-indigo-500/5 to-transparent blur-3xl" />
+          <div className="absolute top-1/2 right-0 h-[450px] w-[600px] rounded-full bg-gradient-to-bl from-emerald-500/5 via-cyan-500/5 to-transparent blur-3xl" />
+          <div className="absolute bottom-0 left-10 h-[350px] w-[500px] rounded-full bg-gradient-to-tr from-purple-500/5 via-indigo-500/5 to-transparent blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:24px_24px] opacity-80" />
+        </div>
+
+        {/* Frosted Glass Sidebar */}
+        <aside className="relative flex w-64 flex-shrink-0 flex-col justify-between border-r border-white/[0.08] bg-zinc-950/75 backdrop-blur-2xl glass-specular shadow-2xl">
           <div>
             {/* Logo & Brand Header */}
-            <div className="flex items-center justify-between border-b border-zinc-800/80 px-4 py-3.5">
+            <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3.5">
               <a href="/" className="flex items-center gap-2.5 group">
-                {/* Bespoke Geometric Mark */}
-                <div className="flex h-7 w-7 items-center justify-center rounded-md border border-zinc-700 bg-zinc-900 text-zinc-100 shadow-sm transition-colors group-hover:border-zinc-500">
+                <div className="flex h-7 w-7 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-zinc-100 shadow-sm backdrop-blur-sm transition-all group-hover:border-white/20 group-hover:bg-white/[0.08]">
                   <svg
                     className="h-4 w-4"
                     viewBox="0 0 24 24"
@@ -113,17 +120,17 @@ export default function RootLayout({
               </a>
 
               <div className="flex items-center gap-1">
-                <span className="inline-flex items-center rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                <span className="inline-flex items-center rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 font-mono text-[10px] text-zinc-400 backdrop-blur-sm">
                   prod
                 </span>
               </div>
             </div>
 
-            {/* Quick Context Switcher */}
+            {/* Context Switcher Pill */}
             <div className="px-3 pt-3 pb-1">
-              <button className="flex w-full items-center justify-between rounded border border-zinc-800/60 bg-zinc-900/60 px-2.5 py-1.5 text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors">
+              <button className="flex w-full items-center justify-between rounded-md border border-white/[0.08] bg-white/[0.02] px-2.5 py-1.5 text-xs text-zinc-300 backdrop-blur-md transition-colors hover:bg-white/[0.06] hover:border-white/15">
                 <span className="flex items-center gap-2 truncate">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
                   <span className="truncate font-mono text-[11px]">forgeos-control-plane</span>
                 </span>
                 <span className="font-mono text-[10px] text-zinc-500">main</span>
@@ -144,7 +151,7 @@ export default function RootLayout({
                         <a
                           key={item.href}
                           href={item.href}
-                          className="group flex items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-100"
+                          className="group flex items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium text-zinc-400 transition-all hover:bg-white/[0.05] hover:text-zinc-100 hover:backdrop-blur-sm"
                         >
                           <div className="flex items-center gap-2.5">
                             <Icon className="h-4 w-4 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
@@ -161,7 +168,7 @@ export default function RootLayout({
                             </span>
                           )}
                           {item.badge && (
-                            <span className="rounded bg-zinc-800 px-1 text-[9px] text-zinc-400">
+                            <span className="rounded border border-white/[0.08] bg-white/[0.04] px-1 text-[9px] text-zinc-400">
                               {item.badge}
                             </span>
                           )}
@@ -175,7 +182,7 @@ export default function RootLayout({
           </div>
 
           {/* Sidebar Status Footer */}
-          <div className="border-t border-zinc-800/80 bg-zinc-950 p-3">
+          <div className="border-t border-white/[0.08] bg-black/20 p-3 backdrop-blur-md">
             <div className="flex items-center justify-between text-xs mb-1.5">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
@@ -188,15 +195,15 @@ export default function RootLayout({
             </div>
             <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500">
               <span>91/91 gates pass</span>
-              <span>7b3535a</span>
+              <span>1d6dfed</span>
             </div>
           </div>
         </aside>
 
         {/* Main Content Area */}
         <div className="flex flex-1 flex-col overflow-hidden">
-          {/* Refined Top Navigation Bar */}
-          <header className="flex h-12 flex-shrink-0 items-center justify-between border-b border-zinc-800/80 bg-zinc-950 px-6">
+          {/* Frosted Glass Top Navigation Header */}
+          <header className="sticky top-0 z-20 flex h-12 flex-shrink-0 items-center justify-between border-b border-white/[0.08] bg-zinc-950/60 px-6 backdrop-blur-xl">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5 text-xs text-zinc-400">
                 <span className="text-zinc-500">ForgeOS</span>
@@ -207,23 +214,23 @@ export default function RootLayout({
 
             <div className="flex items-center gap-3">
               {/* Command Bar Trigger */}
-              <div className="flex items-center gap-2 rounded-md border border-zinc-800 bg-zinc-900/80 px-2.5 py-1 text-xs text-zinc-400 shadow-sm">
+              <div className="flex items-center gap-2 rounded-md border border-white/[0.09] bg-white/[0.03] px-2.5 py-1 text-xs text-zinc-400 shadow-sm backdrop-blur-md">
                 <Search className="h-3.5 w-3.5 text-zinc-500" />
                 <span className="text-zinc-500">Command Palette</span>
-                <kbd className="ml-3 inline-flex items-center gap-0.5 rounded border border-zinc-700 bg-zinc-800 px-1 font-mono text-[10px] text-zinc-400">
+                <kbd className="ml-3 inline-flex items-center gap-0.5 rounded border border-white/10 bg-white/[0.05] px-1 font-mono text-[10px] text-zinc-400">
                   <Command className="h-2.5 w-2.5" /> K
                 </kbd>
               </div>
 
               {/* Status Pill */}
-              <div className="flex items-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-900/50 px-2 py-1 font-mono text-[11px] text-zinc-400">
+              <div className="flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-zinc-400 backdrop-blur-md">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
                 <span>Runner Sandboxed</span>
               </div>
 
               <a
                 href="/projects"
-                className="inline-flex items-center gap-1.5 rounded-md bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition-colors hover:bg-white"
+                className="inline-flex items-center gap-1.5 rounded-md bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 shadow-md transition-all hover:bg-white hover:shadow-lg"
               >
                 <Plus className="h-3.5 w-3.5" />
                 <span>New Project</span>
@@ -232,7 +239,7 @@ export default function RootLayout({
           </header>
 
           {/* Main Viewport Content */}
-          <main className="flex-1 overflow-y-auto bg-zinc-950 p-8">
+          <main className="flex-1 overflow-y-auto p-8">
             {children}
           </main>
         </div>

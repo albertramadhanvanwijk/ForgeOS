@@ -1,16 +1,9 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Wrench,
-  GitPullRequest,
-  ShieldCheck,
-  CheckCircle2,
-  History,
   Lock,
-  Plus,
-  ArrowRight,
 } from 'lucide-react';
 
 export default function PlatformBuilderPage() {
@@ -51,14 +44,14 @@ export default function PlatformBuilderPage() {
             Controlled conversational evolution, versioned PlatformChangeSets, and zero silent modifications (FR-070–FR-080).
           </p>
         </div>
-        <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 hover:bg-white">
+        <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-md hover:bg-white">
           <Wrench className="mr-1.5 h-3.5 w-3.5" />
           <span>Propose ChangeSet</span>
         </Button>
       </div>
 
       {/* Governance Bar */}
-      <div className="flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900/40 p-3.5 text-xs text-zinc-400">
+      <div className="glass-panel glass-specular flex items-center gap-3 rounded-xl p-4 text-xs text-zinc-400">
         <Lock className="h-4 w-4 text-emerald-400 flex-shrink-0" />
         <div>
           <span className="font-semibold text-zinc-200">Evolution Lifecycle: </span>
@@ -69,25 +62,25 @@ export default function PlatformBuilderPage() {
       </div>
 
       {/* Versioned ChangeSets */}
-      <div className="divide-y divide-zinc-800/60 rounded-lg border border-zinc-800 bg-zinc-950">
-        <div className="bg-zinc-900/60 px-4 py-3 font-mono text-[11px] font-medium text-zinc-400">
+      <div className="glass-panel glass-specular divide-y divide-white/[0.06] rounded-xl shadow-2xl overflow-hidden">
+        <div className="bg-black/40 px-4 py-3 font-mono text-[11px] font-medium text-zinc-400">
           CHANGE SET AUDIT TRAIL
         </div>
         {changeSets.map((cs) => (
-          <div key={cs.id} className="flex items-center justify-between p-4 hover:bg-zinc-900/20 transition-colors">
+          <div key={cs.id} className="flex items-center justify-between p-4 hover:bg-white/[0.02] transition-colors">
             <div className="space-y-1">
               <div className="flex items-center gap-2.5">
                 <span className="font-mono text-[10px] text-zinc-500">{cs.id}</span>
                 <h3 className="text-xs font-semibold text-zinc-100">{cs.title}</h3>
-                <span className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                <span className="rounded border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
                   {cs.version}
                 </span>
                 {cs.status === 'released' ? (
-                  <Badge variant="outline" className="border-emerald-800/80 bg-emerald-950/40 font-mono text-[10px] text-emerald-400">
+                  <Badge variant="outline" className="border-emerald-500/30 bg-emerald-500/10 font-mono text-[10px] text-emerald-400">
                     RELEASED
                   </Badge>
                 ) : (
-                  <Badge variant="outline" className="border-amber-800/80 bg-amber-950/40 font-mono text-[10px] text-amber-400">
+                  <Badge variant="outline" className="border-amber-500/30 bg-amber-500/10 font-mono text-[10px] text-amber-400">
                     STAGED
                   </Badge>
                 )}

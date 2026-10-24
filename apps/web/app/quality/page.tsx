@@ -1,15 +1,10 @@
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   ShieldCheck,
   CheckCircle2,
-  AlertTriangle,
   Play,
-  RotateCcw,
-  FileCheck,
-  Terminal,
 } from 'lucide-react';
 
 export default function QualityPage() {
@@ -72,7 +67,7 @@ export default function QualityPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 hover:bg-white">
+          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-md hover:bg-white">
             <Play className="mr-1.5 h-3.5 w-3.5 fill-current" />
             <span>Evaluate All Gates</span>
           </Button>
@@ -80,33 +75,33 @@ export default function QualityPage() {
       </div>
 
       {/* Metrics Bar */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-3">
+        <div className="glass-panel glass-specular glass-panel-hover rounded-xl p-4">
           <span className="text-[11px] font-medium text-zinc-400">Overall Gate Pass Rate</span>
-          <div className="mt-1 font-mono text-2xl font-bold text-emerald-400">100%</div>
+          <div className="mt-1.5 font-mono text-2xl font-bold text-emerald-400">100%</div>
           <span className="font-mono text-[10px] text-zinc-500">5/5 gates passing</span>
         </div>
-        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+        <div className="glass-panel glass-specular glass-panel-hover rounded-xl p-4">
           <span className="text-[11px] font-medium text-zinc-400">Release Gate Clearance</span>
-          <div className="mt-1 font-mono text-2xl font-bold text-zinc-100">GRANTED</div>
+          <div className="mt-1.5 font-mono text-2xl font-bold text-zinc-100">GRANTED</div>
           <span className="font-mono text-[10px] text-zinc-500">Zero mandatory blockers</span>
         </div>
-        <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/40 p-3.5">
+        <div className="glass-panel glass-specular glass-panel-hover rounded-xl p-4">
           <span className="text-[11px] font-medium text-zinc-400">Automated Suites</span>
-          <div className="mt-1 font-mono text-2xl font-bold text-zinc-100">91 Tests</div>
+          <div className="mt-1.5 font-mono text-2xl font-bold text-zinc-100">91 Tests</div>
           <span className="font-mono text-[10px] text-zinc-500">100% automated regression evidence</span>
         </div>
       </div>
 
       {/* Quality Gate List */}
-      <div className="divide-y divide-zinc-800/60 rounded-lg border border-zinc-800 bg-zinc-950">
+      <div className="glass-panel glass-specular divide-y divide-white/[0.06] rounded-xl shadow-2xl overflow-hidden">
         {gates.map((g) => (
-          <div key={g.name} className="flex items-center justify-between p-4 hover:bg-zinc-900/20 transition-colors">
+          <div key={g.name} className="flex items-center justify-between p-4 hover:bg-white/[0.02] transition-colors">
             <div className="space-y-1">
               <div className="flex items-center gap-2.5">
                 <CheckCircle2 className="h-4 w-4 text-emerald-400" />
                 <h3 className="text-xs font-semibold text-zinc-100">{g.name}</h3>
-                <span className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                <span className="rounded border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
                   {g.severity}
                 </span>
               </div>
@@ -119,7 +114,7 @@ export default function QualityPage() {
 
             <div className="flex items-center gap-3">
               <span className="font-mono text-[11px] text-zinc-500">{g.timestamp}</span>
-              <Badge variant="outline" className="border-emerald-800/80 bg-emerald-950/40 font-mono text-[10px] text-emerald-400">
+              <Badge variant="outline" className="border-emerald-500/30 bg-emerald-500/10 font-mono text-[10px] text-emerald-400">
                 PASSED
               </Badge>
             </div>
