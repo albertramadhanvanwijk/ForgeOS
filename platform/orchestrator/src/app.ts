@@ -37,6 +37,8 @@ import {
 import { registerMemoryRoutes } from './memory/memory.routes.js';
 import { DesignStudioEngine } from '@forgeos/design-studio';
 import { registerDesignRoutes } from './design/design.routes.js';
+import { PlatformBuilderService } from '@forgeos/platform-builder';
+import { registerPlatformBuilderRoutes } from './platform-builder/platform-builder.routes.js';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -59,6 +61,7 @@ export interface ServerOptions {
   memoryService?: PersistentMemoryService;
   contextPackager?: ContextPackager;
   designEngine?: DesignStudioEngine;
+  builderService?: PlatformBuilderService;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -223,6 +226,13 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
 
   registerDesignRoutes(app, {
     designEngine,
+  });
+
+  // Platform Builder Routes (FR-070 - FR-080)
+  const builderService = opts.builderService ?? new PlatformBuilderService();
+
+  registerPlatformBuilderRoutes(app, {
+    builderService,
   });
 
   return app;

@@ -163,6 +163,9 @@ importers:
       '@forgeos/persistent-memory':
         specifier: workspace:*
         version: link:../persistent-memory
+      '@forgeos/platform-builder':
+        specifier: workspace:*
+        version: link:../platform-builder
       '@forgeos/policy-engine':
         specifier: workspace:*
         version: link:../policy-engine
@@ -190,6 +193,12 @@ importers:
         version: 5.9.3
 
   platform/persistent-memory:
+    dependencies:
+      '@forgeos/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+
+  platform/platform-builder:
     dependencies:
       '@forgeos/types':
         specifier: workspace:*

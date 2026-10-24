@@ -1,0 +1,14 @@
+{
+  "name": "@forgeos/platform-builder",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ForgeOS Platform Builder & Self-Modification Engine (FR-070 - FR-080)",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@forgeos/types": "workspace:*"
+  }
+}

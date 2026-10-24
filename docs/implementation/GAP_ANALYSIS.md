@@ -114,14 +114,14 @@
 
 | Requirement | Gap | Priority |
 |-------------|-----|----------|
-| FR-070 Conversational ForgeOS changes | ❌ Empty `platform/platform-builder/` | P0 |
-| FR-071 Inspect existing capabilities | ❌ | P0 |
-| FR-073 Versioned PlatformChangeSet | ❌ | P0 |
-| FR-074 Impact analysis | ❌ | P0 |
-| FR-075 Isolated implementation | ❌ | P0 |
-| FR-076 Test/review/preview before release | ❌ | P0 |
-| FR-077 Approve/reject/request revisions | ❌ | P0 |
-| FR-080 No silent production changes | ❌ | P0 |
+| FR-070 Conversational ForgeOS changes | ✅ PlatformBuilderService end-to-end lifecycle | P0 |
+| FR-071 Inspect existing capabilities | ✅ CapabilityGraph traversal & gap detection | P0 |
+| FR-073 Versioned PlatformChangeSet | ✅ Deterministic SHA-256 versioning | P0 |
+| FR-074 Impact analysis | ✅ Dependency traversal & policy risk classification | P0 |
+| FR-075 Isolated implementation | ✅ Worktree / branch isolation workflow | P0 |
+| FR-076 Test/review/preview before release | ✅ Quality verification gate before merge | P0 |
+| FR-077 Approve/reject/request revisions | ✅ Governance approval gate & hash matching | P0 |
+| FR-080 No silent production changes | ✅ assertNoSilentProductionChange invariant block | P0 |
 
 ---
 

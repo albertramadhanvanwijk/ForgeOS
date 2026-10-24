@@ -71,12 +71,20 @@
 | FR-061 | Relevant checks before verification | P0 | `platform/quality-engine` | `tests/unit/quality-engine.test.ts` | `tested` |
 | FR-063 | Failed mandatory gates block release | P0 | `platform/quality-engine` | `tests/unit/quality-engine.test.ts` | `tested` |
 | FR-065 | Policy-controlled production deployment | P0 | `platform/policy-engine` | `tests/integration/deploy-policy.test.ts` | `not_started` |
-| FR-070 | Conversational ForgeOS changes | P0 | `platform/platform-builder` | `tests/integration/platform-builder.test.ts` | `not_started` |
-| FR-071 | Inspect existing capabilities | P0 | `platform/platform-builder` | `tests/unit/capability-inspect.test.ts` | `not_started` |
-| FR-073 | Versioned PlatformChangeSet | P0 | `platform/platform-builder` | `tests/unit/changeset.test.ts` | `not_started` |
-| FR-075 | Isolated implementation | P0 | `platform/platform-builder` | `tests/integration/isolated-impl.test.ts` | `not_started` |
-| FR-077 | Approve/reject/request revisions | P0 | `platform/policy-engine` | `tests/integration/approval.test.ts` | `not_started` |
-| FR-080 | No silent production changes | P0 | `platform/platform-builder` | `tests/security/silent-change.test.ts` | `not_started` |
+| FR-070 | Conversational ForgeOS changes | P0 | `platform/platform-builder` | `tests/integration/platform-builder.test.ts` | `tested` |
+| FR-071 | Inspect existing capabilities | P0 | `platform/platform-builder` | `tests/unit/capability-inspect.test.ts` | `tested` |
+| FR-073 | Versioned PlatformChangeSet | P0 | `platform/platform-builder` | `tests/unit/changeset.test.ts` | `tested` |
+| FR-074 | Capability impact analysis | P0 | `platform/platform-builder` | `tests/unit/capability-inspect.test.ts` | `tested` |
+| FR-075 | Isolated implementation | P0 | `platform/platform-builder` | `tests/integration/platform-builder.test.ts` | `tested` |
+| FR-076 | Test/review/preview before release | P0 | `platform/platform-builder` | `tests/integration/platform-builder.test.ts` | `tested` |
+| FR-077 | Approve/reject/request revisions | P0 | `platform/platform-builder` | `tests/unit/changeset.test.ts` | `tested` |
+| FR-078 | Dynamic capability registration | P0 | `platform/platform-builder` | `tests/unit/capability-inspect.test.ts` | `tested` |
+| FR-079 | Automated ChangeSet rollback | P0 | `platform/platform-builder` | `tests/unit/changeset.test.ts` | `tested` |
+| FR-080 | No silent production changes | P0 | `platform/platform-builder` | `tests/security/silent-change.test.ts` | `tested` |
+ |
+ |
+ |
+ |
 | FR-090 | Structured workflow/tool logs | P0 | `platform/observability` | `tests/unit/observability.test.ts` | `tested` |
 | FR-091 | Explain failure/recovery | P0 | `platform/observability` | `tests/unit/observability.test.ts` | `tested` |
 | FR-092 | Budget/time/concurrency/retry limits | P0 | `platform/observability` | `tests/unit/observability.test.ts` | `tested` |

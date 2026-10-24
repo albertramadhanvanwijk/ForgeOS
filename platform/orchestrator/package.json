@@ -23,6 +23,7 @@
     "@forgeos/observability": "workspace:*",
     "@forgeos/persistent-memory": "workspace:*",
     "@forgeos/design-studio": "workspace:*",
+    "@forgeos/platform-builder": "workspace:*",
     "fastify": "^4.28.1",
     "@fastify/cors": "^9.0.1"
   },

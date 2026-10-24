@@ -26,6 +26,7 @@ export default defineConfig({
       '@forgeos/observability': path.resolve(__dirname, 'platform/observability/src/index.ts'),
       '@forgeos/persistent-memory': path.resolve(__dirname, 'platform/persistent-memory/src/index.ts'),
       '@forgeos/design-studio': path.resolve(__dirname, 'platform/design-studio/src/index.ts'),
+      '@forgeos/platform-builder': path.resolve(__dirname, 'platform/platform-builder/src/index.ts'),
     },
   },
 });
