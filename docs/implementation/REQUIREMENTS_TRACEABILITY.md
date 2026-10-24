@@ -54,8 +54,8 @@
 | FR-034 | Reference artifacts from conversation/workflow/approval | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
 | FR-035 | Draft/approved/verified/released/superseded/failed states | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
 | FR-036 | Review before dependent stages | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
-| FR-040 | Git integration | P1 | `platform/orchestrator` | `tests/integration/git.test.ts` | `not_started` |
-| FR-041 | Isolated branch/worktree | P1 | `infrastructure/local-runner` | `tests/integration/worktree.test.ts` | `not_started` |
+| FR-040 | Git integration | P1 | `platform/orchestrator` | `tests/unit/git-integration.test.ts` | `tested` |
+| FR-041 | Isolated branch/worktree | P1 | `infrastructure/local-runner` | `tests/unit/git-integration.test.ts` | `tested` |
 | FR-042 | Execute allowed commands/build/lint/tests | P1 | `infrastructure/local-runner` | `tests/unit/runner.test.ts` | `tested` |
 | FR-043 | Execution logs | P0 | `infrastructure/local-runner` | `tests/unit/runner.test.ts` | `tested` |
 | FR-044 | Cloud sandbox/local runner adapters | P1 | `infrastructure/local-runner` | `tests/integration/runner-api.test.ts` | `tested` |

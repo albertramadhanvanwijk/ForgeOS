@@ -21,6 +21,7 @@ import { registerModelRoutes } from './models/models.routes.js';
 import { ModelGateway, MockModelAdapter } from '@forgeos/model-gateway';
 import { registerRunnerRoutes } from './runner/runner.routes.js';
 import { IRunnerAdapter, LocalProcessRunner } from '@forgeos/runner';
+import { GitService, registerGitRoutes } from './git/index.js';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -35,6 +36,7 @@ export interface ServerOptions {
   intentClassifier?: IntentClassifier;
   modelGateway?: ModelGateway;
   runner?: IRunnerAdapter;
+  gitService?: GitService;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -152,6 +154,13 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
 
   registerRunnerRoutes(app, {
     runner,
+  });
+
+  // Git Integration Routes (FR-040, FR-041, FR-046)
+  const gitService = opts.gitService ?? new GitService(runner);
+
+  registerGitRoutes(app, {
+    gitService,
   });
 
   return app;
