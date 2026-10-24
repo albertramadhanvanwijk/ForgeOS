@@ -101,12 +101,12 @@
 
 | Requirement | Gap | Priority |
 |-------------|-----|----------|
-| FR-050 Requirements/user flows before complex UI | ❌ | P1 |
-| FR-051 Sitemap/wireframe/mockup/tokens/components | ❌ | P1 |
-| FR-052 Approve/revise design | ❌ | P1 |
-| FR-053 Use approved design system | ❌ | P1 |
-| Memory System (MEM-001–MEM-018) | ❌ 18 requirements, all missing | P1 |
-| Context Manager | ❌ | P1 |
+| FR-050 Requirements/user flows before complex UI | ✅ Implemented in `@forgeos/design-studio` | P1 |
+| FR-051 Sitemap/wireframe/mockup/tokens/components | ✅ Implemented with deterministic SHA-256 hash | P1 |
+| FR-052 Approve/revise design | ✅ Governed approval & version binding | P1 |
+| FR-053 Use approved design system | ✅ Adherence enforcement on code generation | P1 |
+| Memory System (MEM-001–MEM-018) | ✅ Fully implemented in `@forgeos/persistent-memory` | P1 |
+| Context Manager | ✅ Bounded context packager with advisory invariant | P1 |
 
 ---
 
