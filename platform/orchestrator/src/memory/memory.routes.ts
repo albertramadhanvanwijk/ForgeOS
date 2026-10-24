@@ -46,6 +46,26 @@ export function registerMemoryRoutes(
     }
   });
 
+  // GET /api/memory/items — Query memory items
+  app.get('/api/memory/items', async (request, reply) => {
+    const query = request.query as any;
+    if (!query.scopeId) {
+      return reply.status(400).send({ error: 'Missing required query param: scopeId' });
+    }
+
+    const items = await memoryService.query({
+      scopeType: query.scopeType || 'project',
+      scopeId: query.scopeId,
+      memoryType: query.memoryType,
+      includeShared: query.includeShared === 'true',
+    });
+
+    return reply.send({
+      items,
+      count: items.length,
+    });
+  });
+
   // GET /api/memory/items/:id — Get item by ID
   app.get('/api/memory/items/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
