@@ -56,11 +56,11 @@
 | FR-036 | Review before dependent stages | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
 | FR-040 | Git integration | P1 | `platform/orchestrator` | `tests/integration/git.test.ts` | `not_started` |
 | FR-041 | Isolated branch/worktree | P1 | `infrastructure/local-runner` | `tests/integration/worktree.test.ts` | `not_started` |
-| FR-042 | Execute allowed commands/build/lint/tests | P1 | `infrastructure/local-runner` | `tests/integration/execution.test.ts` | `not_started` |
-| FR-043 | Execution logs | P0 | `platform/observability` | `tests/unit/exec-logs.test.ts` | `not_started` |
-| FR-044 | Cloud sandbox/local runner adapters | P1 | `infrastructure/local-runner` | `tests/integration/sandbox.test.ts` | `not_started` |
-| FR-047 | Network/filesystem/env/secrets policy | P0 | `platform/policy-engine` | `tests/security/sandbox-policy.test.ts` | `not_started` |
-| FR-048 | Failed commands never reported successful | P0 | `platform/orchestrator` | `tests/unit/false-success.test.ts` | `not_started` |
+| FR-042 | Execute allowed commands/build/lint/tests | P1 | `infrastructure/local-runner` | `tests/unit/runner.test.ts` | `tested` |
+| FR-043 | Execution logs | P0 | `infrastructure/local-runner` | `tests/unit/runner.test.ts` | `tested` |
+| FR-044 | Cloud sandbox/local runner adapters | P1 | `infrastructure/local-runner` | `tests/integration/runner-api.test.ts` | `tested` |
+| FR-047 | Network/filesystem/env/secrets policy | P0 | `infrastructure/local-runner` | `tests/unit/runner.test.ts` | `tested` |
+| FR-048 | Failed commands never reported successful | P0 | `infrastructure/local-runner` | `tests/unit/runner.test.ts` | `tested` |
 | FR-050 | Requirements/user flows before complex UI | P1 | `apps/web` | `tests/unit/web-workspace.test.ts` | `tested` |
 | FR-060 | Task-appropriate quality criteria | P0 | `platform/quality-engine` | `tests/unit/quality-criteria.test.ts` | `not_started` |
 | FR-061 | Relevant checks before verification | P0 | `platform/quality-engine` | `tests/unit/quality-checks.test.ts` | `not_started` |

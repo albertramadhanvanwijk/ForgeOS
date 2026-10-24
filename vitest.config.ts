@@ -21,6 +21,7 @@ export default defineConfig({
       '@forgeos/policy-engine': path.resolve(__dirname, 'platform/policy-engine/src/index.ts'),
       '@forgeos/artifact-registry': path.resolve(__dirname, 'platform/artifact-registry/src/index.ts'),
       '@forgeos/model-gateway': path.resolve(__dirname, 'platform/model-gateway/src/index.ts'),
+      '@forgeos/runner': path.resolve(__dirname, 'infrastructure/local-runner/src/index.ts'),
     },
   },
 });

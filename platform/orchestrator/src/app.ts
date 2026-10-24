@@ -19,6 +19,8 @@ import { ArtifactRegistry, InMemoryArtifactStorage } from '@forgeos/artifact-reg
 import { ConversationService, IntentClassifier, registerIntentRoutes } from './intent/index.js';
 import { registerModelRoutes } from './models/models.routes.js';
 import { ModelGateway, MockModelAdapter } from '@forgeos/model-gateway';
+import { registerRunnerRoutes } from './runner/runner.routes.js';
+import { IRunnerAdapter, LocalProcessRunner } from '@forgeos/runner';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -32,6 +34,7 @@ export interface ServerOptions {
   conversationService?: ConversationService;
   intentClassifier?: IntentClassifier;
   modelGateway?: ModelGateway;
+  runner?: IRunnerAdapter;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -140,6 +143,15 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
 
   registerModelRoutes(app, {
     gateway: modelGateway,
+  });
+
+  // Runner Routes (FR-042, FR-043, FR-044, FR-047, FR-048)
+  const runner = opts.runner ?? new LocalProcessRunner({
+    allowedCommands: ['node', 'git', 'pnpm', 'npm', 'tsc', 'vitest'],
+  });
+
+  registerRunnerRoutes(app, {
+    runner,
   });
 
   return app;

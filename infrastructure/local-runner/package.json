@@ -1,0 +1,15 @@
+{
+  "name": "@forgeos/runner",
+  "version": "0.1.0",
+  "description": "ForgeOS Sandboxed Execution Engine and Local Runner",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@forgeos/types": "workspace:*"
+  }
+}
