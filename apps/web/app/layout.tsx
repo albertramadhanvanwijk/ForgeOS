@@ -1,4 +1,18 @@
 import React from 'react';
+import './globals.css';
+import {
+  LayoutDashboard,
+  FolderGit2,
+  Workflow,
+  Bot,
+  BrainCircuit,
+  Palette,
+  ShieldCheck,
+  Wrench,
+  GitFork,
+  Activity,
+  Plus,
+} from 'lucide-react';
 
 export const metadata = {
   title: 'ForgeOS — AI Engineering Operating System',
@@ -14,31 +28,31 @@ export default function RootLayout({
     {
       label: 'CORE WORKSPACE',
       items: [
-        { href: '/', label: 'Dashboard & Overview', icon: '📊' },
-        { href: '/projects', label: 'Projects Workspace', icon: '📁' },
-        { href: '/workflows', label: 'Workflows & Runs', icon: '⚡' },
+        { href: '/', label: 'Dashboard & Overview', icon: LayoutDashboard },
+        { href: '/projects', label: 'Projects Workspace', icon: FolderGit2 },
+        { href: '/workflows', label: 'Workflows & Runs', icon: Workflow },
       ],
     },
     {
       label: 'ENGINEERING & FLEET',
       items: [
-        { href: '/fleet', label: 'Agent Fleet Catalog', icon: '🤖' },
-        { href: '/memory', label: 'Persistent Memory', icon: '🧠' },
-        { href: '/design', label: 'Design Studio', icon: '🎨' },
+        { href: '/fleet', label: 'Agent Fleet Catalog', icon: Bot },
+        { href: '/memory', label: 'Persistent Memory', icon: BrainCircuit },
+        { href: '/design', label: 'Design Studio', icon: Palette },
       ],
     },
     {
       label: 'GOVERNANCE & ENGINE',
       items: [
-        { href: '/quality', label: 'Quality Center', icon: '🛡️' },
-        { href: '/platform-builder', label: 'Platform Builder', icon: '🛠️' },
-        { href: '/git', label: 'Git & Worktrees', icon: '🌿' },
+        { href: '/quality', label: 'Quality Center', icon: ShieldCheck },
+        { href: '/platform-builder', label: 'Platform Builder', icon: Wrench },
+        { href: '/git', label: 'Git & Worktrees', icon: GitFork },
       ],
     },
   ];
 
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -47,117 +61,51 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body
-        style={{
-          fontFamily: "'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
-          margin: 0,
-          padding: 0,
-          backgroundColor: '#090d16',
-          color: '#f1f5f9',
-          display: 'flex',
-          height: '100vh',
-          overflow: 'hidden',
-        }}
-      >
+      <body className="flex h-screen overflow-hidden bg-background font-sans text-foreground antialiased">
         {/* Left Sidebar */}
-        <aside
-          style={{
-            width: '280px',
-            backgroundColor: '#0e1526',
-            borderRight: '1px solid #1e293b',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            flexShrink: 0,
-          }}
-        >
+        <aside className="flex w-72 flex-shrink-0 flex-col justify-between border-r border-border bg-card">
           {/* Logo & Brand Header */}
           <div>
-            <div
-              style={{
-                padding: '24px 20px',
-                borderBottom: '1px solid #1e293b',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-              }}
-            >
-              <div
-                style={{
-                  width: '38px',
-                  height: '38px',
-                  borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #0ea5e9, #6366f1)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 0 20px rgba(14, 165, 233, 0.35)',
-                }}
-              >
-                <span style={{ fontSize: '20px' }}>⚡</span>
+            <div className="flex items-center gap-3 border-b border-border p-5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 shadow-md shadow-sky-500/20">
+                <span className="text-xl">⚡</span>
               </div>
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontWeight: 800, fontSize: '18px', letterSpacing: '-0.02em', color: '#fff' }}>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg font-bold tracking-tight text-white">
                     ForgeOS
                   </span>
-                  <span
-                    style={{
-                      fontSize: '10px',
-                      fontWeight: 700,
-                      backgroundColor: '#1e293b',
-                      color: '#38bdf8',
-                      padding: '2px 6px',
-                      borderRadius: '4px',
-                      border: '1px solid #334155',
-                    }}
-                  >
+                  <span className="rounded border border-border bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-sky-400">
                     v2.2
                   </span>
                 </div>
-                <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px' }}>
-                  AI Engineering Operating System
+                <div className="text-xs text-muted-foreground">
+                  AI Engineering OS
                 </div>
               </div>
             </div>
 
             {/* Navigation Sections */}
-            <div style={{ padding: '16px 12px', overflowY: 'auto', maxHeight: 'calc(100vh - 220px)' }}>
+            <div className="max-h-[calc(100vh-210px)] overflow-y-auto p-3">
               {navSections.map((section) => (
-                <div key={section.label} style={{ marginBottom: '24px' }}>
-                  <div
-                    style={{
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      color: '#64748b',
-                      letterSpacing: '0.08em',
-                      padding: '0 12px 8px',
-                    }}
-                  >
+                <div key={section.label} className="mb-6">
+                  <div className="px-3 pb-2 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
                     {section.label}
                   </div>
-                  <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    {section.items.map((item) => (
-                      <a
-                        key={item.href}
-                        href={item.href}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '12px',
-                          padding: '10px 12px',
-                          borderRadius: '8px',
-                          color: '#cbd5e1',
-                          textDecoration: 'none',
-                          fontSize: '13.5px',
-                          fontWeight: 500,
-                          transition: 'all 0.15s ease',
-                        }}
-                      >
-                        <span style={{ fontSize: '16px' }}>{item.icon}</span>
-                        <span>{item.label}</span>
-                      </a>
-                    ))}
+                  <nav className="flex flex-col space-y-1">
+                    {section.items.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-300 transition-colors hover:bg-accent hover:text-white"
+                        >
+                          <Icon className="h-4 w-4 text-slate-400" />
+                          <span>{item.label}</span>
+                        </a>
+                      );
+                    })}
                   </nav>
                 </div>
               ))}
@@ -165,94 +113,47 @@ export default function RootLayout({
           </div>
 
           {/* Engine Status Footer */}
-          <div
-            style={{
-              padding: '16px',
-              borderTop: '1px solid #1e293b',
-              backgroundColor: '#090d16',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span
-                  style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: '#10b981',
-                    boxShadow: '0 0 10px #10b981',
-                  }}
-                />
-                <span style={{ fontSize: '12px', fontWeight: 600, color: '#e2e8f0' }}>Control Plane</span>
+          <div className="border-t border-border bg-background/50 p-4">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
+                <span className="text-xs font-semibold text-slate-200">Control Plane</span>
               </div>
-              <span style={{ fontSize: '11px', fontFamily: "'JetBrains Mono', monospace", color: '#38bdf8' }}>
+              <span className="font-mono text-xs text-sky-400">
                 :3001
               </span>
             </div>
-            <div style={{ fontSize: '11px', color: '#64748b', lineHeight: 1.4 }}>
+            <div className="text-[11px] leading-relaxed text-muted-foreground">
               91 Tests Passing • Local Runner Active • Model Gateway Ready
             </div>
           </div>
         </aside>
 
         {/* Main Content Area */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div className="flex flex-1 flex-col overflow-hidden">
           {/* Top Header */}
-          <header
-            style={{
-              height: '64px',
-              borderBottom: '1px solid #1e293b',
-              backgroundColor: '#0e1526',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '0 32px',
-              flexShrink: 0,
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span style={{ fontSize: '13px', color: '#64748b' }}>Workspace /</span>
-              <span style={{ fontSize: '14px', fontWeight: 600, color: '#f8fafc' }}>Autonomous Engineering</span>
+          <header className="flex h-16 flex-shrink-0 items-center justify-between border-b border-border bg-card px-8">
+            <div className="flex items-center gap-3 text-sm">
+              <span className="text-muted-foreground">Workspace /</span>
+              <span className="font-semibold text-foreground">Autonomous Engineering Dashboard</span>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  backgroundColor: '#1e293b',
-                  padding: '6px 14px',
-                  borderRadius: '20px',
-                  border: '1px solid #334155',
-                  fontSize: '12px',
-                }}
-              >
-                <span style={{ color: '#10b981' }}>●</span>
-                <span style={{ color: '#cbd5e1' }}>6 Agents Idle / Ready</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 text-xs">
+                <Activity className="h-3.5 w-3.5 text-emerald-400" />
+                <span className="text-slate-300">6 Agent Roles Ready</span>
               </div>
               <a
                 href="/projects"
-                style={{
-                  backgroundColor: '#0284c7',
-                  color: '#ffffff',
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-sky-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow hover:bg-sky-500 transition-colors"
               >
-                <span>+</span> New Project
+                <Plus className="h-4 w-4" /> New Project
               </a>
             </div>
           </header>
 
           {/* Page Body */}
-          <main style={{ flex: 1, overflowY: 'auto', padding: '32px' }}>
+          <main className="flex-1 overflow-y-auto p-8">
             {children}
           </main>
         </div>

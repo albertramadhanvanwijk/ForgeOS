@@ -1,6 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Sparkles,
+  FolderGit2,
+  Bot,
+  ShieldCheck,
+  Cpu,
+  ArrowRight,
+  Activity,
+  Layers,
+  Code2,
+  Terminal,
+} from 'lucide-react';
 
 export default function DashboardPage() {
   const [prompt, setPrompt] = useState('');
@@ -40,241 +56,218 @@ export default function DashboardPage() {
   };
 
   return (
-    <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      {/* Welcome Banner & Intent Bar */}
-      <div
-        style={{
-          background: 'linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(99, 102, 241, 0.08))',
-          border: '1px solid #1e293b',
-          borderRadius: '16px',
-          padding: '28px',
-          boxShadow: '0 8px 30px rgba(0, 0, 0, 0.3)',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
-          <div>
-            <h1 style={{ fontSize: '24px', fontWeight: 800, margin: '0 0 6px', color: '#f8fafc' }}>
-              ForgeOS Command Center
-            </h1>
-            <p style={{ color: '#94a3b8', margin: 0, fontSize: '14px' }}>
-              Transform natural product intent into verifiable, test-proven engineering deliverables.
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <span style={{ fontSize: '12px', padding: '6px 12px', borderRadius: '6px', backgroundColor: '#0f172a', border: '1px solid #334155', color: '#38bdf8' }}>
-              TDD Verification Active
-            </span>
-            <span style={{ fontSize: '12px', padding: '6px 12px', borderRadius: '6px', backgroundColor: '#064e3b', color: '#34d399', fontWeight: 600 }}>
-              91 Tests Passing
-            </span>
-          </div>
-        </div>
-
-        {/* Interactive Intent Bar */}
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-          <input
-            type="text"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleClassify()}
-            placeholder="Type engineering intent (e.g. 'Build new service...', 'Fix failing test...', 'Add feature...')"
-            style={{
-              flex: 1,
-              backgroundColor: '#090d16',
-              border: '1px solid #334155',
-              borderRadius: '8px',
-              padding: '14px 18px',
-              color: '#f8fafc',
-              fontSize: '14.5px',
-              outline: 'none',
-              fontFamily: 'inherit',
-            }}
-          />
-          <button
-            onClick={() => handleClassify()}
-            disabled={analyzing}
-            style={{
-              backgroundColor: '#0284c7',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '8px',
-              padding: '0 24px',
-              fontWeight: 700,
-              fontSize: '14px',
-              cursor: analyzing ? 'wait' : 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              transition: 'background-color 0.2s',
-            }}
-          >
-            {analyzing ? 'Classifying...' : '⚡ Orchestrate'}
-          </button>
-        </div>
-
-        {/* Sample Prompt Chips */}
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>Try intent:</span>
-          {samplePrompts.map((sample) => (
-            <button
-              key={sample}
-              onClick={() => {
-                setPrompt(sample);
-                handleClassify(sample);
-              }}
-              style={{
-                backgroundColor: 'rgba(30, 41, 59, 0.7)',
-                border: '1px solid #334155',
-                color: '#cbd5e1',
-                padding: '4px 10px',
-                borderRadius: '6px',
-                fontSize: '12px',
-                cursor: 'pointer',
-              }}
-            >
-              {sample.length > 40 ? sample.substring(0, 38) + '...' : sample}
-            </button>
-          ))}
-        </div>
-
-        {/* Classification Result Card (Interactive) */}
-        {analysisResult && (
-          <div
-            style={{
-              marginTop: '20px',
-              backgroundColor: '#090d16',
-              border: '1px solid #0284c7',
-              borderRadius: '10px',
-              padding: '18px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px',
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '18px' }}>🎯</span>
-                <span style={{ fontWeight: 700, color: '#38bdf8', fontSize: '15px' }}>
-                  Intent Identified: {analysisResult.intentType?.toUpperCase()}
-                </span>
-                <span style={{ fontSize: '12px', backgroundColor: '#1e293b', padding: '2px 8px', borderRadius: '4px', color: '#94a3b8' }}>
-                  Confidence: {(analysisResult.confidence * 100).toFixed(0)}%
-                </span>
+    <div className="mx-auto max-w-7xl space-y-8">
+      {/* Hero Intent Command Center */}
+      <Card className="border-sky-900/40 bg-gradient-to-br from-sky-950/20 via-card to-indigo-950/10 shadow-xl">
+        <CardHeader className="pb-4">
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-sky-400" />
+                <CardTitle className="text-xl font-bold tracking-tight">
+                  ForgeOS Command Center
+                </CardTitle>
               </div>
-              <span style={{ fontSize: '12px', color: '#34d399', fontWeight: 600 }}>
-                Workflow: {analysisResult.suggestedWorkflow}
-              </span>
+              <CardDescription className="mt-1 text-sm">
+                Transform product intent into empirical, test-proven engineering deliverables with autonomous agents.
+              </CardDescription>
             </div>
-            <div style={{ fontSize: '13px', color: '#cbd5e1', lineHeight: 1.5 }}>
-              <strong>Extracted Goals:</strong> {analysisResult.extractedGoals?.join('; ')}
-            </div>
-            <div style={{ fontSize: '13px', color: '#94a3b8', lineHeight: 1.5 }}>
-              <strong>Assigned Roles:</strong> {analysisResult.suggestedRoles?.join(', ')}
+            <div className="flex items-center gap-2">
+              <Badge variant="outline" className="border-sky-800 bg-sky-950/40 text-sky-400">
+                TDD Verification Active
+              </Badge>
+              <Badge variant="success">
+                91 Tests Passing
+              </Badge>
             </div>
           </div>
-        )}
-      </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Input & Action Button */}
+          <div className="flex gap-2">
+            <Input
+              type="text"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleClassify()}
+              placeholder="Type engineering intent (e.g. 'Build new service...', 'Fix failing test...', 'Add feature...')"
+              className="h-11 bg-background/80 text-sm shadow-inner placeholder:text-muted-foreground"
+            />
+            <Button
+              onClick={() => handleClassify()}
+              disabled={analyzing}
+              className="h-11 px-6 font-semibold"
+            >
+              {analyzing ? (
+                <>
+                  <Activity className="mr-2 h-4 w-4 animate-spin" /> Classifying...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" /> Orchestrate
+                </>
+              )}
+            </Button>
+          </div>
+
+          {/* Prompt Chips */}
+          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+            <span className="font-semibold text-muted-foreground">Try intent:</span>
+            {samplePrompts.map((sample) => (
+              <button
+                key={sample}
+                onClick={() => {
+                  setPrompt(sample);
+                  handleClassify(sample);
+                }}
+                className="rounded-md border border-border bg-muted/60 px-2.5 py-1 text-xs text-slate-300 transition-colors hover:bg-accent hover:text-white"
+              >
+                {sample.length > 44 ? sample.substring(0, 42) + '...' : sample}
+              </button>
+            ))}
+          </div>
+
+          {/* Interactive Classification Result */}
+          {analysisResult && (
+            <div className="rounded-lg border border-sky-800 bg-background/90 p-4 shadow-lg animate-in fade-in slide-in-from-top-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-lg">🎯</span>
+                  <span className="font-bold text-sky-400">
+                    Intent Identified: {analysisResult.intentType?.toUpperCase()}
+                  </span>
+                  <Badge variant="secondary" className="text-xs">
+                    Confidence: {(analysisResult.confidence * 100).toFixed(0)}%
+                  </Badge>
+                </div>
+                <Badge variant="outline" className="border-emerald-800 bg-emerald-950/40 text-emerald-400">
+                  Workflow: {analysisResult.suggestedWorkflow}
+                </Badge>
+              </div>
+              <div className="mt-3 text-xs text-slate-300 leading-relaxed">
+                <strong className="text-white">Extracted Goals:</strong> {analysisResult.extractedGoals?.join('; ')}
+              </div>
+              <div className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                <strong className="text-slate-200">Assigned Roles:</strong> {analysisResult.suggestedRoles?.join(', ')}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
 
       {/* 4 Metric Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 500 }}>Active Projects</span>
-            <span style={{ fontSize: '18px' }}>📁</span>
-          </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc' }}>3</div>
-          <div style={{ fontSize: '12px', color: '#34d399', marginTop: '6px' }}>● 100% On Schedule</div>
-        </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-xs font-medium text-muted-foreground">
+              Active Projects
+            </CardTitle>
+            <FolderGit2 className="h-4 w-4 text-sky-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">3</div>
+            <p className="mt-1 text-xs text-emerald-400">● 100% On Schedule</p>
+          </CardContent>
+        </Card>
 
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 500 }}>Agent Fleet</span>
-            <span style={{ fontSize: '18px' }}>🤖</span>
-          </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc' }}>6 Roles</div>
-          <div style={{ fontSize: '12px', color: '#38bdf8', marginTop: '6px' }}>Orchestrator, Arch, Eng, QA, DevOps, PM</div>
-        </div>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-xs font-medium text-muted-foreground">
+              Agent Fleet
+            </CardTitle>
+            <Bot className="h-4 w-4 text-indigo-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">6 Roles</div>
+            <p className="mt-1 text-xs text-sky-400">Orchestrator, Arch, Eng, QA, DevOps, PM</p>
+          </CardContent>
+        </Card>
 
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 500 }}>Quality Gate Pass Rate</span>
-            <span style={{ fontSize: '18px' }}>🛡️</span>
-          </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#34d399' }}>100%</div>
-          <div style={{ fontSize: '12px', color: '#94a3b8', marginTop: '6px' }}>91/91 Automated Tests Passing</div>
-        </div>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-xs font-medium text-muted-foreground">
+              Quality Gate Pass Rate
+            </CardTitle>
+            <ShieldCheck className="h-4 w-4 text-emerald-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-emerald-400">100%</div>
+            <p className="mt-1 text-xs text-muted-foreground">91/91 Automated Tests Passing</p>
+          </CardContent>
+        </Card>
 
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-            <span style={{ fontSize: '13px', color: '#94a3b8', fontWeight: 500 }}>Token & Cost Routing</span>
-            <span style={{ fontSize: '18px' }}>⚡</span>
-          </div>
-          <div style={{ fontSize: '28px', fontWeight: 800, color: '#f8fafc' }}>$0.0042</div>
-          <div style={{ fontSize: '12px', color: '#38bdf8', marginTop: '6px' }}>Multi-Provider Fast/Reasoning Tiers</div>
-        </div>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-xs font-medium text-muted-foreground">
+              Token & Cost Routing
+            </CardTitle>
+            <Cpu className="h-4 w-4 text-amber-400" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">$0.0042</div>
+            <p className="mt-1 text-xs text-sky-400">Multi-Provider Fast/Reasoning Tiers</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Engineering Lifecycle Pipeline */}
-      <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '24px' }}>
-        <h3 style={{ margin: '0 0 16px', fontSize: '16px', fontWeight: 700, color: '#f8fafc' }}>
-          Autonomous Engineering Pipeline
-        </h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
-          {[
-            { step: '01', title: 'Intent Classification', role: 'Orchestrator', status: 'Completed', color: '#10b981' },
-            { step: '02', title: 'Architecture Spec', role: 'Solution Architect', status: 'Active', color: '#38bdf8' },
-            { step: '03', title: 'Implementation', role: 'Software Engineer', status: 'Queued', color: '#64748b' },
-            { step: '04', title: 'Quality Verification', role: 'QA Engineer', status: 'Pending', color: '#64748b' },
-            { step: '05', title: 'Controlled Release', role: 'Policy Engine', status: 'Approval Gate', color: '#64748b' },
-          ].map((s) => (
-            <div
-              key={s.step}
-              style={{
-                backgroundColor: '#090d16',
-                border: '1px solid #1e293b',
-                borderRadius: '8px',
-                padding: '16px',
-                position: 'relative',
-              }}
-            >
-              <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', marginBottom: '4px' }}>
-                PHASE {s.step}
-              </div>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#f1f5f9', marginBottom: '8px' }}>
-                {s.title}
-              </div>
-              <div style={{ fontSize: '12px', color: '#94a3b8', marginBottom: '10px' }}>
-                {s.role}
-              </div>
-              <span
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  color: s.color,
-                  backgroundColor: `${s.color}15`,
-                  padding: '2px 8px',
-                  borderRadius: '4px',
-                }}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm font-semibold tracking-wide uppercase text-muted-foreground">
+            Autonomous Engineering Pipeline
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-5">
+            {[
+              { step: '01', title: 'Intent Classification', role: 'Orchestrator', status: 'Completed', color: 'text-emerald-400 border-emerald-800 bg-emerald-950/20' },
+              { step: '02', title: 'Architecture Spec', role: 'Solution Architect', status: 'Active', color: 'text-sky-400 border-sky-800 bg-sky-950/20' },
+              { step: '03', title: 'Implementation', role: 'Software Engineer', status: 'Queued', color: 'text-muted-foreground border-border bg-muted/20' },
+              { step: '04', title: 'Quality Verification', role: 'QA Engineer', status: 'Pending', color: 'text-muted-foreground border-border bg-muted/20' },
+              { step: '05', title: 'Controlled Release', role: 'Policy Engine', status: 'Approval Gate', color: 'text-muted-foreground border-border bg-muted/20' },
+            ].map((s) => (
+              <div
+                key={s.step}
+                className="rounded-lg border border-border bg-background/50 p-4"
               >
-                {s.status}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+                <div className="text-[10px] font-bold text-muted-foreground">
+                  PHASE {s.step}
+                </div>
+                <div className="mt-1 text-sm font-semibold text-foreground">
+                  {s.title}
+                </div>
+                <div className="mt-1 text-xs text-muted-foreground">
+                  {s.role}
+                </div>
+                <div className="mt-3">
+                  <span className={`inline-block rounded border px-2 py-0.5 text-[10px] font-semibold ${s.color}`}>
+                    {s.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Active Projects Table & Agent Fleet Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Active Projects Table */}
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700 }}>Active Projects</h3>
-            <a href="/projects" style={{ fontSize: '13px', color: '#38bdf8', textDecoration: 'none' }}>
-              View All (3) →
-            </a>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <Card className="lg:col-span-2">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle className="text-base font-semibold">Active Projects</CardTitle>
+              <CardDescription className="text-xs">
+                Empirical deliverables tracked across isolated workspaces
+              </CardDescription>
+            </div>
+            <Button variant="ghost" size="sm" asChild>
+              <a href="/projects" className="text-xs text-sky-400 hover:text-sky-300">
+                View All <ArrowRight className="ml-1 h-3.5 w-3.5" />
+              </a>
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-3">
             {[
               {
                 id: 'proj-001',
@@ -303,87 +296,74 @@ export default function DashboardPage() {
             ].map((proj) => (
               <div
                 key={proj.id}
-                style={{
-                  backgroundColor: '#090d16',
-                  border: '1px solid #1e293b',
-                  borderRadius: '8px',
-                  padding: '16px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
+                className="flex items-center justify-between rounded-lg border border-border bg-background/50 p-4 transition-colors hover:border-slate-700"
               >
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <div className="flex items-center gap-2">
                     <a
                       href={`/projects/${proj.id}`}
-                      style={{ fontSize: '15px', fontWeight: 600, color: '#f8fafc', textDecoration: 'none' }}
+                      className="font-semibold text-sm text-foreground hover:text-sky-400 hover:underline"
                     >
                       {proj.name}
                     </a>
-                    <span
-                      style={{
-                        fontSize: '11px',
-                        padding: '2px 6px',
-                        borderRadius: '4px',
-                        backgroundColor: proj.status === 'active' ? '#065f46' : '#1e293b',
-                        color: proj.status === 'active' ? '#34d399' : '#94a3b8',
-                      }}
-                    >
+                    <Badge variant={proj.status === 'active' ? 'success' : 'secondary'} className="text-[10px]">
                       {proj.status}
-                    </span>
+                    </Badge>
                   </div>
-                  <div style={{ fontSize: '12.5px', color: '#94a3b8', marginTop: '4px' }}>
+                  <p className="mt-1 text-xs text-muted-foreground">
                     {proj.goal}
-                  </div>
+                  </p>
                 </div>
 
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#38bdf8' }}>{proj.stage}</div>
-                  <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>{proj.tests}</div>
+                <div className="text-right">
+                  <div className="text-xs font-semibold text-sky-400">{proj.stage}</div>
+                  <div className="text-[11px] text-muted-foreground">{proj.tests}</div>
                 </div>
               </div>
             ))}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
         {/* Agent Fleet Quick Status */}
-        <div style={{ backgroundColor: '#0e1526', border: '1px solid #1e293b', borderRadius: '12px', padding: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700 }}>Agent Fleet</h3>
-            <span style={{ fontSize: '12px', color: '#10b981' }}>● 6 Online</span>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-3">
+            <div>
+              <CardTitle className="text-base font-semibold">Agent Fleet</CardTitle>
+              <CardDescription className="text-xs">
+                Role capabilities & status
+              </CardDescription>
+            </div>
+            <span className="flex items-center gap-1.5 text-xs text-emerald-400">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" /> 6 Online
+            </span>
+          </CardHeader>
+          <CardContent className="space-y-2.5">
             {[
-              { role: 'Orchestrator', desc: 'Intent classification & DAG synthesis', icon: '⚡' },
-              { role: 'Solution Architect', desc: 'Interface design & contract spec', icon: '📐' },
-              { role: 'Software Engineer', desc: 'TDD implementation & execution', icon: '💻' },
-              { role: 'QA Engineer', desc: 'Automated verification suites', icon: '🛡️' },
-              { role: 'DevOps Engineer', desc: 'Isolated worktrees & deployment', icon: '🚀' },
-              { role: 'Product Manager', desc: 'Requirements & ambiguity checks', icon: '📋' },
-            ].map((agent) => (
-              <div
-                key={agent.role}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  backgroundColor: '#090d16',
-                  padding: '10px 12px',
-                  borderRadius: '6px',
-                  border: '1px solid #1e293b',
-                }}
-              >
-                <span style={{ fontSize: '18px' }}>{agent.icon}</span>
-                <div>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#f1f5f9' }}>{agent.role}</div>
-                  <div style={{ fontSize: '11px', color: '#64748b' }}>{agent.desc}</div>
+              { role: 'Orchestrator', desc: 'Intent classification & DAG synthesis', icon: Sparkles },
+              { role: 'Solution Architect', desc: 'Interface design & contract spec', icon: Layers },
+              { role: 'Software Engineer', desc: 'TDD implementation & execution', icon: Code2 },
+              { role: 'QA Engineer', desc: 'Automated verification suites', icon: ShieldCheck },
+              { role: 'DevOps Engineer', desc: 'Isolated worktrees & deployment', icon: Terminal },
+              { role: 'Product Manager', desc: 'Requirements & ambiguity checks', icon: Bot },
+            ].map((agent) => {
+              const Icon = agent.icon;
+              return (
+                <div
+                  key={agent.role}
+                  className="flex items-center gap-3 rounded-md border border-border bg-background/40 p-2.5"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted text-sky-400">
+                    <Icon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-semibold text-foreground">{agent.role}</div>
+                    <div className="text-[10px] text-muted-foreground">{agent.desc}</div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              );
+            })}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
