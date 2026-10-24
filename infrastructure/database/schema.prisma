@@ -1,0 +1,508 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum ProjectStatus {
+  active
+  archived
+  paused
+  completed
+}
+
+enum ConversationType {
+  orchestrator
+  agent
+  platform_builder
+  review
+}
+
+enum MessageRole {
+  user
+  assistant
+  system
+  tool
+}
+
+enum RequirementPriority {
+  P0
+  P1
+  P2
+}
+
+enum RequirementStatus {
+  draft
+  approved
+  implemented
+  verified
+  rejected
+}
+
+enum WorkflowState {
+  pending
+  running
+  waiting_approval
+  paused
+  completed
+  failed
+  cancelled
+}
+
+enum TaskStatus {
+  pending
+  assigned
+  running
+  review
+  completed
+  failed
+  skipped
+}
+
+enum ArtifactStatus {
+  draft
+  approved
+  verified
+  released
+  superseded
+  failed
+}
+
+enum ApprovalStatus {
+  pending
+  approved
+  rejected
+  expired
+  cancelled
+  superseded
+}
+
+enum RiskLevel {
+  low
+  medium
+  high
+  critical
+}
+
+enum QualityGateStatus {
+  passed
+  failed
+  blocked
+  skipped_with_reason
+  not_applicable
+}
+
+enum MemoryScopeType {
+  task
+  role
+  project
+  workspace
+  shared
+}
+
+enum MemoryType {
+  project
+  role
+  episodic
+  knowledge
+  procedural
+  preference
+}
+
+enum MemoryStatus {
+  candidate
+  validated
+  active
+  superseded
+  archived
+  rejected
+  deleted
+}
+
+enum MemoryVerificationStatus {
+  unverified
+  model_inferred
+  empirically_tested
+  human_approved
+}
+
+enum MemorySensitivity {
+  public
+  internal
+  confidential
+  restricted
+}
+
+enum MemoryRelationType {
+  supports
+  contradicts
+  duplicates
+  supersedes
+  derived_from
+  related_to
+}
+
+enum FeedbackType {
+  helpful
+  irrelevant
+  incorrect
+  stale
+  unsafe
+}
+
+model User {
+  id           String        @id @default(uuid())
+  email        String        @unique
+  name         String
+  role         String        @default("user") // admin, engineer, reviewer, user
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  projects     Project[]
+}
+
+model Project {
+  id                String         @id @default(uuid())
+  name              String
+  description       String?
+  goal              String
+  status            ProjectStatus  @default(active)
+  capabilityProfile Json?
+  ownerId           String?
+  owner             User?          @relation(fields: [ownerId], references: [id])
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  conversations     Conversation[]
+  requirements      Requirement[]
+  decisions         Decision[]
+  workflowRuns      WorkflowRun[]
+  artifacts         Artifact[]
+  approvalRecords   ApprovalRecord[]
+  memoryItems       MemoryItem[]
+}
+
+model Conversation {
+  id          String           @id @default(uuid())
+  projectId   String
+  project     Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title       String
+  type        ConversationType @default(orchestrator)
+  metadata    Json?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  messages    Message[]
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           MessageRole
+  content        String       @db.Text
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+}
+
+model Requirement {
+  id                 String              @id @default(uuid())
+  projectId          String
+  project            Project             @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  code               String              // e.g. FR-001
+  title              String
+  description        String              @db.Text
+  priority           RequirementPriority @default(P0)
+  status             RequirementStatus   @default(draft)
+  acceptanceCriteria Json?               // string[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model Decision {
+  id                     String    @id @default(uuid())
+  projectId              String
+  project                Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title                  String
+  context                String    @db.Text
+  decision               String    @db.Text
+  rationale              String    @db.Text
+  alternativesConsidered Json?     // string[]
+  status                 String    @default("accepted")
+  decidedBy              String
+  decidedAt              DateTime  @default(now())
+}
+
+model WorkflowDefinition {
+  id          String        @id @default(uuid())
+  name        String
+  version     String
+  description String?
+  graph       Json          // DAG nodes & dependencies
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  runs        WorkflowRun[]
+}
+
+model WorkflowRun {
+  id                   String             @id @default(uuid())
+  projectId            String
+  project              Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  workflowDefinitionId String
+  workflowDefinition   WorkflowDefinition @relation(fields: [workflowDefinitionId], references: [id])
+  state                WorkflowState      @default(pending)
+  context              Json               @default("{}")
+  checkpoints          Json               @default("[]")
+  currentTaskId        String?
+  startedAt            DateTime?
+  completedAt          DateTime?
+  failureReason        String?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  tasks                Task[]
+}
+
+model Task {
+  id                 String              @id @default(uuid())
+  workflowRunId      String
+  workflowRun        WorkflowRun         @relation(fields: [workflowRunId], references: [id], onDelete: Cascade)
+  name               String
+  description        String?             @db.Text
+  assignedRole       String?
+  status             TaskStatus          @default(pending)
+  inputs             Json                @default("{}")
+  outputs            Json?
+  dependencies       Json                @default("[]") // string[] of task IDs
+  retryCount         Int                 @default(0)
+  maxRetries         Int                 @default(3)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  agentRuns          AgentRun[]
+  qualityGateResults QualityGateResult[]
+}
+
+model AgentRun {
+  id               String    @id @default(uuid())
+  taskId           String
+  task             Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  roleId           String
+  agentInstanceId  String
+  modelUsed        String
+  tokensUsed       Int?
+  costEstimate     Float?
+  status           String    @default("running")
+  executionLogRef  String?
+  startedAt        DateTime  @default(now())
+  completedAt      DateTime?
+}
+
+model Artifact {
+  id                   String         @id @default(uuid())
+  projectId            String
+  project              Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type                 String         // code, prd, design, test_report, release
+  title                String
+  status               ArtifactStatus @default(draft)
+  currentVersionNumber Int            @default(1)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  versions             ArtifactVersion[]
+}
+
+model ArtifactVersion {
+  id                  String              @id @default(uuid())
+  artifactId          String
+  artifact            Artifact            @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  versionNumber       Int
+  storageRef          String              // MinIO or S3 locator
+  contentHash         String              // SHA-256 for integrity & approval binding
+  provenanceTaskRunId String?
+  metadata            Json?
+  createdAt           DateTime            @default(now())
+
+  qualityGateResults  QualityGateResult[]
+
+  @@unique([artifactId, versionNumber])
+}
+
+model ApprovalRecord {
+  id                String         @id @default(uuid())
+  projectId         String
+  project           Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  action            String         // deploy_production, mutate_permission, platform_change
+  resourceType      String
+  resourceId        String
+  exactVersionHash  String         // approval binds to exact hash
+  status            ApprovalStatus @default(pending)
+  riskLevel         RiskLevel      @default(medium)
+  requestedBy       String
+  approvedBy        String?
+  rationale         String         @db.Text
+  expiresAt         DateTime?
+  decidedAt         DateTime?
+  createdAt         DateTime       @default(now())
+}
+
+model QualityGateResult {
+  id                String            @id @default(uuid())
+  taskId            String
+  task              Task              @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  artifactVersionId String?
+  artifactVersion   ArtifactVersion?  @relation(fields: [artifactVersionId], references: [id])
+  gateType          String            // unit_tests, lint, security_scan, coverage
+  status            QualityGateStatus
+  testsRun          Int               @default(0)
+  testsPassed       Int               @default(0)
+  testsFailed       Int               @default(0)
+  evidenceRef       String            // log/report artifact locator
+  evaluatedAt       DateTime          @default(now())
+}
+
+model AuditEvent {
+  id            String   @id @default(uuid())
+  actor         String
+  action        String
+  resourceType  String
+  resourceId    String
+  outcome       String   // allowed, denied, error
+  correlationId String
+  details       Json?
+  timestamp     DateTime @default(now())
+
+  @@index([correlationId])
+  @@index([actor])
+  @@index([timestamp])
+}
+
+// -------------------------------------------------------------
+// Persistent Memory Subsystem (MEM-001 - MEM-018)
+// -------------------------------------------------------------
+
+model MemoryItem {
+  id                 String                   @id @default(uuid())
+  workspaceId        String
+  scopeType          MemoryScopeType          @default(project)
+  scopeId            String
+  memoryType         MemoryType
+  title              String
+  content            String                   @db.Text
+  summary            String?                  @db.Text
+  status             MemoryStatus             @default(candidate)
+  confidence         Float                    @default(1.0)
+  verificationStatus MemoryVerificationStatus @default(unverified)
+  sensitivity        MemorySensitivity        @default(internal)
+  createdById        String
+  currentVersionId   String?
+  reviewAfter        DateTime?
+  lastValidatedAt    DateTime?
+  projectId          String?
+  project            Project?                 @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+
+  versions           MemoryVersion[]
+  sources            MemorySource[]
+  relationsFrom      MemoryRelation[]         @relation("RelationsFrom")
+  relationsTo        MemoryRelation[]         @relation("RelationsTo")
+  feedbacks          MemoryFeedback[]
+
+  @@index([scopeType, scopeId])
+  @@index([status])
+  @@index([projectId])
+}
+
+model MemoryVersion {
+  id              String     @id @default(uuid())
+  memoryItemId    String
+  memoryItem      MemoryItem @relation(fields: [memoryItemId], references: [id], onDelete: Cascade)
+  versionNumber   Int
+  contentSnapshot String     @db.Text
+  changeReason    String
+  sourceEventId   String?
+  createdById     String
+  createdAt       DateTime   @default(now())
+
+  @@unique([memoryItemId, versionNumber])
+}
+
+model MemorySource {
+  id              String     @id @default(uuid())
+  memoryItemId    String
+  memoryItem      MemoryItem @relation(fields: [memoryItemId], references: [id], onDelete: Cascade)
+  sourceType      String     // run, test_report, conversation, decision
+  sourceId        String
+  sourceVersion   String?
+  evidenceLocator String?
+  captureTime     DateTime   @default(now())
+}
+
+model MemoryRelation {
+  id           String             @id @default(uuid())
+  fromMemoryId String
+  fromMemory   MemoryItem         @relation("RelationsFrom", fields: [fromMemoryId], references: [id], onDelete: Cascade)
+  toMemoryId   String
+  toMemory     MemoryItem         @relation("RelationsTo", fields: [toMemoryId], references: [id], onDelete: Cascade)
+  relationType MemoryRelationType
+  createdAt    DateTime           @default(now())
+
+  @@unique([fromMemoryId, toMemoryId, relationType])
+}
+
+model MemoryFeedback {
+  id           String       @id @default(uuid())
+  memoryItemId String
+  memoryItem   MemoryItem   @relation(fields: [memoryItemId], references: [id], onDelete: Cascade)
+  userId       String?
+  feedbackType FeedbackType
+  notes        String?
+  createdAt    DateTime     @default(now())
+}
+
+// -------------------------------------------------------------
+// Platform Builder Subsystem (FR-070 - FR-080)
+// -------------------------------------------------------------
+
+model PlatformChangeSet {
+  id              String   @id @default(uuid())
+  version         String   @unique
+  intent          String   @db.Text
+  impactAnalysis  Json     // affected roles, skills, APIs, schemas, tests
+  diffSnapshot    String?  @db.Text
+  status          String   @default("draft") // draft, tested, approved, released, rolled_back
+  approvedById    String?
+  releasedAt      DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model CapabilityNode {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  type        String   // role, skill, tool, workflow, module, api, ui_workspace
+  status      String   @default("implemented") // planned, implemented, validated, available, deprecated
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  outgoingEdges CapabilityEdge[] @relation("NodeOutgoing")
+  incomingEdges CapabilityEdge[] @relation("NodeIncoming")
+}
+
+model CapabilityEdge {
+  id         String         @id @default(uuid())
+  fromNodeId String
+  fromNode   CapabilityNode @relation("NodeOutgoing", fields: [fromNodeId], references: [id], onDelete: Cascade)
+  toNodeId   String
+  toNode     CapabilityNode @relation("NodeIncoming", fields: [toNodeId], references: [id], onDelete: Cascade)
+  relation   String         // implements, depends_on, uses, exposes, requires_permission
+  createdAt  DateTime       @default(now())
+
+  @@unique([fromNodeId, toNodeId, relation])
+}
