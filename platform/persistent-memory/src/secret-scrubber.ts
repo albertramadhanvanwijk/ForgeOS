@@ -24,8 +24,13 @@ export class SecretScrubber {
     },
     {
       type: 'openai_key',
-      regex: /sk-[a-zA-Z0-9_-]{20,}/g,
+      regex: /sk-[a-zA-Z0-9_-]{12,}/g,
       replacement: '[REDACTED_SECRET:OPENAI_KEY]',
+    },
+    {
+      type: 'password',
+      regex: /(?:password|passwd|pwd)\s*[:=]\s*['"]?([^\s'";]+)['"]?/gi,
+      replacement: '[REDACTED_SECRET:PASSWORD]',
     },
     {
       type: 'anthropic_key',

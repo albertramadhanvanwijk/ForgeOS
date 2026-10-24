@@ -151,8 +151,8 @@ export class ChangeSetManager {
   public rollbackChangeSet(id: string): PlatformChangeSet {
     const cs = this.changeSets.get(id);
     if (!cs) throw new Error(`ChangeSet '${id}' not found.`);
-    if (cs.status !== 'applied') {
-      throw new Error(`Cannot rollback ChangeSet in '${cs.status}' status.`);
+    if (cs.status === 'rolled_back') {
+      throw new Error(`ChangeSet '${id}' is already rolled back.`);
     }
 
     cs.status = 'rolled_back';

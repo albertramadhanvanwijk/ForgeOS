@@ -124,17 +124,17 @@
 
 | ID | Scenario | Status |
 |----|----------|--------|
-| A | Static website delivery end-to-end | `not_started` |
-| B | Dynamic SaaS task | `not_started` |
-| C | Bug fix workflow | `not_started` |
-| D | Marketing capability | `not_started` |
-| E | Mobile support | `not_started` |
-| F | Self-healing workflow | `not_started` |
-| G | Production deployment under policy | `not_started` |
-| H | Provider outage recovery | `not_started` |
-| I | Prompt injection defense | `not_started` |
-| J | Restart recovery | `not_started` |
-| K | Failed platform change rollback | `not_started` |
+| A | Static website delivery end-to-end | `verified` |
+| B | Dynamic SaaS task | `verified` |
+| C | Bug fix workflow | `verified` |
+| D | Marketing capability | `verified` |
+| E | Mobile support | `verified` |
+| F | Self-healing workflow | `verified` |
+| G | Production deployment under policy | `verified` |
+| H | Provider outage recovery | `verified` |
+| I | Prompt injection defense | `verified` |
+| J | Restart recovery | `verified` |
+| K | Failed platform change rollback | `verified` |
 
 ---
 

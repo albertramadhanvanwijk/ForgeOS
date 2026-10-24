@@ -129,12 +129,12 @@
 
 | Item | Gap |
 |------|-----|
-| PostgreSQL schema/migrations | ❌ None |
-| S3-compatible object storage config | ❌ None |
-| Docker / docker-compose | ❌ None |
-| CI/CD pipeline (GitHub Actions) | ❌ None |
-| Durable workflow engine (Temporal / custom) | ❌ None |
-| Local runner / sandbox | ❌ None |
+| PostgreSQL schema/migrations | ✅ Complete schema in infrastructure/ & docker-compose pgvector |
+| S3-compatible object storage config | ✅ MinIO S3 object storage in docker-compose & environment configs |
+| Docker / docker-compose | ✅ docker-compose.yml at root & infrastructure/ with healthchecks |
+| CI/CD pipeline (GitHub Actions) | ✅ Complete Vitest + Next.js automated test gates & verification scripts |
+| Durable workflow engine (Temporal / custom) | ✅ Custom durable workflow engine with DAG execution & checkpoints |
+| Local runner / sandbox | ✅ Sandboxed LocalProcessRunner with command allowlists |
 
 ---
 
