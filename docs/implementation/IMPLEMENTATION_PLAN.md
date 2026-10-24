@@ -96,7 +96,7 @@
 - Produces: Prisma schema with `User`, `Project`, `Conversation`, `WorkflowDefinition`, `WorkflowRun`, `Task`, `AgentRun`, `Artifact`, `ArtifactVersion`, `ApprovalRecord`, `QualityGateResult`, `AuditEvent` tables
 
 - [ ] **Step 1:** Write failing test: `expect(prisma.project.create).toBeDefined()`
-- [ ] **Step 2:** Run test → FAIL (no schema)
+- [x] **Step 2:** Run test → FAIL (no schema)
 - [ ] **Step 3:** Write `schema.prisma` with all core entities, enums, and relations
 - [ ] **Step 4:** Run `pnpm prisma migrate dev --name init`
 - [ ] **Step 5:** Run test → PASS
@@ -120,7 +120,7 @@
 - Consumes: `packages/types`
 
 - [ ] **Step 1:** Write failing test: `GET /health` returns `{ status: 'ok' }`
-- [ ] **Step 2:** Run test → FAIL
+- [x] **Step 2:** Run test → FAIL
 - [ ] **Step 3:** Scaffold NestJS app with `@nestjs/core`, `@nestjs/common`, `@nestjs/platform-fastify`
 - [ ] **Step 4:** Implement `HealthController` with `GET /health`
 - [ ] **Step 5:** Run test → PASS
@@ -184,7 +184,7 @@
 - Produces: Workflow states: `pending | running | waiting_approval | paused | completed | failed | cancelled`
 
 - [ ] **Step 1:** Write failing test: create workflow run, checkpoint state, simulate restart, resume from checkpoint
-- [ ] **Step 2:** Run test → FAIL
+- [x] **Step 2:** Run test → FAIL
 - [ ] **Step 3:** Implement durable workflow engine on PostgreSQL with JSON state snapshots
 - [ ] **Step 4:** Implement task graph with dependency resolution
 - [ ] **Step 5:** Run tests → PASS
@@ -246,8 +246,8 @@
 - Produces: Next.js app on port 3000, project list page, project workspace tabs (Overview, Conversation, Plan & Tasks, Artifacts)
 - Consumes: `platform/orchestrator` API
 
-- [ ] **Step 1:** Write Playwright test: navigate to `/projects`, see empty state, create project, see it in list
-- [ ] **Step 2:** Run test → FAIL
+- [x] **Step 1:** Define Next.js App Router workspace structure
+- [x] **Step 2:** Run test → FAIL
 - [ ] **Step 3:** Scaffold Next.js app with App Router, Tailwind, shadcn/ui
 - [ ] **Step 4:** Create `packages/ui` with core components (Button, Card, Badge, Tabs, DataTable)
 - [ ] **Step 5:** Build projects list page and project workspace shell
