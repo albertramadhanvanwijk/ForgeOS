@@ -84,8 +84,8 @@ export default function FleetPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-xs text-zinc-300 backdrop-blur-md">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" /> 6 Roles Registered
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-xs text-zinc-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> 6 Roles Registered
           </span>
         </div>
       </div>
@@ -97,12 +97,12 @@ export default function FleetPage() {
           return (
             <div
               key={role.id}
-              className="glass-panel glass-specular glass-panel-hover flex flex-col justify-between rounded-xl p-5"
+              className="work-card card-specular flex flex-col justify-between p-5"
             >
               <div>
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-zinc-300">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 text-zinc-300">
                       <Icon className="h-4 w-4" />
                     </div>
                     <div>
@@ -111,11 +111,11 @@ export default function FleetPage() {
                     </div>
                   </div>
                   {role.status === 'busy' ? (
-                    <Badge variant="outline" className="border-amber-500/30 bg-amber-500/10 font-mono text-[10px] text-amber-400">
+                    <Badge variant="outline" className="border-amber-800 bg-amber-950 font-mono text-[10px] text-amber-400">
                       active
                     </Badge>
                   ) : (
-                    <Badge variant="outline" className="border-white/10 bg-white/[0.04] font-mono text-[10px] text-zinc-400">
+                    <Badge variant="outline" className="border-zinc-800 bg-zinc-900 font-mono text-[10px] text-zinc-400">
                       idle
                     </Badge>
                   )}
@@ -134,7 +134,7 @@ export default function FleetPage() {
                     {role.capabilities.map((cap) => (
                       <span
                         key={cap}
-                        className="rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 backdrop-blur-sm"
+                        className="rounded border border-zinc-800 bg-zinc-900/60 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300"
                       >
                         {cap}
                       </span>
@@ -144,7 +144,7 @@ export default function FleetPage() {
               </div>
 
               {/* Card Footer */}
-              <div className="mt-5 flex items-center justify-between border-t border-white/[0.08] pt-3 text-[11px] font-mono text-zinc-500">
+              <div className="mt-5 flex items-center justify-between border-t border-zinc-800/80 pt-3 text-[11px] font-mono text-zinc-500">
                 <span>Model: {role.modelTier}</span>
                 <span className="text-zinc-400 hover:text-zinc-200 cursor-pointer">Config →</span>
               </div>

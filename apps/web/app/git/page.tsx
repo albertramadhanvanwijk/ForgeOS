@@ -13,7 +13,7 @@ export default function GitWorktreesPage() {
     {
       path: 'D:\\abeng\\WORK\\proyek\\ForgeOS',
       branch: 'main',
-      head: '1d6dfed',
+      head: '9232152',
       isClean: true,
       isPrimary: true,
       lastModified: 'Just now',
@@ -21,7 +21,7 @@ export default function GitWorktreesPage() {
     {
       path: 'D:\\abeng\\WORK\\proyek\\ForgeOS\\runtime-data\\worktrees\\agent-lead-architect-task-88',
       branch: 'agent/lead-architect-task-88',
-      head: '1d6dfed',
+      head: '9232152',
       isClean: true,
       isPrimary: false,
       lastModified: '18 min ago',
@@ -39,11 +39,11 @@ export default function GitWorktreesPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" className="border-white/10 bg-white/[0.04] font-mono text-xs text-zinc-300 hover:bg-white/[0.08]">
+          <Button size="sm" variant="outline" className="border-zinc-800 bg-zinc-900 font-mono text-xs text-zinc-300 hover:bg-zinc-800">
             <RefreshCw className="mr-1.5 h-3.5 w-3.5" />
             <span>Scan Worktrees</span>
           </Button>
-          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-md hover:bg-white">
+          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-sm hover:bg-white">
             <Plus className="mr-1.5 h-3.5 w-3.5" />
             <span>Create Isolated Worktree</span>
           </Button>
@@ -51,12 +51,12 @@ export default function GitWorktreesPage() {
       </div>
 
       {/* Primary Worktree Status */}
-      <div className="glass-panel glass-specular rounded-xl p-5 shadow-xl">
+      <div className="work-card card-specular p-5 shadow-sm">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs font-semibold text-zinc-100">Primary Git Repository Root</span>
-              <span className="rounded border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[10px] text-emerald-400">
+              <span className="rounded border border-emerald-800 bg-emerald-950 px-1.5 py-0.5 font-mono text-[10px] text-emerald-400">
                 ACTIVE
               </span>
             </div>
@@ -67,24 +67,24 @@ export default function GitWorktreesPage() {
           <div className="flex items-center gap-2 font-mono text-xs text-zinc-400">
             <span>Branch: <span className="text-zinc-200 font-semibold">main</span></span>
             <span>•</span>
-            <span>HEAD: <span className="text-zinc-200">1d6dfed</span></span>
+            <span>HEAD: <span className="text-zinc-200">9232152</span></span>
           </div>
         </div>
       </div>
 
       {/* Worktrees Table */}
-      <div className="glass-panel glass-specular divide-y divide-white/[0.06] rounded-xl shadow-2xl overflow-hidden">
-        <div className="bg-black/40 px-4 py-3 font-mono text-[11px] font-medium text-zinc-400">
+      <div className="work-card card-specular divide-y divide-zinc-800/80 overflow-hidden shadow-sm">
+        <div className="bg-zinc-950 px-4 py-3 font-mono text-[11px] font-medium text-zinc-400">
           REGISTERED ACTIVE WORKTREES
         </div>
         {worktrees.map((wt) => (
-          <div key={wt.path} className="flex items-center justify-between p-4 hover:bg-white/[0.02] transition-colors">
+          <div key={wt.path} className="flex items-center justify-between p-4 hover:bg-zinc-900/40 transition-colors">
             <div className="space-y-1">
               <div className="flex items-center gap-2.5">
                 <GitBranch className="h-4 w-4 text-zinc-400" />
                 <span className="font-mono text-xs font-semibold text-zinc-200">{wt.branch}</span>
                 {wt.isPrimary && (
-                  <span className="rounded border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                  <span className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
                     root
                   </span>
                 )}

@@ -11,9 +11,11 @@ import {
   Wrench,
   GitFork,
   Search,
-  CheckCircle2,
+  Terminal,
+  Activity,
   Plus,
   Command,
+  CheckCircle2,
 } from 'lucide-react';
 
 export const metadata = {
@@ -77,17 +79,15 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="relative flex h-screen overflow-hidden bg-zinc-950 font-sans text-zinc-100 antialiased selection:bg-zinc-800 selection:text-zinc-100">
-        {/* Hardware-Accelerated Ambient Canvas */}
-        <div className="ambient-canvas fixed inset-0 -z-10 pointer-events-none" />
-
-        {/* High-Performance Frosted Sidebar */}
-        <aside className="relative flex w-64 flex-shrink-0 flex-col justify-between border-r border-white/[0.08] bg-zinc-950/85 backdrop-blur-md glass-specular shadow-xl">
+      <body className="flex h-screen overflow-hidden bg-zinc-950 font-sans text-zinc-100 antialiased selection:bg-zinc-800 selection:text-zinc-100">
+        {/* Left Sidebar */}
+        <aside className="flex w-64 flex-shrink-0 flex-col justify-between border-r border-zinc-800/80 bg-zinc-950">
           <div>
             {/* Logo & Brand Header */}
-            <div className="flex items-center justify-between border-b border-white/[0.08] px-4 py-3.5">
+            <div className="flex items-center justify-between border-b border-zinc-800/80 px-4 py-3.5">
               <a href="/" className="flex items-center gap-2.5 group">
-                <div className="flex h-7 w-7 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] text-zinc-100 shadow-sm transition-all group-hover:border-white/20 group-hover:bg-white/[0.08]">
+                {/* Bespoke Geometric Mark */}
+                <div className="flex h-7 w-7 items-center justify-center rounded-md border border-zinc-700 bg-zinc-900 text-zinc-100 shadow-sm transition-colors group-hover:border-zinc-500">
                   <svg
                     className="h-4 w-4"
                     viewBox="0 0 24 24"
@@ -113,17 +113,17 @@ export default function RootLayout({
               </a>
 
               <div className="flex items-center gap-1">
-                <span className="inline-flex items-center rounded border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                <span className="inline-flex items-center rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
                   prod
                 </span>
               </div>
             </div>
 
-            {/* Context Switcher Pill */}
+            {/* Quick Context Switcher */}
             <div className="px-3 pt-3 pb-1">
-              <button className="flex w-full items-center justify-between rounded-md border border-white/[0.08] bg-white/[0.02] px-2.5 py-1.5 text-xs text-zinc-300 transition-colors hover:bg-white/[0.06] hover:border-white/15">
+              <button className="flex w-full items-center justify-between rounded border border-zinc-800/60 bg-zinc-900/60 px-2.5 py-1.5 text-xs text-zinc-300 hover:bg-zinc-800/60 transition-colors">
                 <span className="flex items-center gap-2 truncate">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   <span className="truncate font-mono text-[11px]">forgeos-control-plane</span>
                 </span>
                 <span className="font-mono text-[10px] text-zinc-500">main</span>
@@ -144,7 +144,7 @@ export default function RootLayout({
                         <a
                           key={item.href}
                           href={item.href}
-                          className="group flex items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:bg-white/[0.05] hover:text-zinc-100"
+                          className="group flex items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-zinc-100"
                         >
                           <div className="flex items-center gap-2.5">
                             <Icon className="h-4 w-4 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
@@ -161,7 +161,7 @@ export default function RootLayout({
                             </span>
                           )}
                           {item.badge && (
-                            <span className="rounded border border-white/[0.08] bg-white/[0.04] px-1 text-[9px] text-zinc-400">
+                            <span className="rounded bg-zinc-800 px-1 text-[9px] text-zinc-400">
                               {item.badge}
                             </span>
                           )}
@@ -175,7 +175,7 @@ export default function RootLayout({
           </div>
 
           {/* Sidebar Status Footer */}
-          <div className="border-t border-white/[0.08] bg-black/20 p-3">
+          <div className="border-t border-zinc-800/80 bg-zinc-950 p-3">
             <div className="flex items-center justify-between text-xs mb-1.5">
               <div className="flex items-center gap-2">
                 <span className="relative flex h-2 w-2">
@@ -188,15 +188,15 @@ export default function RootLayout({
             </div>
             <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500">
               <span>91/91 gates pass</span>
-              <span>0a35e35</span>
+              <span>7b3535a</span>
             </div>
           </div>
         </aside>
 
         {/* Main Content Area */}
         <div className="flex flex-1 flex-col overflow-hidden">
-          {/* High-Performance Top Navigation Header */}
-          <header className="sticky top-0 z-20 flex h-12 flex-shrink-0 items-center justify-between border-b border-white/[0.08] bg-zinc-950/80 px-6 backdrop-blur-md">
+          {/* Refined Top Navigation Bar */}
+          <header className="flex h-12 flex-shrink-0 items-center justify-between border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-md px-6 sticky top-0 z-20">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5 text-xs text-zinc-400">
                 <span className="text-zinc-500">ForgeOS</span>
@@ -207,23 +207,23 @@ export default function RootLayout({
 
             <div className="flex items-center gap-3">
               {/* Command Bar Trigger */}
-              <div className="flex items-center gap-2 rounded-md border border-white/[0.09] bg-white/[0.03] px-2.5 py-1 text-xs text-zinc-400 shadow-sm">
+              <div className="flex items-center gap-2 rounded-md border border-zinc-800 bg-zinc-900/80 px-2.5 py-1 text-xs text-zinc-400 shadow-sm">
                 <Search className="h-3.5 w-3.5 text-zinc-500" />
                 <span className="text-zinc-500">Command Palette</span>
-                <kbd className="ml-3 inline-flex items-center gap-0.5 rounded border border-white/10 bg-white/[0.05] px-1 font-mono text-[10px] text-zinc-400">
+                <kbd className="ml-3 inline-flex items-center gap-0.5 rounded border border-zinc-700 bg-zinc-800 px-1 font-mono text-[10px] text-zinc-400">
                   <Command className="h-2.5 w-2.5" /> K
                 </kbd>
               </div>
 
               {/* Status Pill */}
-              <div className="flex items-center gap-1.5 rounded-md border border-white/[0.08] bg-white/[0.03] px-2 py-1 font-mono text-[11px] text-zinc-400">
+              <div className="flex items-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-900/50 px-2 py-1 font-mono text-[11px] text-zinc-400">
                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
                 <span>Runner Sandboxed</span>
               </div>
 
               <a
                 href="/projects"
-                className="inline-flex items-center gap-1.5 rounded-md bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 shadow-md transition-all hover:bg-white hover:shadow-lg"
+                className="inline-flex items-center gap-1.5 rounded-md bg-zinc-100 px-3 py-1 text-xs font-semibold text-zinc-900 transition-colors hover:bg-white"
               >
                 <Plus className="h-3.5 w-3.5" />
                 <span>New Project</span>
@@ -231,8 +231,8 @@ export default function RootLayout({
             </div>
           </header>
 
-          {/* Main Viewport Content with Smooth GPU Scrolling */}
-          <main className="flex-1 overflow-y-auto p-8 overscroll-contain">
+          {/* Main Viewport Content */}
+          <main className="flex-1 overflow-y-auto bg-zinc-950 p-8">
             {children}
           </main>
         </div>

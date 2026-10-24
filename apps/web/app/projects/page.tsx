@@ -38,7 +38,7 @@ export default function ProjectsPage() {
           <h1 className="text-xl font-bold tracking-tight text-zinc-100">Projects Workspace</h1>
           <p className="mt-0.5 text-xs text-zinc-400">Manage and oversee active AI engineering project environments</p>
         </div>
-        <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-md transition-all hover:bg-white hover:shadow-lg">
+        <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-sm transition-all hover:bg-white">
           <Plus className="mr-1.5 h-3.5 w-3.5" />
           <span>New Project</span>
         </Button>
@@ -48,12 +48,12 @@ export default function ProjectsPage() {
         {projects.map((proj) => (
           <div
             key={proj.id}
-            className="glass-panel glass-specular glass-panel-hover flex flex-col justify-between rounded-xl p-5"
+            className="work-card card-specular flex flex-col justify-between p-5"
           >
             <div>
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-2.5">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04]">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900">
                     <FolderGit2 className="h-4 w-4 text-zinc-300" />
                   </div>
                   <div>
@@ -65,8 +65,8 @@ export default function ProjectsPage() {
                   variant="outline"
                   className={`font-mono text-[10px] ${
                     proj.status === 'active'
-                      ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-                      : 'border-white/10 bg-white/[0.04] text-zinc-400'
+                      ? 'border-emerald-800 bg-emerald-950 text-emerald-400'
+                      : 'border-zinc-800 bg-zinc-900 text-zinc-400'
                   }`}
                 >
                   {proj.status}
@@ -78,14 +78,14 @@ export default function ProjectsPage() {
               </p>
             </div>
 
-            <div className="mt-5 space-y-3 pt-3 border-t border-white/[0.08]">
+            <div className="mt-5 space-y-3 pt-3 border-t border-zinc-800/80">
               <div className="flex items-center justify-between font-mono text-[11px] text-zinc-500">
                 <span>{proj.rolesCount} Active Roles</span>
                 <span>{proj.artifactsCount} Artifacts</span>
               </div>
               <a
                 href={`/projects/${proj.id}`}
-                className="flex items-center justify-between rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-xs font-medium text-zinc-300 backdrop-blur-sm transition-all hover:bg-white/[0.08] hover:text-white"
+                className="flex items-center justify-between rounded-md border border-zinc-800 bg-zinc-900/60 px-3 py-2 text-xs font-medium text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-white"
               >
                 <span>Open Workspace</span>
                 <ArrowRight className="h-3.5 w-3.5" />

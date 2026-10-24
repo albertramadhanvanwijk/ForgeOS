@@ -61,7 +61,7 @@ export default function MemoryPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-md hover:bg-white">
+          <Button size="sm" className="bg-zinc-100 font-mono text-xs text-zinc-900 shadow-sm hover:bg-white">
             <Plus className="mr-1.5 h-3.5 w-3.5" />
             <span>Store Context</span>
           </Button>
@@ -69,7 +69,7 @@ export default function MemoryPage() {
       </div>
 
       {/* Governance Banner */}
-      <div className="glass-panel glass-specular flex items-center justify-between rounded-xl px-4 py-3 text-xs text-zinc-400">
+      <div className="work-card card-specular flex items-center justify-between px-4 py-3 text-xs text-zinc-400">
         <div className="flex items-center gap-2">
           <Lock className="h-3.5 w-3.5 text-emerald-400" />
           <span>Project Isolation Enforced: Context items cannot leak across project boundaries.</span>
@@ -82,16 +82,16 @@ export default function MemoryPage() {
         {items.map((m) => (
           <div
             key={m.id}
-            className="glass-panel glass-specular glass-panel-hover flex flex-col justify-between rounded-xl p-5"
+            className="work-card card-specular flex flex-col justify-between p-5"
           >
             <div>
               <div className="flex items-start justify-between gap-2">
                 <span className="font-mono text-[10px] text-zinc-500">{m.id}</span>
                 <div className="flex items-center gap-1.5">
-                  <Badge variant="outline" className="border-white/10 bg-white/[0.04] font-mono text-[10px] text-zinc-300">
+                  <Badge variant="outline" className="border-zinc-800 bg-zinc-900 font-mono text-[10px] text-zinc-300">
                     {m.type}
                   </Badge>
-                  <span className="rounded border border-white/10 bg-white/[0.04] px-1 font-mono text-[10px] text-zinc-400">
+                  <span className="rounded border border-zinc-800 bg-zinc-900 px-1 font-mono text-[10px] text-zinc-400">
                     v{m.version}
                   </span>
                 </div>
@@ -104,9 +104,9 @@ export default function MemoryPage() {
               </p>
             </div>
 
-            <div className="mt-4 flex items-center justify-between border-t border-white/[0.08] pt-3 text-[11px] font-mono">
+            <div className="mt-4 flex items-center justify-between border-t border-zinc-800/80 pt-3 text-[11px] font-mono">
               <span className="text-emerald-400 flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" /> Zero Secrets Detected
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Zero Secrets Detected
               </span>
               <span className="text-zinc-400 hover:text-zinc-200 cursor-pointer font-sans">
                 Inspect Memory →
