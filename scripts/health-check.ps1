@@ -20,7 +20,7 @@ try {
 
 # 2. Web Frontend Health
 try {
-    $webRes = Invoke-WebRequest -Uri $webUrl -Method Get -TimeoutSec 3
+    $webRes = Invoke-WebRequest -Uri $webUrl -Method Get -TimeoutSec 3 -UseBasicParsing
     if ($webRes.StatusCode -eq 200) {
         Write-Host "[OK] Next.js Web Frontend is HEALTHY (Status 200)" -ForegroundColor Green
     } else {
