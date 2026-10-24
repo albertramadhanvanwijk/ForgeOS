@@ -24,8 +24,15 @@ import {
   Download,
   Eye,
   CheckCircle,
+  Cpu,
+  GitCompare,
 } from 'lucide-react';
 import { LivePreviewCanvas } from '@/components/project/LivePreviewCanvas';
+import { VisualDiffViewer } from '@/components/project/VisualDiffViewer';
+import {
+  ModelFleetSelectorModal,
+  type FleetModelConfig,
+} from '@/components/project/ModelFleetSelectorModal';
 
 interface GeneratedFile {
   path: string;
@@ -146,6 +153,7 @@ export default function ProjectWorkspacePage() {
   const [activeTab, setActiveTab] = useState<'preview' | 'code' | 'timeline' | 'design' | 'quality'>('preview');
   const [files, setFiles] = useState<GeneratedFile[]>(INITIAL_PROJECT_FILES);
   const [selectedFileIdx, setSelectedFileIdx] = useState(0);
+  const [codeViewMode, setCodeViewMode] = useState<'raw' | 'diff'>('raw');
   const [copied, setCopied] = useState(false);
   const [copiedBranch, setCopiedBranch] = useState(false);
   const [specApproved, setSpecApproved] = useState(false);
@@ -153,6 +161,15 @@ export default function ProjectWorkspacePage() {
   const [commandInput, setCommandInput] = useState('');
   const [isProcessingCommand, setIsProcessingCommand] = useState(false);
   const [activeSections, setActiveSections] = useState<string[]>([]);
+
+  // Model Fleet Configuration State (Model Gateway)
+  const [isModelModalOpen, setIsModelModalOpen] = useState(false);
+  const [fleetModels, setFleetModels] = useState<FleetModelConfig>({
+    architect: 'anthropic/claude-3.5-sonnet',
+    designer: 'anthropic/claude-3.5-sonnet',
+    engineer: 'deepseek/deepseek-coder-v2',
+    qa: 'openai/gpt-4o-mini',
+  });
 
   const [commandLogs, setCommandLogs] = useState<Array<{ role: string; text: string; time: string }>>([
     { role: 'Orchestrator', text: `Autonomous multi-agent workspace initialized for ${projectId}`, time: '02:40:12' },
@@ -207,6 +224,20 @@ export default function ProjectWorkspacePage() {
     showToast('Design Spec approved! Exact SHA-256 hash locked for engineering fleet.');
   };
 
+  const handleSaveFleetModels = (newConfig: FleetModelConfig) => {
+    setFleetModels(newConfig);
+    showToast('AI Model Fleet routing updated across 4 roles!');
+  };
+
+  const getOriginalCode = (filePath: string): string => {
+    // If it is newly added component (e.g. ContactForm), original was empty
+    if (filePath.includes('ContactForm') || filePath.includes('Testimonials') || filePath.includes('CustomFeature')) {
+      return '// File did not exist in v1.0 baseline\n';
+    }
+    // Baseline representation for diffing modifications
+    return `import React from 'react';\n\nexport default function Placeholder() {\n  return <div>Baseline scaffold</div>;\n}\n`;
+  };
+
   const handleSendCommand = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commandInput.trim() || isProcessingCommand) return;
@@ -221,16 +252,14 @@ export default function ProjectWorkspacePage() {
     setCommandLogs((prev) => [
       ...prev,
       { role: 'Developer', text: prompt, time: now() },
-      { role: 'Orchestrator', text: `Analyzing intent: "${prompt}". Dispatching to Fleet Agents...`, time: now() },
+      { role: 'Orchestrator', text: `Analyzing intent: "${prompt}". Dispatching to Fleet Agents using ${fleetModels.engineer}...`, time: now() },
     ]);
 
     // Simulate multi-agent chain
     setTimeout(() => {
       const lower = prompt.toLowerCase();
-      let newSectionName = '';
 
       if (lower.includes('contact') || lower.includes('kontak') || lower.includes('pesan') || lower.includes('form')) {
-        newSectionName = 'contact';
         const contactFile: GeneratedFile = {
           path: 'src/components/ContactForm.tsx',
           language: 'tsx',
@@ -270,7 +299,6 @@ export function ContactForm() {
           setActiveSections((s) => [...s, 'contact']);
         }
       } else if (lower.includes('testimonial') || lower.includes('review') || lower.includes('testimoni')) {
-        newSectionName = 'testimonials';
         const testFile: GeneratedFile = {
           path: 'src/components/Testimonials.tsx',
           language: 'tsx',
@@ -322,8 +350,8 @@ export function CustomFeature() {
         ...prev,
         { role: 'Architect Agent', text: `Requirements & state flow validated for "${prompt}".`, time: now() },
         { role: 'Designer Agent', text: 'Checked token contrast and component variant contract.', time: now() },
-        { role: 'Engineering Agent', text: 'Written new component file into project worktree.', time: now() },
-        { role: 'QA Agent', text: 'Vitest pass & visual token compliance verified (0 violations).', time: now() },
+        { role: 'Engineering Agent', text: `Written new component file into worktree via ${fleetModels.engineer}.`, time: now() },
+        { role: 'QA Agent', text: `Vitest pass & visual token compliance verified via ${fleetModels.qa}.`, time: now() },
       ]);
 
       setIsProcessingCommand(false);
@@ -365,6 +393,17 @@ export function CustomFeature() {
 
         {/* Developer Action Buttons */}
         <div className="flex flex-wrap items-center gap-2">
+          {/* Model Gateway Fleet Selector Button */}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setIsModelModalOpen(true)}
+            className="border-zinc-800 font-mono text-xs text-zinc-300 hover:bg-zinc-900 hover:text-white"
+          >
+            <Cpu className="mr-1.5 h-3.5 w-3.5 text-blue-400" />
+            <span>AI Model Fleet</span>
+          </Button>
+
           <button
             onClick={handleCopyBranch}
             title="Copy git checkout command"
@@ -395,7 +434,7 @@ export function CustomFeature() {
         </div>
       </div>
 
-      {/* Multi-Agent Fleet Status Ribbon */}
+      {/* Multi-Agent Fleet Status Ribbon with Assigned Models */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <div className="work-card card-specular p-3.5 space-y-1">
           <div className="flex items-center justify-between">
@@ -405,7 +444,10 @@ export function CustomFeature() {
             <CheckCircle2 className="h-3.5 w-3.5 text-blue-400" />
           </div>
           <p className="text-xs font-semibold text-zinc-100">PRD & User Flows</p>
-          <p className="text-[11px] text-zinc-400 font-mono">4 flows derived (FR-050)</p>
+          <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500 pt-1">
+            <span>4 flows (FR-050)</span>
+            <span className="text-zinc-400 truncate max-w-[90px]">{fleetModels.architect.split('/')[1]}</span>
+          </div>
         </div>
 
         <div className="work-card card-specular p-3.5 space-y-1">
@@ -416,9 +458,10 @@ export function CustomFeature() {
             <CheckCircle2 className="h-3.5 w-3.5 text-purple-400" />
           </div>
           <p className="text-xs font-semibold text-zinc-100">Design Studio</p>
-          <p className="text-[11px] text-zinc-400 font-mono">
-            {specApproved ? 'Status: APPROVED (Locked)' : 'SHA-256 tokens ready (FR-051)'}
-          </p>
+          <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500 pt-1">
+            <span>{specApproved ? 'APPROVED' : 'SHA-256 Tokens'}</span>
+            <span className="text-zinc-400 truncate max-w-[90px]">{fleetModels.designer.split('/')[1]}</span>
+          </div>
         </div>
 
         <div className="work-card card-specular p-3.5 space-y-1">
@@ -429,7 +472,10 @@ export function CustomFeature() {
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
           </div>
           <p className="text-xs font-semibold text-zinc-100">Code Generation</p>
-          <p className="text-[11px] text-zinc-400 font-mono">{files.length} components scaffolded</p>
+          <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500 pt-1">
+            <span>{files.length} components</span>
+            <span className="text-zinc-400 truncate max-w-[90px]">{fleetModels.engineer.split('/')[1]}</span>
+          </div>
         </div>
 
         <div className="work-card card-specular p-3.5 space-y-1">
@@ -440,7 +486,10 @@ export function CustomFeature() {
             <CheckCircle2 className="h-3.5 w-3.5 text-amber-400" />
           </div>
           <p className="text-xs font-semibold text-zinc-100">Quality Gates</p>
-          <p className="text-[11px] text-zinc-400 font-mono">100% token compliance (FR-055)</p>
+          <div className="flex items-center justify-between font-mono text-[10px] text-zinc-500 pt-1">
+            <span>100% compliant</span>
+            <span className="text-zinc-400 truncate max-w-[90px]">{fleetModels.qa.split('/')[1]}</span>
+          </div>
         </div>
       </div>
 
@@ -519,7 +568,7 @@ export function CustomFeature() {
         </div>
       )}
 
-      {/* Tab: Generated Code & Deliverables */}
+      {/* Tab: Generated Code & Deliverables with Visual Diff Toggle */}
       {activeTab === 'code' && (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
           <div className="work-card card-specular p-3 space-y-1 lg:col-span-1">
@@ -554,17 +603,53 @@ export function CustomFeature() {
                 <span>{currentFile.path}</span>
                 <span className="text-zinc-600">({currentFile.language})</span>
               </div>
-              <button
-                onClick={handleCopyCode}
-                className="flex items-center gap-1 rounded border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-[11px] text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-white"
-              >
-                {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
-                <span>{copied ? 'Copied' : 'Copy Code'}</span>
-              </button>
+
+              <div className="flex items-center gap-2">
+                {/* Code vs Diff Mode Toggle */}
+                <div className="flex items-center rounded border border-zinc-800 bg-zinc-900 p-0.5 font-mono text-[11px]">
+                  <button
+                    onClick={() => setCodeViewMode('raw')}
+                    className={`rounded px-2 py-0.5 transition-colors ${
+                      codeViewMode === 'raw' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-zinc-200'
+                    }`}
+                  >
+                    Raw Code
+                  </button>
+                  <button
+                    onClick={() => setCodeViewMode('diff')}
+                    className={`rounded px-2 py-0.5 flex items-center gap-1 transition-colors ${
+                      codeViewMode === 'diff' ? 'bg-zinc-800 text-emerald-400 font-semibold' : 'text-zinc-400 hover:text-zinc-200'
+                    }`}
+                  >
+                    <GitCompare className="h-3 w-3" />
+                    <span>Visual Diff</span>
+                  </button>
+                </div>
+
+                <button
+                  onClick={handleCopyCode}
+                  className="flex items-center gap-1 rounded border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-[11px] text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-white"
+                >
+                  {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                  <span>{copied ? 'Copied' : 'Copy'}</span>
+                </button>
+              </div>
             </div>
-            <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-zinc-300 bg-[#0a0a0d] max-h-[500px]">
-              <code>{currentFile.content}</code>
-            </pre>
+
+            {/* Display Either Raw Code or Side-by-Side Visual Diff */}
+            {codeViewMode === 'diff' ? (
+              <div className="p-3">
+                <VisualDiffViewer
+                  filename={currentFile.path}
+                  originalCode={getOriginalCode(currentFile.path)}
+                  modifiedCode={currentFile.content}
+                />
+              </div>
+            ) : (
+              <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-zinc-300 bg-[#0a0a0d] max-h-[500px]">
+                <code>{currentFile.content}</code>
+              </pre>
+            )}
           </div>
         </div>
       )}
@@ -735,6 +820,14 @@ export function CustomFeature() {
           <span>{toastMessage}</span>
         </div>
       )}
+
+      {/* Model Fleet Selector Modal */}
+      <ModelFleetSelectorModal
+        isOpen={isModelModalOpen}
+        onClose={() => setIsModelModalOpen(false)}
+        currentConfig={fleetModels}
+        onSave={handleSaveFleetModels}
+      />
     </div>
   );
 }
