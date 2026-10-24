@@ -45,7 +45,7 @@
 | FR-022 | Agent uses compatible skills | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-024 | Skip irrelevant agents | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-025 | Scope every run by goal/context/permissions/budget | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
-| FR-026 | Delegation | P1 | `platform/orchestrator` | `tests/unit/delegation.test.ts` | `not_started` |
+| FR-026 | Delegation | P1 | `platform/orchestrator` | `tests/unit/delegation.test.ts` | `tested` |
 | FR-027 | Record selection rationale | P1 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-028 | Agents cannot expand permissions | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
 | FR-030 | Artifact Registry | P0 | `platform/artifact-registry` | `tests/unit/artifact-registry.test.ts` | `tested` |
@@ -70,7 +70,8 @@
 | FR-060 | Task-appropriate quality criteria | P0 | `platform/quality-engine` | `tests/unit/quality-engine.test.ts` | `tested` |
 | FR-061 | Relevant checks before verification | P0 | `platform/quality-engine` | `tests/unit/quality-engine.test.ts` | `tested` |
 | FR-063 | Failed mandatory gates block release | P0 | `platform/quality-engine` | `tests/unit/quality-engine.test.ts` | `tested` |
-| FR-065 | Policy-controlled production deployment | P0 | `platform/policy-engine` | `tests/integration/deploy-policy.test.ts` | `not_started` |
+| FR-064 | Self-healing repair loops | P0 | `platform/quality-engine` | `tests/unit/self-healing.test.ts` | `tested` |
+| FR-065 | Policy-controlled production deployment | P0 | `platform/policy-engine` | `tests/unit/deployment-gate.test.ts` | `tested` |
 | FR-070 | Conversational ForgeOS changes | P0 | `platform/platform-builder` | `tests/integration/platform-builder.test.ts` | `tested` |
 | FR-071 | Inspect existing capabilities | P0 | `platform/platform-builder` | `tests/unit/capability-inspect.test.ts` | `tested` |
 | FR-073 | Versioned PlatformChangeSet | P0 | `platform/platform-builder` | `tests/unit/changeset.test.ts` | `tested` |
@@ -90,7 +91,7 @@
 | FR-092 | Budget/time/concurrency/retry limits | P0 | `platform/observability` | `tests/unit/observability.test.ts` | `tested` |
 | FR-093 | Audit sensitive actions | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
 | FR-094 | Model routing | P1 | `platform/model-gateway` | `tests/unit/model-gateway.test.ts` | `tested` |
-| FR-095 | Outcome-based agent evaluation | P1 | `platform/quality-engine` | `tests/unit/agent-eval.test.ts` | `not_started` |
+| FR-095 | Outcome-based agent evaluation | P1 | `platform/quality-engine` | `tests/unit/agent-eval.test.ts` | `tested` |
 
 ---
 

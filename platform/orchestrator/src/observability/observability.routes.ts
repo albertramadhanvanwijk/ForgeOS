@@ -6,16 +6,20 @@ import {
   StructuredLogInput,
   FailureExplanationInput,
   LogQueryFilter,
+  ContextCompactor,
+  ConversationMessage,
 } from '@forgeos/observability';
 
 export interface ObservabilityRoutesOptions {
   logger: StructuredLogger;
   explainer: FailureExplainer;
   limitEnforcer: LimitEnforcer;
+  compactor?: ContextCompactor;
 }
 
 export const registerObservabilityRoutes = (app: FastifyInstance, options: ObservabilityRoutesOptions) => {
   const { logger, explainer, limitEnforcer } = options;
+  const compactor = options.compactor ?? new ContextCompactor();
 
   app.get('/api/observability/logs', async (request, reply) => {
     const query = request.query as LogQueryFilter;
@@ -48,5 +52,29 @@ export const registerObservabilityRoutes = (app: FastifyInstance, options: Obser
       limits: limitEnforcer.limits,
       activeConcurrency: limitEnforcer.getActiveConcurrency(),
     });
+  });
+
+  // POST /api/observability/compact (FR-092 Context Compaction)
+  app.post('/api/observability/compact', async (request, reply) => {
+    const body = request.body as {
+      messages: ConversationMessage[];
+      maxMessagesBeforeCompaction?: number;
+      retainRecentMessages?: number;
+    };
+
+    if (!body || !Array.isArray(body.messages)) {
+      return reply.status(400).send({ error: 'Missing required field: messages (array)' });
+    }
+
+    const activeCompactor =
+      body.maxMessagesBeforeCompaction !== undefined
+        ? new ContextCompactor({
+            maxMessagesBeforeCompaction: body.maxMessagesBeforeCompaction,
+            retainRecentMessages: body.retainRecentMessages,
+          })
+        : compactor;
+
+    const result = activeCompactor.compact(body.messages);
+    return reply.status(200).send(result);
   });
 };

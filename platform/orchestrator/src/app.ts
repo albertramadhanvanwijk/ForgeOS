@@ -22,12 +22,17 @@ import { ModelGateway, MockModelAdapter } from '@forgeos/model-gateway';
 import { registerRunnerRoutes } from './runner/runner.routes.js';
 import { IRunnerAdapter, LocalProcessRunner } from '@forgeos/runner';
 import { GitService, registerGitRoutes } from './git/index.js';
-import { QualityEngine } from '@forgeos/quality-engine';
+import {
+  QualityEngine,
+  SelfHealingEngine,
+  AgentEvaluator,
+} from '@forgeos/quality-engine';
 import { registerQualityRoutes } from './quality/quality.routes.js';
 import {
   StructuredLogger,
   FailureExplainer,
   LimitEnforcer,
+  ContextCompactor,
 } from '@forgeos/observability';
 import { registerObservabilityRoutes } from './observability/observability.routes.js';
 import {
@@ -39,6 +44,7 @@ import { DesignStudioEngine } from '@forgeos/design-studio';
 import { registerDesignRoutes } from './design/design.routes.js';
 import { PlatformBuilderService } from '@forgeos/platform-builder';
 import { registerPlatformBuilderRoutes } from './platform-builder/platform-builder.routes.js';
+import { DeploymentPolicyGate } from '@forgeos/policy-engine';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -48,6 +54,7 @@ export interface ServerOptions {
   policyEngine?: PolicyEngine;
   approvalService?: ApprovalService;
   auditLogger?: InMemoryAuditLogger;
+  deploymentGate?: DeploymentPolicyGate;
   artifactRegistry?: ArtifactRegistry;
   conversationService?: ConversationService;
   intentClassifier?: IntentClassifier;
@@ -55,9 +62,12 @@ export interface ServerOptions {
   runner?: IRunnerAdapter;
   gitService?: GitService;
   qualityEngine?: QualityEngine;
+  selfHealingEngine?: SelfHealingEngine;
+  agentEvaluator?: AgentEvaluator;
   structuredLogger?: StructuredLogger;
   failureExplainer?: FailureExplainer;
   limitEnforcer?: LimitEnforcer;
+  compactor?: ContextCompactor;
   memoryService?: PersistentMemoryService;
   contextPackager?: ContextPackager;
   designEngine?: DesignStudioEngine;
@@ -114,11 +124,14 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
   const approvalService =
     opts.approvalService ?? new ApprovalService(new InMemoryApprovalStore());
 
+  const deploymentGate = opts.deploymentGate ?? new DeploymentPolicyGate();
+
   await app.register(policyRoutes, {
     prefix: '/api/policy',
     policyEngine,
     approvalService,
     auditLogger,
+    deploymentGate,
   });
 
   // Artifact Registry Routes (FR-030 - FR-036)
@@ -188,11 +201,15 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
     gitService,
   });
 
-  // Quality Engine Routes (FR-060, FR-061, FR-063)
+  // Quality Engine Routes (FR-060, FR-061, FR-063, FR-064, FR-095)
   const qualityEngine = opts.qualityEngine ?? new QualityEngine();
+  const selfHealingEngine = opts.selfHealingEngine ?? new SelfHealingEngine();
+  const agentEvaluator = opts.agentEvaluator ?? new AgentEvaluator();
 
   registerQualityRoutes(app, {
     qualityEngine,
+    selfHealingEngine,
+    agentEvaluator,
     runner,
   });
 
@@ -205,11 +222,13 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
     maxConcurrency: 10,
     maxRetries: 3,
   });
+  const compactor = opts.compactor ?? new ContextCompactor();
 
   registerObservabilityRoutes(app, {
     logger: structuredLogger,
     explainer: failureExplainer,
     limitEnforcer,
+    compactor,
   });
 
   // Persistent Memory Routes (MEM-001 - MEM-018)

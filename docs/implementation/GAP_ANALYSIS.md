@@ -84,16 +84,16 @@
 
 | Requirement | Gap | Priority |
 |-------------|-----|----------|
-| FR-040 Git integration | ❌ | P1 |
-| FR-041 Isolated branch/worktree | ❌ | P1 |
-| FR-042 Execute commands/build/lint/tests | ❌ | P1 |
-| FR-044 Cloud sandbox/local runner adapters | ❌ | P1 |
-| FR-045 Preview | ❌ | P1 |
-| FR-046 Diff/change summary | ❌ | P1 |
-| FR-060 Task-appropriate quality criteria | ❌ | P0 |
-| FR-061 Relevant checks before verification | ❌ | P0 |
-| FR-063 Failed mandatory gates block release | ❌ | P0 |
-| FR-065 Policy-controlled production deployment | ❌ | P0 |
+| FR-040 Git integration | ✅ Full GitService with status/branch/commit/diff | P1 |
+| FR-041 Isolated branch/worktree | ✅ Isolated branch creation & workspace separation | P1 |
+| FR-042 Execute commands/build/lint/tests | ✅ LocalProcessRunner with command allowlists | P1 |
+| FR-044 Cloud sandbox/local runner adapters | ✅ Extensible IRunnerAdapter with process & mock adapters | P1 |
+| FR-045 Preview | ✅ Multi-viewport LivePreviewCanvas with hot-reload | P1 |
+| FR-046 Diff/change summary | ✅ VisualDiffViewer side-by-side & unified views | P1 |
+| FR-060 Task-appropriate quality criteria | ✅ QualityEngine preset gates by artifact type | P0 |
+| FR-061 Relevant checks before verification | ✅ Automated command & programmatic evaluators | P0 |
+| FR-063 Failed mandatory gates block release | ✅ 422 HTTP response & release lock | P0 |
+| FR-065 Policy-controlled production deployment | ✅ DeploymentPolicyGate with rollback snapshots | P0 |
 
 ---
 

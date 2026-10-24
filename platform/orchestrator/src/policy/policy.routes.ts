@@ -7,18 +7,22 @@ import {
   RequestApprovalInput,
   DecideApprovalInput,
   AuthorizationRequest,
+  DeploymentPolicyGate,
+  DeploymentRequest,
 } from '@forgeos/policy-engine';
 
 export interface PolicyPluginOptions {
   policyEngine?: PolicyEngine;
   approvalService?: ApprovalService;
   auditLogger?: InMemoryAuditLogger;
+  deploymentGate?: DeploymentPolicyGate;
 }
 
 export const policyRoutes: FastifyPluginAsync<PolicyPluginOptions> = async (app, opts) => {
   const auditLogger = opts.auditLogger ?? new InMemoryAuditLogger();
   const policyEngine = opts.policyEngine ?? new PolicyEngine(auditLogger);
   const approvalService = opts.approvalService ?? new ApprovalService(new InMemoryApprovalStore());
+  const deploymentGate = opts.deploymentGate ?? new DeploymentPolicyGate();
 
   // POST /api/policy/authorize - Authorize an action
   app.post<{
@@ -79,6 +83,20 @@ export const policyRoutes: FastifyPluginAsync<PolicyPluginOptions> = async (app,
       const message = err instanceof Error ? err.message : 'Unknown error';
       return reply.status(404).send({ error: 'Not Found', message });
     }
+  });
+
+  // POST /api/policy/deployments/evaluate - Policy deployment gate (FR-065)
+  app.post<{
+    Body: DeploymentRequest;
+  }>('/deployments/evaluate', async (request, reply) => {
+    const body = request.body;
+    if (!body?.deploymentId || !body?.environment) {
+      return reply.status(400).send({ error: 'Missing deploymentId or environment' });
+    }
+
+    const decision = deploymentGate.evaluateDeployment(body);
+    const statusCode = decision.allowed ? 200 : 403;
+    return reply.status(statusCode).send(decision);
   });
 
   // GET /api/policy/audit - Query audit logs (FR-093)
