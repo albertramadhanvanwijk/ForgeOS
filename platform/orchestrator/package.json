@@ -1,0 +1,23 @@
+{
+  "name": "@forgeos/orchestrator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ForgeOS Control Plane Orchestrator & Backend Service",
+  "main": "./dist/server.js",
+  "types": "./dist/app.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "start": "node ./dist/server.js",
+    "dev": "tsx watch ./src/server.ts"
+  },
+  "dependencies": {
+    "@forgeos/types": "workspace:*",
+    "fastify": "^4.28.1",
+    "@fastify/cors": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
