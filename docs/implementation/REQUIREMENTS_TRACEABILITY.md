@@ -26,15 +26,15 @@
 |----|-------------|----------|-----------|-----------|--------|
 | FR-001 | Create/open/archive projects | P0 | `platform/orchestrator` | `tests/integration/projects-api.test.ts` | `tested` |
 | FR-002 | Store goal/status/config/capability/artifacts | P0 | `packages/types`, DB schema | `tests/unit/types-and-schema.test.ts` | `tested` |
-| FR-003 | Conversational Orchestrator | P0 | `platform/orchestrator` | `tests/integration/orchestrator.test.ts` | `not_started` |
-| FR-004 | Conversations reference projects/tasks/artifacts/runs | P0 | `platform/orchestrator` | `tests/integration/conversation.test.ts` | `not_started` |
-| FR-005 | Classify intent | P0 | `platform/orchestrator` | `tests/unit/intent-classifier.test.ts` | `not_started` |
-| FR-006 | Clarify material ambiguity | P0 | `platform/orchestrator` | `tests/unit/clarification.test.ts` | `not_started` |
-| FR-007 | Preserve relevant context | P0 | `platform/persistent-memory` | `tests/unit/context.test.ts` | `not_started` |
+| FR-003 | Conversational Orchestrator | P0 | `platform/orchestrator` | `tests/integration/conversational-orchestrator.test.ts` | `tested` |
+| FR-004 | Conversations reference projects/tasks/artifacts/runs | P0 | `platform/orchestrator` | `tests/unit/intent-classification.test.ts` | `tested` |
+| FR-005 | Classify intent | P0 | `platform/orchestrator` | `tests/unit/intent-classification.test.ts` | `tested` |
+| FR-006 | Clarify material ambiguity | P0 | `platform/orchestrator` | `tests/unit/intent-classification.test.ts` | `tested` |
+| FR-007 | Preserve relevant context | P0 | `platform/orchestrator` | `tests/integration/conversational-orchestrator.test.ts` | `tested` |
 | FR-008 | Store decisions/assumptions with source/time | P1 | `platform/orchestrator` | `tests/unit/decisions.test.ts` | `not_started` |
-| FR-010 | Translate intent into goals and criteria | P0 | `platform/orchestrator` | `tests/unit/planning.test.ts` | `not_started` |
+| FR-010 | Translate intent into goals and criteria | P0 | `platform/orchestrator` | `tests/unit/intent-classification.test.ts` | `tested` |
 | FR-011 | Task graph with dependencies/inputs/outputs/status | P0 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |
-| FR-012 | Adaptive workflow selection | P0 | `platform/workflow-engine` | `tests/unit/workflow-selection.test.ts` | `not_started` |
+| FR-012 | Adaptive workflow selection | P0 | `platform/orchestrator` | `tests/unit/intent-classification.test.ts` | `tested` |
 | FR-013 | Safe serial/parallel work | P1 | `platform/workflow-engine` | `tests/integration/parallel-work.test.ts` | `not_started` |
 | FR-015 | Review consequential plans | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
 | FR-016 | Explicit workflow states | P0 | `platform/workflow-engine` | `tests/unit/workflow-engine.test.ts` | `tested` |

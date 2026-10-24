@@ -16,6 +16,7 @@ import {
 } from '@forgeos/policy-engine';
 import { artifactsRoutes } from './artifacts/artifacts.routes.js';
 import { ArtifactRegistry, InMemoryArtifactStorage } from '@forgeos/artifact-registry';
+import { ConversationService, IntentClassifier, registerIntentRoutes } from './intent/index.js';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -26,6 +27,8 @@ export interface ServerOptions {
   approvalService?: ApprovalService;
   auditLogger?: InMemoryAuditLogger;
   artifactRegistry?: ArtifactRegistry;
+  conversationService?: ConversationService;
+  intentClassifier?: IntentClassifier;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -92,6 +95,15 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
   await app.register(artifactsRoutes, {
     prefix: '/api/artifacts',
     registry: artifactRegistry,
+  });
+
+  // Intent & Conversation Routes (FR-003, FR-004, FR-005, FR-006, FR-007, FR-010, FR-012)
+  const conversationService = opts.conversationService ?? new ConversationService();
+  const intentClassifier = opts.intentClassifier ?? new IntentClassifier();
+
+  registerIntentRoutes(app, {
+    conversationService,
+    intentClassifier,
   });
 
   return app;
