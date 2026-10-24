@@ -30,10 +30,91 @@ export const registerModelRoutes = (app: FastifyInstance, options: ModelRoutesOp
     return reply.status(200).send(models);
   });
 
-  // Get gateway token and cost metrics (FR-092, FR-094)
+  // GET /api/models/metrics — Get gateway token and cost metrics (FR-092, FR-094)
   app.get('/api/models/metrics', async (_request, reply) => {
     const metrics = gateway.getMetrics();
     return reply.status(200).send(metrics);
+  });
+
+  // POST /api/models/detect — Server-side model detection (bypasses browser CORS completely)
+  app.post('/api/models/detect', async (request, reply) => {
+    const { baseUrl, apiKey } = (request.body as { baseUrl?: string; apiKey?: string }) || {};
+    if (!baseUrl || !baseUrl.trim()) {
+      return reply.status(400).send({ error: 'Missing required field: baseUrl' });
+    }
+
+    const cleanUrl = baseUrl.trim().replace(/\/+$/, '');
+    const headers: Record<string, string> = {
+      'User-Agent': 'ForgeOS/1.0',
+    };
+    if (apiKey && apiKey.trim()) {
+      headers['Authorization'] = `Bearer ${apiKey.trim()}`;
+    }
+
+    const candidates = [
+      cleanUrl.endsWith('/models') ? cleanUrl : `${cleanUrl}/models`,
+      cleanUrl.endsWith('/api/tags') ? cleanUrl : `${cleanUrl}/api/tags`,
+      cleanUrl.includes('/v1') ? null : `${cleanUrl}/v1/models`,
+    ].filter(Boolean) as string[];
+
+    const detectedModels = new Set<string>();
+    let lastError = '';
+
+    for (const targetUrl of candidates) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+        const res = await fetch(targetUrl, {
+          method: 'GET',
+          headers,
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const json = (await res.json()) as any;
+          // Format A: { data: [ { id: "..." } ] } (OpenAI, Groq, OpenRouter, vLLM, LM Studio)
+          if (Array.isArray(json.data)) {
+            for (const item of json.data) {
+              if (item && item.id) detectedModels.add(String(item.id));
+              else if (typeof item === 'string') detectedModels.add(item);
+            }
+          }
+          // Format B: { models: [ { name: "..." } ] } (Ollama)
+          if (Array.isArray(json.models)) {
+            for (const item of json.models) {
+              if (item && (item.name || item.model)) detectedModels.add(String(item.name || item.model));
+              else if (typeof item === 'string') detectedModels.add(item);
+            }
+          }
+          // Format C: Direct array [ "...", ... ]
+          if (Array.isArray(json)) {
+            for (const item of json) {
+              if (typeof item === 'string') detectedModels.add(item);
+              else if (item && item.id) detectedModels.add(String(item.id));
+            }
+          }
+
+          if (detectedModels.size > 0) {
+            break;
+          }
+        } else {
+          lastError = `HTTP ${res.status}: ${res.statusText}`;
+        }
+      } catch (err: any) {
+        lastError = err.message || 'Fetch error';
+      }
+    }
+
+    const modelsList = Array.from(detectedModels).sort();
+
+    return reply.status(200).send({
+      success: modelsList.length > 0,
+      count: modelsList.length,
+      models: modelsList,
+      error: modelsList.length === 0 ? lastError : undefined,
+    });
   });
 
   // GET /api/models/config — Retrieve currently configured endpoints
