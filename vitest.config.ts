@@ -20,6 +20,7 @@ export default defineConfig({
       '@forgeos/workflow-engine': path.resolve(__dirname, 'platform/workflow-engine/src/index.ts'),
       '@forgeos/policy-engine': path.resolve(__dirname, 'platform/policy-engine/src/index.ts'),
       '@forgeos/artifact-registry': path.resolve(__dirname, 'platform/artifact-registry/src/index.ts'),
+      '@forgeos/model-gateway': path.resolve(__dirname, 'platform/model-gateway/src/index.ts'),
     },
   },
 });

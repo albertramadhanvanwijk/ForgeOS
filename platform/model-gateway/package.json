@@ -1,0 +1,15 @@
+{
+  "name": "@forgeos/model-gateway",
+  "version": "0.1.0",
+  "description": "ForgeOS Multi-Provider Model Gateway & Intelligent Router",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@forgeos/types": "workspace:*"
+  }
+}

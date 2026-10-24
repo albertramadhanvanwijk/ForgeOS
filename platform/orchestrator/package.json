@@ -17,6 +17,7 @@
     "@forgeos/workflow-engine": "workspace:*",
     "@forgeos/policy-engine": "workspace:*",
     "@forgeos/artifact-registry": "workspace:*",
+    "@forgeos/model-gateway": "workspace:*",
     "fastify": "^4.28.1",
     "@fastify/cors": "^9.0.1"
   },

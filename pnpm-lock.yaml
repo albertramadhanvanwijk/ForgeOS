@@ -80,6 +80,12 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  platform/model-gateway:
+    dependencies:
+      '@forgeos/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+
   platform/orchestrator:
     dependencies:
       '@fastify/cors':
@@ -91,6 +97,9 @@ importers:
       '@forgeos/artifact-registry':
         specifier: workspace:*
         version: link:../artifact-registry
+      '@forgeos/model-gateway':
+        specifier: workspace:*
+        version: link:../model-gateway
       '@forgeos/policy-engine':
         specifier: workspace:*
         version: link:../policy-engine

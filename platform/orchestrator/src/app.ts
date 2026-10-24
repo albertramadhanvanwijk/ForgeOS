@@ -17,6 +17,8 @@ import {
 import { artifactsRoutes } from './artifacts/artifacts.routes.js';
 import { ArtifactRegistry, InMemoryArtifactStorage } from '@forgeos/artifact-registry';
 import { ConversationService, IntentClassifier, registerIntentRoutes } from './intent/index.js';
+import { registerModelRoutes } from './models/models.routes.js';
+import { ModelGateway, MockModelAdapter } from '@forgeos/model-gateway';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -29,6 +31,7 @@ export interface ServerOptions {
   artifactRegistry?: ArtifactRegistry;
   conversationService?: ConversationService;
   intentClassifier?: IntentClassifier;
+  modelGateway?: ModelGateway;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -104,6 +107,39 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
   registerIntentRoutes(app, {
     conversationService,
     intentClassifier,
+  });
+
+  // Model Gateway Routes (FR-094)
+  let modelGateway = opts.modelGateway;
+  if (!modelGateway) {
+    modelGateway = new ModelGateway();
+    modelGateway.registerAdapter(new MockModelAdapter('mock'));
+    modelGateway.registerModel({
+      id: 'mock-fast',
+      name: 'Default Fast Mock',
+      provider: 'mock',
+      contextWindow: 128000,
+      costPerInputToken: 0.00000015,
+      costPerOutputToken: 0.0000006,
+      capabilities: ['fast'],
+      tier: 'fast',
+      priority: 10,
+    });
+    modelGateway.registerModel({
+      id: 'mock-reasoning',
+      name: 'Default Deep Reasoning Mock',
+      provider: 'mock',
+      contextWindow: 200000,
+      costPerInputToken: 0.000003,
+      costPerOutputToken: 0.000015,
+      capabilities: ['reasoning', 'code'],
+      tier: 'deep_reasoning',
+      priority: 10,
+    });
+  }
+
+  registerModelRoutes(app, {
+    gateway: modelGateway,
   });
 
   return app;

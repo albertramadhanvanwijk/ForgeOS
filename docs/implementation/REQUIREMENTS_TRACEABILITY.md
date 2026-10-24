@@ -76,7 +76,7 @@
 | FR-091 | Explain failure/recovery | P0 | `platform/orchestrator` | `tests/unit/failure-explain.test.ts` | `not_started` |
 | FR-092 | Budget/time/concurrency/retry limits | P0 | `platform/policy-engine` | `tests/unit/limits.test.ts` | `not_started` |
 | FR-093 | Audit sensitive actions | P0 | `platform/policy-engine` | `tests/security/policy-engine.test.ts` | `tested` |
-| FR-094 | Model routing | P1 | `platform/model-gateway` | `tests/unit/model-routing.test.ts` | `not_started` |
+| FR-094 | Model routing | P1 | `platform/model-gateway` | `tests/unit/model-gateway.test.ts` | `tested` |
 | FR-095 | Outcome-based agent evaluation | P1 | `platform/quality-engine` | `tests/unit/agent-eval.test.ts` | `not_started` |
 
 ---
