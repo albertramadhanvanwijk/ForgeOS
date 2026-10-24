@@ -16,6 +16,7 @@ import {
   Plus,
   Command,
   CheckCircle2,
+  KeyRound,
 } from 'lucide-react';
 
 export const metadata = {
@@ -65,6 +66,12 @@ export default function RootLayout({
       items: [
         { href: '/quality', label: 'Quality Center', icon: ShieldCheck, status: '91/91' },
         { href: '/platform-builder', label: 'Platform Builder', icon: Wrench },
+      ],
+    },
+    {
+      group: 'SETTINGS & POLICIES',
+      items: [
+        { href: '/settings', label: 'AI Models & API Keys', icon: KeyRound },
       ],
     },
   ];

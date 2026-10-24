@@ -1,8 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
-import { X, Cpu, Check, ShieldCheck, DollarSign, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { X, Cpu, Check, ShieldCheck, DollarSign, Sparkles, KeyRound, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  ALL_MODELS,
+  getStoredApiKeys,
+  isProviderConnected,
+  type ApiKeysConfig,
+  DEFAULT_API_KEYS,
+} from '@/lib/api-keys-store';
 
 export interface FleetModelConfig {
   architect: string;
@@ -18,15 +26,6 @@ interface ModelSelectorProps {
   onSave: (config: FleetModelConfig) => void;
 }
 
-const MODEL_OPTIONS = [
-  { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', provider: 'Anthropic', cost: '$3.00 / 1M', tag: 'Best Architecture & Code' },
-  { id: 'openai/gpt-4o', name: 'GPT-4o (Omni)', provider: 'OpenAI', cost: '$2.50 / 1M', tag: 'Multimodal & Reasoning' },
-  { id: 'deepseek/deepseek-coder-v2', name: 'DeepSeek-Coder V2', provider: 'DeepSeek', cost: '$0.28 / 1M', tag: 'Ultra-Fast Code Gen' },
-  { id: 'openai/gpt-4o-mini', name: 'GPT-4o-mini', provider: 'OpenAI', cost: '$0.15 / 1M', tag: 'Cost-Optimized QA & Tests' },
-  { id: 'anthropic/claude-3.5-haiku', name: 'Claude 3.5 Haiku', provider: 'Anthropic', cost: '$0.80 / 1M', tag: 'Fast Verifier' },
-  { id: 'ollama/llama3.1-70b', name: 'Llama 3.1 70B (Local)', provider: 'Ollama', cost: '$0.00 (Self-hosted)', tag: 'Zero-Cloud Airgap' },
-];
-
 export function ModelFleetSelectorModal({
   isOpen,
   onClose,
@@ -34,12 +33,31 @@ export function ModelFleetSelectorModal({
   onSave,
 }: ModelSelectorProps) {
   const [config, setConfig] = useState<FleetModelConfig>(currentConfig);
+  const [apiKeys, setApiKeys] = useState<ApiKeysConfig>(DEFAULT_API_KEYS);
+
+  useEffect(() => {
+    if (isOpen) {
+      setApiKeys(getStoredApiKeys());
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   const handleSave = () => {
     onSave(config);
     onClose();
+  };
+
+  const renderModelOptions = () => {
+    return ALL_MODELS.map((m) => {
+      const isConnected = isProviderConnected(m.provider, apiKeys) || m.provider === 'Ollama';
+      const label = `${m.name} (${m.provider}) — ${m.cost} ${isConnected ? ' [✓ Ready]' : ' [⚠️ Key in Settings]'}`;
+      return (
+        <option key={m.id} value={m.id}>
+          {label}
+        </option>
+      );
+    });
   };
 
   return (
@@ -54,13 +72,29 @@ export function ModelFleetSelectorModal({
             <div>
               <h2 className="text-sm font-semibold text-zinc-100">AI Model Fleet Routing</h2>
               <p className="text-[11px] text-zinc-400">
-                Configure specialized LLMs per autonomous agent role via Model Gateway
+                Models adapt based on your connected API Keys in Settings
               </p>
             </div>
           </div>
           <button onClick={onClose} className="text-zinc-500 hover:text-zinc-300">
             <X className="h-4 w-4" />
           </button>
+        </div>
+
+        {/* API Keys Banner Notification */}
+        <div className="flex items-center justify-between rounded-md border border-zinc-800/80 bg-zinc-950 p-3 text-xs">
+          <div className="flex items-center gap-2 text-zinc-400 font-mono text-[11px]">
+            <KeyRound className="h-3.5 w-3.5 text-blue-400" />
+            <span>Connect Anthropic, OpenAI, or DeepSeek API keys to unlock cloud models.</span>
+          </div>
+          <Link
+            href="/settings"
+            onClick={onClose}
+            className="flex items-center gap-1 font-mono text-[11px] font-semibold text-blue-400 hover:text-blue-300"
+          >
+            <span>Open Settings</span>
+            <ExternalLink className="h-3 w-3" />
+          </Link>
         </div>
 
         {/* Roles Configuration */}
@@ -79,11 +113,7 @@ export function ModelFleetSelectorModal({
               onChange={(e) => setConfig({ ...config, architect: e.target.value })}
               className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-200 focus:outline-none focus:border-zinc-600"
             >
-              {MODEL_OPTIONS.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name} ({m.provider}) — {m.cost}
-                </option>
-              ))}
+              {renderModelOptions()}
             </select>
           </div>
 
@@ -101,11 +131,7 @@ export function ModelFleetSelectorModal({
               onChange={(e) => setConfig({ ...config, designer: e.target.value })}
               className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-200 focus:outline-none focus:border-zinc-600"
             >
-              {MODEL_OPTIONS.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name} ({m.provider}) — {m.cost}
-                </option>
-              ))}
+              {renderModelOptions()}
             </select>
           </div>
 
@@ -123,11 +149,7 @@ export function ModelFleetSelectorModal({
               onChange={(e) => setConfig({ ...config, engineer: e.target.value })}
               className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-200 focus:outline-none focus:border-zinc-600"
             >
-              {MODEL_OPTIONS.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name} ({m.provider}) — {m.cost}
-                </option>
-              ))}
+              {renderModelOptions()}
             </select>
           </div>
 
@@ -145,11 +167,7 @@ export function ModelFleetSelectorModal({
               onChange={(e) => setConfig({ ...config, qa: e.target.value })}
               className="w-full rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-200 focus:outline-none focus:border-zinc-600"
             >
-              {MODEL_OPTIONS.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.name} ({m.provider}) — {m.cost}
-                </option>
-              ))}
+              {renderModelOptions()}
             </select>
           </div>
         </div>
