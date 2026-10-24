@@ -24,6 +24,7 @@ export default defineConfig({
       '@forgeos/runner': path.resolve(__dirname, 'infrastructure/local-runner/src/index.ts'),
       '@forgeos/quality-engine': path.resolve(__dirname, 'platform/quality-engine/src/index.ts'),
       '@forgeos/observability': path.resolve(__dirname, 'platform/observability/src/index.ts'),
+      '@forgeos/persistent-memory': path.resolve(__dirname, 'platform/persistent-memory/src/index.ts'),
     },
   },
 });

@@ -177,6 +177,12 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  platform/persistent-memory:
+    dependencies:
+      '@forgeos/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+
   platform/policy-engine:
     dependencies:
       '@forgeos/types':

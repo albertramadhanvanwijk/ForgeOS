@@ -30,6 +30,11 @@ import {
   LimitEnforcer,
 } from '@forgeos/observability';
 import { registerObservabilityRoutes } from './observability/observability.routes.js';
+import {
+  PersistentMemoryService,
+  ContextPackager,
+} from '@forgeos/persistent-memory';
+import { registerMemoryRoutes } from './memory/memory.routes.js';
 
 export interface ServerOptions {
   logger?: boolean;
@@ -49,6 +54,8 @@ export interface ServerOptions {
   structuredLogger?: StructuredLogger;
   failureExplainer?: FailureExplainer;
   limitEnforcer?: LimitEnforcer;
+  memoryService?: PersistentMemoryService;
+  contextPackager?: ContextPackager;
 }
 
 export async function createServer(opts: ServerOptions = { logger: false }): Promise<FastifyInstance> {
@@ -197,6 +204,15 @@ export async function createServer(opts: ServerOptions = { logger: false }): Pro
     logger: structuredLogger,
     explainer: failureExplainer,
     limitEnforcer,
+  });
+
+  // Persistent Memory Routes (MEM-001 - MEM-018)
+  const memoryService = opts.memoryService ?? new PersistentMemoryService();
+  const contextPackager = opts.contextPackager ?? new ContextPackager(memoryService);
+
+  registerMemoryRoutes(app, {
+    memoryService,
+    contextPackager,
   });
 
   return app;

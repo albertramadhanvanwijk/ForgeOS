@@ -85,24 +85,24 @@
 
 | ID | Requirement | Component | Test File | Status |
 |----|-------------|-----------|-----------|--------|
-| MEM-001 | Lifecycle states (candidate→active→archived) | `platform/persistent-memory` | `tests/unit/memory-lifecycle.test.ts` | `not_started` |
-| MEM-002 | Event-driven candidate capture | `platform/persistent-memory` | `tests/integration/memory-capture.test.ts` | `not_started` |
-| MEM-003 | Candidate extraction with provenance | `platform/persistent-memory` | `tests/unit/memory-extraction.test.ts` | `not_started` |
-| MEM-004 | Validation (permissions/secrets/duplicates/conflicts) | `platform/persistent-memory` | `tests/unit/memory-validation.test.ts` | `not_started` |
-| MEM-005 | Retrieval with metadata/full-text/optional semantic | `platform/persistent-memory` | `tests/unit/memory-retrieval.test.ts` | `not_started` |
-| MEM-006 | Bounded context package for Orchestrator | `platform/persistent-memory` | `tests/integration/memory-context.test.ts` | `not_started` |
-| MEM-007 | Scope-based access control | `platform/persistent-memory` | `tests/security/memory-isolation.test.ts` | `not_started` |
-| MEM-008 | Versioning (no silent last-write-wins) | `platform/persistent-memory` | `tests/unit/memory-versioning.test.ts` | `not_started` |
-| MEM-009 | Staleness/conflict detection | `platform/persistent-memory` | `tests/unit/memory-staleness.test.ts` | `not_started` |
-| MEM-010 | Governed promotion with approval | `platform/persistent-memory` | `tests/integration/memory-promotion.test.ts` | `not_started` |
-| MEM-011 | User/agent feedback | `platform/persistent-memory` | `tests/unit/memory-feedback.test.ts` | `not_started` |
-| MEM-012 | Maintenance (dedupe/consolidate/archive) | `platform/persistent-memory` | `tests/unit/memory-maintenance.test.ts` | `not_started` |
-| MEM-013 | Correction/deletion with cache invalidation | `platform/persistent-memory` | `tests/unit/memory-correction.test.ts` | `not_started` |
-| MEM-014 | Retrieval explainability | `platform/persistent-memory` | `tests/unit/memory-explain.test.ts` | `not_started` |
-| MEM-015 | Observability (telemetry, no sensitive content in metrics) | `platform/persistent-memory` | `tests/unit/memory-telemetry.test.ts` | `not_started` |
-| MEM-016 | Graceful degradation on outage | `platform/persistent-memory` | `tests/integration/memory-outage.test.ts` | `not_started` |
+| MEM-001 | Lifecycle states (candidate→active→archived) | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-002 | Event-driven candidate capture | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-003 | Candidate extraction with provenance | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-004 | Validation (permissions/secrets/duplicates/conflicts) | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-005 | Retrieval with metadata/full-text/optional semantic | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-006 | Bounded context package for Orchestrator | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-007 | Scope-based access control | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-008 | Versioning (no silent last-write-wins) | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-009 | Staleness/conflict detection | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-010 | Governed promotion with approval | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-011 | User/agent feedback | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-012 | Maintenance (dedupe/consolidate/archive) | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-013 | Correction/deletion with cache invalidation | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-014 | Retrieval explainability | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-015 | Observability (telemetry, no sensitive content in metrics) | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
+| MEM-016 | Graceful degradation on outage | `platform/persistent-memory` | `tests/integration/memory-api.test.ts` | `tested` |
 | MEM-017 | Memory Center UI | `apps/web` | `tests/e2e/memory-center.test.ts` | `not_started` |
-| MEM-018 | No false authority over policy/instructions | `platform/persistent-memory` | `tests/security/memory-injection.test.ts` | `not_started` |
+| MEM-018 | No false authority over policy/instructions | `platform/persistent-memory` | `tests/unit/persistent-memory.test.ts` | `tested` |
 
 ---
 
