@@ -61,3 +61,6 @@ desktop.ini
 *.tmp
 *.bak
 *.orig
+
+# ── Build caches ──────────────────────────────
+*.tsbuildinfo
