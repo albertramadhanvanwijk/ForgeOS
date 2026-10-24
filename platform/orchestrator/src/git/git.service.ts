@@ -169,4 +169,32 @@ export class GitService {
 
     return commitRes.stdout.trim();
   }
+
+  public async getHistory(
+    limit = 10,
+    cwd?: string
+  ): Promise<Array<{ hash: string; author: string; date: string; message: string }>> {
+    const res = await this.runner.execute({
+      command: 'git',
+      args: ['log', `-${limit}`, '--pretty=format:%h|%an|%cr|%s'],
+      cwd,
+    });
+
+    if (!res.success) {
+      return [];
+    }
+
+    return res.stdout
+      .split('\n')
+      .filter(Boolean)
+      .map((line) => {
+        const [hash, author, date, ...rest] = line.split('|');
+        return {
+          hash: hash?.trim() || '',
+          author: author?.trim() || '',
+          date: date?.trim() || '',
+          message: rest.join('|').trim(),
+        };
+      });
+  }
 }

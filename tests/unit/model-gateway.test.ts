@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   ModelGateway,
   MockModelAdapter,
+  HttpModelAdapter,
   ModelSpec,
 } from '../../platform/model-gateway/src/index.js';
 
@@ -126,5 +127,72 @@ describe('Task 2.2: Model Gateway & Multi-Provider Routing (FR-094)', () => {
 
     expect(response.provider).toBe('anthropic');
     expect(response.modelUsed).toBe('claude-haiku');
+  });
+
+  it('HttpModelAdapter successfully connects to live OpenAI-compatible endpoint', async () => {
+    const fakeFetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        id: 'chatcmpl-test-123',
+        model: 'llama-3.3-70b-versatile',
+        choices: [
+          {
+            index: 0,
+            message: {
+              role: 'assistant',
+              content: 'Hello! I am ready to generate production code.',
+            },
+          },
+        ],
+        usage: {
+          prompt_tokens: 15,
+          completion_tokens: 10,
+          total_tokens: 25,
+        },
+      }),
+    });
+
+    vi.stubGlobal('fetch', fakeFetch);
+
+    const adapter = new HttpModelAdapter({
+      baseUrl: 'https://api.custom-ai.internal/v1',
+      apiKey: 'sk-test-custom-key',
+      providerName: 'custom-groq',
+    });
+
+    const spec: ModelSpec = {
+      id: 'llama-3.3-70b-versatile',
+      name: 'Llama 3.3 70B',
+      provider: 'custom-groq',
+      contextWindow: 128000,
+      costPerInputToken: 0.0000005,
+      costPerOutputToken: 0.000001,
+      capabilities: ['code', 'fast'],
+      tier: 'fast',
+      priority: 10,
+    };
+
+    const res = await adapter.complete(
+      {
+        messages: [{ role: 'user', content: 'Say hello' }],
+      },
+      spec
+    );
+
+    expect(res.content).toBe('Hello! I am ready to generate production code.');
+    expect(res.modelUsed).toBe('llama-3.3-70b-versatile');
+    expect(res.provider).toBe('custom-groq');
+    expect(res.usage.totalTokens).toBe(25);
+    expect(fakeFetch).toHaveBeenCalledWith(
+      'https://api.custom-ai.internal/v1/chat/completions',
+      expect.objectContaining({
+        method: 'POST',
+        headers: expect.objectContaining({
+          Authorization: 'Bearer sk-test-custom-key',
+        }),
+      })
+    );
+
+    vi.unstubAllGlobals();
   });
 });

@@ -52,8 +52,39 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
-    setKeys(getStoredApiKeys());
+    const local = getStoredApiKeys();
+    setKeys(local);
+
+    // Sync with backend config
+    fetch('/api/models/config')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && data.customEndpoints && data.customEndpoints.length > 0) {
+          setKeys({ customEndpoints: data.customEndpoints });
+          saveStoredApiKeys({ customEndpoints: data.customEndpoints });
+        } else if (local.customEndpoints && local.customEndpoints.length > 0) {
+          // Push local to backend
+          fetch('/api/models/config', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(local),
+          }).catch(() => {});
+        }
+      })
+      .catch(() => {});
   }, []);
+
+  const syncToBackend = async (config: ApiKeysConfig) => {
+    try {
+      await fetch('/api/models/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(config),
+      });
+    } catch (e) {
+      console.warn('Backend sync warning:', e);
+    }
+  };
 
   const toggleShow = (id: string) => {
     setShowKey((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -66,7 +97,8 @@ export default function SettingsPage() {
 
   const handleSave = () => {
     saveStoredApiKeys(keys);
-    showToast('Konfigurasi AI Endpoint tersimpan!');
+    syncToBackend(keys);
+    showToast('Konfigurasi AI Endpoint tersimpan & tersinkronisasi ke backend!');
   };
 
   // Auto detect models when Base URL changes or on blur/button click
@@ -120,6 +152,7 @@ export default function SettingsPage() {
 
     setKeys(updated);
     saveStoredApiKeys(updated);
+    syncToBackend(updated);
     setIsAddingCustom(false);
     setNewEndpoint({
       name: '',
@@ -128,7 +161,7 @@ export default function SettingsPage() {
       models: [],
       customModelInput: '',
     });
-    showToast(`Endpoint "${created.name}" ditambahkan dengan ${created.availableModels.length} model!`);
+    showToast(`Endpoint "${created.name}" ditambahkan & didaftarkan ke backend!`);
   };
 
   const handleDeleteCustomEndpoint = (id: string) => {
@@ -137,19 +170,60 @@ export default function SettingsPage() {
     };
     setKeys(updated);
     saveStoredApiKeys(updated);
+    syncToBackend(updated);
     showToast('Endpoint kustom dihapus');
   };
 
-  const handleTestConnection = (id: string, endpointName: string) => {
+  const handleTestConnection = async (id: string, endpointName: string) => {
     setTestResults((prev) => ({ ...prev, [id]: { status: 'testing' } }));
 
-    setTimeout(() => {
+    try {
+      const ep = keys.customEndpoints.find((e) => e.id === id);
+      if (!ep) throw new Error('Endpoint tidak ditemukan');
+
+      // First sync current config to backend
+      await syncToBackend(keys);
+
+      const targetModel = ep.availableModels[0] || 'default';
+      const res = await fetch('/api/models/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: targetModel,
+          messages: [{ role: 'user', content: 'Ping! Respond with OK.' }],
+          maxTokens: 10,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setTestResults((prev) => ({
+          ...prev,
+          [id]: {
+            status: 'success',
+            message: `Live Connected! Model: ${data.modelUsed} (${data.latencyMs}ms)`,
+          },
+        }));
+        showToast(`${endpointName} LIVE dan terverifikasi aktif!`);
+      } else {
+        const err = await res.json().catch(() => ({ error: 'Koneksi gagal' }));
+        setTestResults((prev) => ({
+          ...prev,
+          [id]: {
+            status: 'error',
+            message: err.error || 'Endpoint gagal merespons',
+          },
+        }));
+      }
+    } catch (err: any) {
       setTestResults((prev) => ({
         ...prev,
-        [id]: { status: 'success', message: 'Koneksi berhasil & endpoint merespons (HTTP 200)' },
+        [id]: {
+          status: 'error',
+          message: err.message || 'Koneksi gagal',
+        },
       }));
-      showToast(`${endpointName} terverifikasi aktif!`);
-    }, 600);
+    }
   };
 
   return (

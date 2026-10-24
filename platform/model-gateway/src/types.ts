@@ -1,4 +1,4 @@
-export type ModelProvider = 'openai' | 'anthropic' | 'gemini' | 'ollama' | 'mock';
+export type ModelProvider = 'openai' | 'anthropic' | 'gemini' | 'ollama' | 'mock' | 'custom' | (string & {});
 
 export type ModelCapability = 'reasoning' | 'fast' | 'vision' | 'code' | 'long_context';
 

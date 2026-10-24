@@ -1,9 +1,24 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { AgentRegistry, TaskRequirement } from '@forgeos/agent-registry';
 import * as path from 'node:path';
+import * as fs from 'node:fs';
 
 export interface RegistryPluginOptions {
   registry?: AgentRegistry;
+}
+
+function resolveRolesDir(): string {
+  const candidates = [
+    path.resolve(process.cwd(), 'agents/roles'),
+    path.resolve(process.cwd(), '../../agents/roles'),
+    path.resolve(process.cwd(), '../agents/roles'),
+  ];
+  for (const c of candidates) {
+    if (fs.existsSync(c)) {
+      return c;
+    }
+  }
+  return path.resolve(process.cwd(), 'agents/roles');
 }
 
 export const registryRoutes: FastifyPluginAsync<RegistryPluginOptions> = async (app, opts) => {
@@ -11,7 +26,7 @@ export const registryRoutes: FastifyPluginAsync<RegistryPluginOptions> = async (
 
   if (!registry) {
     registry = new AgentRegistry();
-    const rolesPath = path.resolve(process.cwd(), 'agents/roles');
+    const rolesPath = resolveRolesDir();
     await registry.loadFromDirectory(rolesPath);
   }
 

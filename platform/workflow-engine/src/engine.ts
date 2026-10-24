@@ -47,6 +47,13 @@ export class WorkflowEngine {
     return this.store.findById(runId);
   }
 
+  async listRuns(): Promise<WorkflowRunInstance[]> {
+    if (this.store.listAll) {
+      return this.store.listAll();
+    }
+    return [];
+  }
+
   async startRun(runId: string): Promise<WorkflowRunInstance> {
     const run = await this.requireRun(runId);
     run.state = 'running';

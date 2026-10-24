@@ -17,6 +17,17 @@ export const registerGitRoutes = (app: FastifyInstance, options: GitRoutesOption
     }
   });
 
+  app.get('/api/git/history', async (request, reply) => {
+    const query = (request.query as { limit?: string }) || {};
+    const limit = query.limit ? parseInt(query.limit, 10) : 10;
+    try {
+      const history = await gitService.getHistory(limit);
+      return reply.status(200).send({ commits: history });
+    } catch (err: any) {
+      return reply.status(500).send({ error: err.message });
+    }
+  });
+
   app.post('/api/git/branch', async (request, reply) => {
     const body = request.body as { branchName: string; baseBranch?: string };
     if (!body || !body.branchName) {

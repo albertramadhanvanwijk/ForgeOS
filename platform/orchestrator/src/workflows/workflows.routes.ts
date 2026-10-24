@@ -44,6 +44,23 @@ export const workflowsRoutes: FastifyPluginAsync<WorkflowsPluginOptions> = async
     });
   });
 
+  // GET /api/workflows/runs - List all workflow runs
+  app.get('/runs', async () => {
+    const runs = await engine.listRuns();
+    return runs.map((r) => ({
+      id: r.id,
+      projectId: r.projectId,
+      state: r.state,
+      definitionId: r.definitionId,
+      name: r.definition.name,
+      tasksCount: r.tasks.size,
+      tasks: Array.from(r.tasks.values()),
+      checkpointsCount: r.checkpoints.length,
+      createdAt: r.createdAt,
+      updatedAt: r.updatedAt,
+    }));
+  });
+
   // GET /api/workflows/runs/:id - Get run details
   app.get<{
     Params: {

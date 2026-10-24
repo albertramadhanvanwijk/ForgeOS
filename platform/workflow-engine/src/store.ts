@@ -4,6 +4,7 @@ export interface IWorkflowStore {
   save(run: WorkflowRunInstance): Promise<void>;
   findById(id: string): Promise<WorkflowRunInstance | null>;
   listByProject(projectId: string): Promise<WorkflowRunInstance[]>;
+  listAll?(): Promise<WorkflowRunInstance[]>;
 }
 
 export class InMemoryWorkflowStore implements IWorkflowStore {
@@ -20,5 +21,9 @@ export class InMemoryWorkflowStore implements IWorkflowStore {
 
   async listByProject(projectId: string): Promise<WorkflowRunInstance[]> {
     return Array.from(this.runs.values()).filter((r) => r.projectId === projectId);
+  }
+
+  async listAll(): Promise<WorkflowRunInstance[]> {
+    return Array.from(this.runs.values());
   }
 }
