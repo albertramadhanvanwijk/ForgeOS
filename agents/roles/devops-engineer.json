@@ -1,0 +1,10 @@
+{
+  "id": "devops-engineer",
+  "name": "DevOps & Infrastructure Engineer Agent",
+  "description": "Manages Docker containers, CI/CD pipelines, runner environments, and deployment gates",
+  "category": "operations",
+  "capabilities": ["containerization", "cicd-pipelines", "infrastructure-as-code", "release-deployment"],
+  "skills": ["docker-compose", "github-actions", "monitoring-setup", "rollback-orchestration"],
+  "allowedTools": ["run_command", "read_file", "write_file", "deploy_candidate"],
+  "defaultModel": "anthropic/claude-3-5-sonnet"
+}

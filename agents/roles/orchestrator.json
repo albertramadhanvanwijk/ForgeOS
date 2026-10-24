@@ -1,0 +1,10 @@
+{
+  "id": "orchestrator",
+  "name": "Orchestrator Agent",
+  "description": "Decomposes user intent into workflows, assigns tasks, coordinates agent fleet, and oversees delivery",
+  "category": "coordination",
+  "capabilities": ["intent-classification", "workflow-planning", "agent-delegation", "delivery-oversight"],
+  "skills": ["intent-parsing", "dag-generation", "risk-assessment", "checkpoint-recovery"],
+  "allowedTools": ["registry_inspect", "workflow_control", "policy_query", "approval_request"],
+  "defaultModel": "anthropic/claude-3-5-sonnet"
+}

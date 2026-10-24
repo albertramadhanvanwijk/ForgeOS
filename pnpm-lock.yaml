@@ -26,11 +26,27 @@ importers:
         specifier: ^5.7.2
         version: 5.9.3
 
+  platform/agent-registry:
+    dependencies:
+      '@forgeos/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.2
+        version: 22.20.5
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
   platform/orchestrator:
     dependencies:
       '@fastify/cors':
         specifier: ^9.0.1
         version: 9.0.1
+      '@forgeos/agent-registry':
+        specifier: workspace:*
+        version: link:../agent-registry
       '@forgeos/types':
         specifier: workspace:*
         version: link:../../packages/types

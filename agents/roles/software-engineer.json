@@ -1,0 +1,10 @@
+{
+  "id": "software-engineer",
+  "name": "Software Engineer Agent",
+  "description": "Implements clean, tested frontend and backend software features and fixes bugs",
+  "category": "engineering",
+  "capabilities": ["backend-development", "frontend-development", "api-implementation", "bug-fixing"],
+  "skills": ["typescript-coding", "fastify-routing", "react-components", "tdd-cycle"],
+  "allowedTools": ["read_file", "edit_file", "write_file", "run_command", "git_commit"],
+  "defaultModel": "anthropic/claude-3-5-sonnet"
+}

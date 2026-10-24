@@ -1,0 +1,10 @@
+{
+  "id": "qa-engineer",
+  "name": "QA & Test Engineer Agent",
+  "description": "Writes automated test suites, validates acceptance criteria, and enforces quality gates",
+  "category": "quality",
+  "capabilities": ["test-automation", "integration-testing", "e2e-testing", "quality-gate-verification"],
+  "skills": ["vitest-writing", "playwright-e2e", "coverage-analysis", "defect-reporting"],
+  "allowedTools": ["run_command", "read_file", "write_file", "quality_report"],
+  "defaultModel": "anthropic/claude-3-5-sonnet"
+}

@@ -40,13 +40,13 @@
 | FR-016 | Explicit workflow states | P0 | `platform/workflow-engine` | `tests/unit/workflow-states.test.ts` | `not_started` |
 | FR-017 | Resume after interruption | P1 | `platform/workflow-engine` | `tests/integration/workflow-resume.test.ts` | `not_started` |
 | FR-018 | Persistent checkpoints | P0 | `platform/workflow-engine` | `tests/unit/checkpoints.test.ts` | `not_started` |
-| FR-020 | Registry for roles/skills/tools/models/capabilities | P0 | `platform/agent-registry` | `tests/unit/registry.test.ts` | `not_started` |
-| FR-021 | Select agents by task | P0 | `platform/agent-registry` | `tests/unit/agent-selection.test.ts` | `not_started` |
-| FR-022 | Agent uses compatible skills | P0 | `platform/agent-registry` | `tests/unit/skill-compat.test.ts` | `not_started` |
-| FR-024 | Skip irrelevant agents | P0 | `platform/agent-registry` | `tests/unit/agent-skip.test.ts` | `not_started` |
+| FR-020 | Registry for roles/skills/tools/models/capabilities | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
+| FR-021 | Select agents by task | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
+| FR-022 | Agent uses compatible skills | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
+| FR-024 | Skip irrelevant agents | P0 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-025 | Scope every run by goal/context/permissions/budget | P0 | `platform/policy-engine` | `tests/unit/run-scope.test.ts` | `not_started` |
 | FR-026 | Delegation | P1 | `platform/orchestrator` | `tests/unit/delegation.test.ts` | `not_started` |
-| FR-027 | Record selection rationale | P1 | `platform/agent-registry` | `tests/unit/rationale.test.ts` | `not_started` |
+| FR-027 | Record selection rationale | P1 | `platform/agent-registry` | `tests/unit/agent-registry.test.ts` | `tested` |
 | FR-028 | Agents cannot expand permissions | P0 | `platform/policy-engine` | `tests/security/permission-expansion.test.ts` | `not_started` |
 | FR-030 | Artifact Registry | P0 | `platform/artifact-registry` | `tests/unit/artifact.test.ts` | `not_started` |
 | FR-031 | Type/version/status/provenance/task links | P0 | `platform/artifact-registry` | `tests/unit/artifact-model.test.ts` | `not_started` |

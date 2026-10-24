@@ -1,0 +1,10 @@
+{
+  "id": "solution-architect",
+  "name": "Solution Architect Agent",
+  "description": "Designs system architectures, data models, API boundaries, and documents ADRs",
+  "category": "engineering",
+  "capabilities": ["system-design", "database-modeling", "api-contract-design", "adr-formulation"],
+  "skills": ["c4-diagramming", "prisma-modeling", "rest-design", "security-boundary-definition"],
+  "allowedTools": ["artifact_create", "memory_query", "schema_validate"],
+  "defaultModel": "anthropic/claude-3-5-sonnet"
+}

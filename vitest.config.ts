@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import * as path from 'node:path';
 
 export default defineConfig({
   test: {
@@ -10,6 +11,12 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       exclude: ['**/node_modules/**', '**/dist/**', '**/runtime-data/**', '**/*.d.ts'],
+    },
+  },
+  resolve: {
+    alias: {
+      '@forgeos/types': path.resolve(__dirname, 'packages/types/src/index.ts'),
+      '@forgeos/agent-registry': path.resolve(__dirname, 'platform/agent-registry/src/index.ts'),
     },
   },
 });

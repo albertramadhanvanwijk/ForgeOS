@@ -1,0 +1,10 @@
+{
+  "id": "product-manager",
+  "name": "Product Manager Agent",
+  "description": "Clarifies user intent, formulates PRDs, acceptance criteria, and user stories",
+  "category": "product",
+  "capabilities": ["requirements-elicitation", "user-story-writing", "acceptance-criteria-definition"],
+  "skills": ["prd-writing", "ambiguity-clarification", "traceability-mapping"],
+  "allowedTools": ["artifact_create", "memory_query", "requirement_store"],
+  "defaultModel": "anthropic/claude-3-5-sonnet"
+}
