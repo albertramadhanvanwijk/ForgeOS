@@ -48,11 +48,44 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<ProjectItem[]>(DEFAULT_PROJECTS);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [projectCategory, setProjectCategory] = useState<'static' | 'dynamic' | 'backend' | 'custom'>('static');
+  const [customStackInput, setCustomStackInput] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     goal: '',
-    techStack: 'Next.js 14 App Router + Tailwind CSS',
+    techStack: 'HTML5 + Tailwind CSS (Zero-dependency Static Web)',
   });
+
+  const STACK_PRESETS = {
+    static: [
+      'HTML5 + Tailwind CSS (Zero-dependency Static Web)',
+      'Pure HTML5 + CSS3 + Vanilla JavaScript (Static Site)',
+      'Astro Static Site Generator (Markdown & Content Web)',
+      'Next.js Static HTML Export (SSG / Static Export)',
+    ],
+    dynamic: [
+      'Next.js 14 App Router + Tailwind CSS + TypeScript',
+      'React + Vite + Tailwind CSS + TypeScript (SPA)',
+      'Vue 3 + Vite + Tailwind CSS',
+      'SvelteKit App + TypeScript',
+    ],
+    backend: [
+      'Node.js Fastify API + TypeScript + Prisma ORM',
+      'Node.js Express + REST API',
+      'Python FastAPI / Flask Microservice',
+      'Go (Golang) Gin / Fiber REST API',
+    ],
+  };
+
+  const handleCategoryChange = (cat: 'static' | 'dynamic' | 'backend' | 'custom') => {
+    setProjectCategory(cat);
+    if (cat !== 'custom') {
+      setFormData((prev) => ({
+        ...prev,
+        techStack: STACK_PRESETS[cat][0],
+      }));
+    }
+  };
 
   useEffect(() => {
     fetch('/api/projects')
@@ -82,6 +115,10 @@ export default function ProjectsPage() {
     if (!formData.name.trim() || !formData.goal.trim()) return;
 
     setIsSubmitting(true);
+    const finalStack = projectCategory === 'custom'
+      ? (customStackInput.trim() || 'Custom Tech Stack')
+      : formData.techStack;
+
     try {
       const res = await fetch('/api/projects', {
         method: 'POST',
@@ -90,7 +127,8 @@ export default function ProjectsPage() {
           name: formData.name,
           goal: formData.goal,
           capabilityProfile: {
-            techStack: formData.techStack,
+            projectType: projectCategory,
+            techStack: finalStack,
             autonomousFleet: ['Architect', 'Designer', 'Engineer', 'QA'],
           },
         }),
@@ -241,20 +279,93 @@ export default function ProjectsPage() {
                 />
               </div>
 
+              {/* Project Type Category Selector */}
+              <div>
+                <label className="block text-[11px] font-medium uppercase tracking-wider text-zinc-400">
+                  Project Architecture / Type
+                </label>
+                <div className="mt-1.5 grid grid-cols-2 gap-2 sm:grid-cols-4 font-mono text-[11px]">
+                  <button
+                    type="button"
+                    onClick={() => handleCategoryChange('static')}
+                    className={`rounded-md border p-2 text-left transition-colors ${
+                      projectCategory === 'static'
+                        ? 'border-emerald-700 bg-emerald-950/40 text-emerald-300'
+                        : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700'
+                    }`}
+                  >
+                    <div className="font-semibold text-zinc-200">Static Web</div>
+                    <div className="text-[10px] text-zinc-500">HTML / Tailwind / SSG</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleCategoryChange('dynamic')}
+                    className={`rounded-md border p-2 text-left transition-colors ${
+                      projectCategory === 'dynamic'
+                        ? 'border-blue-700 bg-blue-950/40 text-blue-300'
+                        : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700'
+                    }`}
+                  >
+                    <div className="font-semibold text-zinc-200">Dynamic SaaS</div>
+                    <div className="text-[10px] text-zinc-500">Next.js / React / SPA</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleCategoryChange('backend')}
+                    className={`rounded-md border p-2 text-left transition-colors ${
+                      projectCategory === 'backend'
+                        ? 'border-purple-700 bg-purple-950/40 text-purple-300'
+                        : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700'
+                    }`}
+                  >
+                    <div className="font-semibold text-zinc-200">Backend API</div>
+                    <div className="text-[10px] text-zinc-500">Fastify / Python / Go</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleCategoryChange('custom')}
+                    className={`rounded-md border p-2 text-left transition-colors ${
+                      projectCategory === 'custom'
+                        ? 'border-amber-700 bg-amber-950/40 text-amber-300'
+                        : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700'
+                    }`}
+                  >
+                    <div className="font-semibold text-zinc-200">Custom Stack</div>
+                    <div className="text-[10px] text-zinc-500">Ketik Bebas Sendiri</div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Tech Stack Picker or Custom Text Input */}
               <div>
                 <label className="block text-[11px] font-medium uppercase tracking-wider text-zinc-400">
                   Target Tech Stack
                 </label>
-                <select
-                  value={formData.techStack}
-                  onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
-                  className="mt-1.5 w-full rounded-md border border-zinc-800 bg-zinc-900 px-3 py-2 font-mono text-xs text-zinc-100 focus:border-zinc-500 focus:outline-none"
-                >
-                  <option value="Next.js 14 App Router + Tailwind CSS">Next.js 14 App Router + Tailwind CSS + TypeScript</option>
-                  <option value="React + Vite + Tailwind CSS">React + Vite + Tailwind CSS + TypeScript</option>
-                  <option value="Node.js Fastify Microservice">Node.js Fastify Microservice + Prisma ORM</option>
-                  <option value="Fullstack Monorepo (Next.js + Fastify)">Fullstack Monorepo (Next.js + Fastify API)</option>
-                </select>
+                {projectCategory === 'custom' ? (
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. SvelteKit, Hugo, Vue 3, Laravel, Ruby on Rails..."
+                    value={customStackInput}
+                    onChange={(e) => setCustomStackInput(e.target.value)}
+                    className="mt-1.5 w-full rounded-md border border-amber-900/60 bg-zinc-900 px-3 py-2 font-mono text-xs text-amber-200 placeholder-zinc-600 focus:border-amber-500 focus:outline-none"
+                  />
+                ) : (
+                  <select
+                    value={formData.techStack}
+                    onChange={(e) => setFormData({ ...formData, techStack: e.target.value })}
+                    className="mt-1.5 w-full rounded-md border border-zinc-800 bg-zinc-900 px-3 py-2 font-mono text-xs text-zinc-100 focus:border-zinc-500 focus:outline-none"
+                  >
+                    {STACK_PRESETS[projectCategory].map((stack) => (
+                      <option key={stack} value={stack}>
+                        {stack}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
 
               <div className="rounded-md border border-zinc-800/80 bg-zinc-950/60 p-3 text-[11px] text-zinc-400">
