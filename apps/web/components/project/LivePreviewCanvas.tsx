@@ -18,17 +18,24 @@ import {
 interface LivePreviewProps {
   brandName?: string;
   activeSections: string[];
+  files?: Array<{ path: string; language: string; content: string }>;
 }
 
 export function LivePreviewCanvas({
   brandName = 'AcmeStore',
   activeSections,
+  files = [],
 }: LivePreviewProps) {
   const [viewport, setViewport] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [contactSent, setContactSent] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+
+  const htmlFile = files.find((f) => f.path.endsWith('.html') || f.path === 'index.html');
+  const [previewMode, setPreviewMode] = useState<'auto' | 'iframe' | 'components'>('auto');
+
+  const showIframe = (previewMode === 'iframe') || (previewMode === 'auto' && Boolean(htmlFile));
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -67,6 +74,27 @@ export function LivePreviewCanvas({
 
         {/* Viewport Toggles & Actions */}
         <div className="flex items-center gap-2">
+          {htmlFile && (
+            <div className="flex items-center rounded-md border border-zinc-800 bg-zinc-900 p-0.5 text-[11px] font-mono">
+              <button
+                onClick={() => setPreviewMode('iframe')}
+                className={`rounded px-2 py-0.5 transition-colors ${
+                  showIframe ? 'bg-zinc-800 text-white font-semibold' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                Live HTML Sandbox
+              </button>
+              <button
+                onClick={() => setPreviewMode('components')}
+                className={`rounded px-2 py-0.5 transition-colors ${
+                  !showIframe ? 'bg-zinc-800 text-white font-semibold' : 'text-zinc-400 hover:text-white'
+                }`}
+              >
+                Components
+              </button>
+            </div>
+          )}
+
           <div className="flex items-center rounded-md border border-zinc-800 bg-zinc-900 p-0.5">
             <button
               onClick={() => setViewport('desktop')}
@@ -112,8 +140,23 @@ export function LivePreviewCanvas({
         <div
           className={`${getViewportWidth()} transition-all duration-300 border border-zinc-800/80 bg-[#0d0d10] text-[#fafafa] rounded shadow-2xl flex flex-col`}
         >
-          {/* Rendered Navbar */}
-          <header className="sticky top-0 z-30 flex items-center justify-between border-b border-zinc-800 bg-[#0d0d10]/90 px-6 py-3 backdrop-blur-md">
+          {showIframe && htmlFile ? (
+            <div className="flex flex-col h-full min-h-[600px]">
+              <div className="bg-zinc-900 border-b border-zinc-800 px-3 py-1.5 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+                <span>Sandboxed Static HTML Sandbox: {htmlFile.path}</span>
+                <span className="text-emerald-400">Live Rendered</span>
+              </div>
+              <iframe
+                title="Live Sandbox View"
+                srcDoc={htmlFile.content}
+                sandbox="allow-scripts allow-forms allow-same-origin"
+                className="w-full flex-1 min-h-[580px] border-0 bg-white"
+              />
+            </div>
+          ) : (
+            <>
+              {/* Rendered Navbar */}
+              <header className="sticky top-0 z-30 flex items-center justify-between border-b border-zinc-800 bg-[#0d0d10]/90 px-6 py-3 backdrop-blur-md">
             <div className="flex items-center gap-2">
               <div className="h-5 w-5 rounded bg-blue-500" />
               <span className="font-mono text-sm font-bold tracking-tight text-white">{brandName}</span>
@@ -343,6 +386,8 @@ export function LivePreviewCanvas({
           <footer className="mt-auto border-t border-zinc-800/80 px-6 py-6 text-center text-[10px] font-mono text-zinc-500">
             © {new Date().getFullYear()} {brandName}. Built autonomously with ForgeOS Multi-Agent Fleet.
           </footer>
+            </>
+          )}
         </div>
       </div>
     </div>

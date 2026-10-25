@@ -148,7 +148,7 @@ export default function PlatformBuilderPage() {
 
   const fetchLiveState = async () => {
     try {
-      const resCaps = await fetch('http://localhost:3001/api/platform-builder/capabilities');
+      const resCaps = await fetch('/api/platform-builder/capabilities');
       if (resCaps.ok) {
         const data = await resCaps.json();
         if (data.nodes && data.nodes.length > 0) {
@@ -162,7 +162,7 @@ export default function PlatformBuilderPage() {
         }
       }
 
-      const resCs = await fetch('http://localhost:3001/api/platform-builder/changesets');
+      const resCs = await fetch('/api/platform-builder/changesets');
       if (resCs.ok) {
         const data = await resCs.json();
         if (data.changeSets && data.changeSets.length > 0) {
@@ -184,7 +184,7 @@ export default function PlatformBuilderPage() {
 
     setIsPlanning(true);
     try {
-      const res = await fetch('http://localhost:3001/api/platform-builder/changesets', {
+      const res = await fetch('/api/platform-builder/changesets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
